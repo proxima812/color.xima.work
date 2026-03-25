@@ -32,7 +32,7 @@ export default defineConfig({
 		icon(),
 		versionsProxima({
 			versionStrategy: "manual",
-			version: "2.0.0",
+			version: "2.1.6",
 			styling: { mode: "class" },
 			header: { class: "text-sm text-zinc-600" },
 			footer: { class: "site-version-footer", label: "Site version:" },

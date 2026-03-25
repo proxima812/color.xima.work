@@ -82,9 +82,28 @@ const openGraphLocaleAlternate = SUPPORTED_LOCALES.filter((lang) => lang !== loc
 		/>
 	</head>
 	<body class="min-h-screen bg-[radial-gradient(52%_120%_at_0%_50%,rgba(244,114,182,0.11)_0%,rgba(244,114,182,0)_62%),radial-gradient(54%_120%_at_100%_50%,rgba(56,189,248,0.12)_0%,rgba(56,189,248,0)_62%),linear-gradient(to_bottom,#ffffff,#fafafa)] text-zinc-900 antialiased">
-		<main class="mx-auto w-full max-w-7xl container px-5 py-12">
+		<main class="mx-auto w-full max-w-7xl container px-5 py-12 pb-32">
 			<Header locale={locale} />
 			<slot />
 		</main>
+		<footer class="pointer-events-none fixed inset-x-0 bottom-5 z-40 px-5">
+			<div class="mx-auto flex w-full max-w-7xl justify-center">
+				<div class="pointer-events-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/82 px-4 py-2 text-sm text-zinc-600 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.28)] backdrop-blur-xl">
+					<span>Built by Kamil Mirikhan</span>
+					<span class="text-zinc-300" aria-hidden="true">•</span>
+					<span>
+						Released under the
+						<a
+							class="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-900"
+							href="https://github.com/proxima812/color.xima.work/blob/main/LICENSE"
+							target="_blank"
+							rel="noreferrer noopener"
+						>
+							MIT License
+						</a>
+					</span>
+				</div>
+			</div>
+		</footer>
 	</body>
 </html>
