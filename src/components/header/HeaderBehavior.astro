@@ -1,0 +1,83 @@
+<style>
+	.header-shell {
+		will-change: transform, opacity, filter;
+	}
+
+	.header-shell[data-header-state="hidden"] {
+		transform: translateY(calc(-100% - 2.25rem));
+		opacity: 0;
+		filter: blur(6px);
+		pointer-events: none;
+	}
+
+	.header-shell[data-header-state="hidden"] .header-surface {
+		transform: scale(0.985);
+		opacity: 0.92;
+	}
+
+	.header-shell[data-header-scrolled="true"] .header-surface {
+		background: rgba(255, 255, 255, 0.88);
+		border-color: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 18px 44px -28px rgba(15, 23, 42, 0.34);
+	}
+</style>
+
+<script is:inline>
+	const langLinks = document.querySelectorAll("[data-lang-link]");
+	const header = document.querySelector(".header-shell");
+	const dropdown = document.querySelector(".header-locale-dropdown");
+	let lastScrollY = window.scrollY;
+	let ticking = false;
+
+	if (langLinks.length) {
+		langLinks.forEach((link) => {
+			link.addEventListener("click", () => {
+				const lang = link.getAttribute("data-lang-btn");
+				if (!lang) return;
+				document.cookie = `preferred_locale=${lang}; Path=/; Max-Age=31536000; SameSite=Lax`;
+			});
+		});
+	}
+
+	function updateHeaderVisibility() {
+		if (!(header instanceof HTMLElement)) return;
+
+		const currentScrollY = window.scrollY;
+		const delta = currentScrollY - lastScrollY;
+		const passedTopZone = currentScrollY > 96;
+		header.dataset.headerScrolled = passedTopZone ? "true" : "false";
+
+		if (!passedTopZone || delta < -8) {
+			header.dataset.headerState = "visible";
+		} else if (delta > 10) {
+			header.dataset.headerState = "hidden";
+			if (dropdown instanceof HTMLDetailsElement) {
+				dropdown.removeAttribute("open");
+			}
+		}
+
+		lastScrollY = currentScrollY;
+		ticking = false;
+	}
+
+	if (header instanceof HTMLElement) {
+		header.dataset.headerState = "visible";
+		header.dataset.headerScrolled = window.scrollY > 96 ? "true" : "false";
+	}
+
+	window.addEventListener(
+		"scroll",
+		() => {
+			if (ticking) return;
+			ticking = true;
+			window.requestAnimationFrame(updateHeaderVisibility);
+		},
+		{ passive: true },
+	);
+
+	document.addEventListener("click", (event) => {
+		if (!(dropdown instanceof HTMLDetailsElement)) return;
+		if (dropdown.contains(event.target instanceof Node ? event.target : null)) return;
+		dropdown.removeAttribute("open");
+	});
+</script>

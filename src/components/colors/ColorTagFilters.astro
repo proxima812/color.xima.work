@@ -1,0 +1,64 @@
+---
+import type { Locale } from "../../i18n";
+import { t } from "../../i18n";
+import type { TagId } from "./tags";
+
+interface Props {
+	locale: Locale;
+	tagOptions: TagId[];
+	tagCounts: Partial<Record<TagId, number>>;
+	totalCount: number;
+}
+
+const { locale, tagOptions, tagCounts, totalCount } = Astro.props;
+
+function getTagLabel(tag: TagId) {
+	const map: Record<TagId, string> = {
+		glow: t(locale, "tagGlow"),
+		mesh: t(locale, "tagMesh"),
+		linear: t(locale, "tagLinear"),
+		radial: t(locale, "tagRadial"),
+		conic: t(locale, "tagConic"),
+		repeating: t(locale, "tagRepeating"),
+		"multi-stop": t(locale, "tagMultiStop"),
+		transparent: t(locale, "tagTransparent"),
+		border: t(locale, "tagBorder"),
+		noise: t(locale, "tagNoise"),
+		femme: t(locale, "tagFemme"),
+		masc: t(locale, "tagMasc"),
+		flag: t(locale, "tagFlag"),
+		other: t(locale, "tagOther"),
+	};
+
+	return map[tag];
+}
+---
+
+<div class="mb-8 flex flex-wrap items-center gap-2" role="group" aria-label="Filters">
+	<button
+		type="button"
+		class="tag-filter-btn inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-zinc-300 px-3 py-1.5 text-xs text-zinc-700"
+		data-tag-filter="all"
+		aria-pressed="true"
+		aria-controls="colors-grid"
+		aria-label={`${t(locale, "tagAll")} (${totalCount})`}
+	>
+		{t(locale, "tagAll")}
+		<span class="tag-filter-count" aria-hidden="true">{totalCount}</span>
+	</button>
+	{
+		tagOptions.map((tag) => (
+			<button
+				type="button"
+				class="tag-filter-btn inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-zinc-300 px-3 py-1.5 text-xs text-zinc-700"
+				data-tag-filter={tag}
+				aria-pressed="false"
+				aria-controls="colors-grid"
+				aria-label={`${getTagLabel(tag)} (${tagCounts[tag] ?? 0})`}
+			>
+				{getTagLabel(tag)}
+				<span class="tag-filter-count" aria-hidden="true">{tagCounts[tag] ?? 0}</span>
+			</button>
+		))
+	}
+</div>

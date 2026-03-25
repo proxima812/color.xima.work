@@ -1,0 +1,44 @@
+---
+import type { Locale } from "../../i18n";
+import { t } from "../../i18n";
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="relative w-full">
+	<svg
+		class="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-zinc-400"
+		fill="none"
+		stroke="currentColor"
+		viewBox="0 0 24 24"
+		aria-hidden="true"
+		focusable="false"
+	>
+		<path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3m1.8-5.2a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+	</svg>
+
+	<input
+		type="search"
+		placeholder={t(locale, "searchPlaceholder")}
+		data-search-input
+		aria-label={t(locale, "searchPlaceholder")}
+		aria-controls="colors-grid"
+		class="w-full rounded-full border border-zinc-200 bg-white/70 py-2.5 pl-11 pr-24 text-zinc-700 outline-none transition-all duration-200 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+	/>
+	<button
+		type="button"
+		data-search-shortcut
+		class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-1 rounded-lg border border-zinc-200 bg-zinc-50/90 px-2 py-1 text-[11px] font-medium text-zinc-500 transition hover:border-zinc-300 hover:text-zinc-700"
+		aria-label="Focus search"
+		aria-controls="colors-grid"
+		aria-keyshortcuts="Meta+K,Control+K"
+	>
+		<kbd data-search-shortcut-mod class="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs leading-none text-zinc-600">Cmd</kbd>
+		<span class="text-zinc-400">+</span>
+		<kbd class="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs leading-none text-zinc-600">K</kbd>
+	</button>
+</div>
