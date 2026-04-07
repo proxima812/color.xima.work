@@ -13,12 +13,9 @@ function getCssSnippetByClassName(gradientsCssText: string, className: string) {
 	return `.${className} {\n${match[2].trimEnd()}\n}`;
 }
 
-export function buildCssSnippetMap(colors: readonly string[]) {
+export function buildCssSnippetMap(classNames: readonly string[]) {
 	const gradientsCssText = fs.readFileSync(path.resolve(process.cwd(), "src/styles/gradients.css"), "utf8");
 	return Object.fromEntries(
-		colors.map((name) => {
-			const className = `radial-${name}`;
-			return [className, getCssSnippetByClassName(gradientsCssText, className)];
-		}),
+		classNames.map((className) => [className, getCssSnippetByClassName(gradientsCssText, className)]),
 	) as Record<string, string>;
 }

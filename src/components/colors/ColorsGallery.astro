@@ -1,14 +1,14 @@
 ---
+import { getCollection } from "astro:content";
 import { LAST_UPDATED_ISO } from "../../config/site";
+import { buildColorCards } from "../../data/color-cards";
+import { buildCssSnippetMap } from "../../data/css-snippets";
+import { getLastUpdatedLabel } from "../../data/descriptions";
+import { tagOrder } from "../../data/tags";
 import type { Locale } from "../../i18n";
-import { buildCssSnippetMap } from "./css-snippets";
 import ColorsControls from "./ColorsControls.astro";
 import ColorsGrid from "./ColorsGrid.astro";
 import ColorsHeader from "./ColorsHeader.astro";
-import { colors } from "./constants";
-import { buildColorCards } from "./data";
-import { getLastUpdatedLabel } from "./descriptions";
-import { tagOrder } from "./tags";
 
 interface Props {
 	locale: Locale;
@@ -16,10 +16,11 @@ interface Props {
 }
 
 const { locale = "en", lastUpdated: lastUpdatedInput = LAST_UPDATED_ISO } = Astro.props;
+const colorEntries = await getCollection("colors");
 
-const cssSnippetMap = buildCssSnippetMap(colors);
 const lastUpdatedLabel = getLastUpdatedLabel(locale, lastUpdatedInput);
-const colorCards = buildColorCards(locale);
+const colorCards = buildColorCards(locale, colorEntries);
+const cssSnippetMap = buildCssSnippetMap(colorCards.map((card) => card.className));
 
 const usedTags = new Set(colorCards.flatMap((card) => card.tags));
 const tagOptions = tagOrder.filter((tag) => usedTags.has(tag) && tag !== "other").concat(
@@ -37,7 +38,7 @@ const tagCounts = colorCards.reduce(
 ---
 
 <div id="colors-gallery-root">
-	<ColorsHeader locale={locale} count={colors.length} lastUpdatedLabel={lastUpdatedLabel} />
+	<ColorsHeader locale={locale} count={colorCards.length} lastUpdatedLabel={lastUpdatedLabel} />
 	<section>
 		<ColorsControls locale={locale} tagOptions={tagOptions} tagCounts={tagCounts} totalCount={colorCards.length} />
 		<ColorsGrid locale={locale} items={colorCards} cssSnippetMap={cssSnippetMap} />

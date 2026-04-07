@@ -27,18 +27,18 @@ const { locale } = Astro.props;
 		data-search-input
 		aria-label={t(locale, "searchPlaceholder")}
 		aria-controls="colors-grid"
-		class="w-full rounded-full border border-zinc-200 bg-white/70 py-2.5 pl-11 pr-24 text-zinc-700 outline-none transition-all duration-200 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+		class="w-full rounded-full border border-zinc-200 bg-white/70 py-2.5 pl-11 pr-24 text-zinc-700 outline-none transition-all duration-200 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/10"
 	/>
 	<button
 		type="button"
 		data-search-shortcut
-		class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-1 rounded-lg border border-zinc-200 bg-zinc-50/90 px-2 py-1 text-[11px] font-medium text-zinc-500 transition hover:border-zinc-300 hover:text-zinc-700"
+		class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-1 rounded-lg border border-zinc-200 bg-zinc-50/90 px-2 py-1 text-[11px] font-medium text-zinc-500 transition hover:border-zinc-300 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-300"
 		aria-label="Focus search"
 		aria-controls="colors-grid"
 		aria-keyshortcuts="Meta+K,Control+K"
 	>
-		<kbd data-search-shortcut-mod class="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs leading-none text-zinc-600">Cmd</kbd>
-		<span class="text-zinc-400">+</span>
-		<kbd class="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs leading-none text-zinc-600">K</kbd>
+		<kbd data-search-shortcut-mod class="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs leading-none text-zinc-600 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">Cmd</kbd>
+		<span class="text-zinc-400 dark:text-zinc-500">+</span>
+		<kbd class="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs leading-none text-zinc-600 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">K</kbd>
 	</button>
 </div>

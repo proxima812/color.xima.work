@@ -1,6 +1,6 @@
 ---
 import type { Locale } from "../../i18n";
-import type { TagId } from "./tags";
+import type { TagId } from "../../data/tags";
 import ColorCard from "./ColorCard.astro";
 
 interface CardItem {
@@ -21,7 +21,7 @@ interface Props {
 const { locale, items, cssSnippetMap } = Astro.props;
 ---
 
-<div id="colors-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-24" role="list">
+<div id="colors-grid" class="grid" data-cols="2" role="list">
 	{items.map((card) => <ColorCard locale={locale} {...card} />)}
 </div>
 
