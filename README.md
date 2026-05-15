@@ -1,63 +1,24 @@
 # color.xima.work
 
-<div align="center">
+A fast gradient gallery for modern UI work.
 
-### Gradient gallery for modern UI work
+[Live Site](https://color.xima.work) · [Repository](https://github.com/proxima812/color.xima.work) · [Issues](https://github.com/proxima812/color.xima.work/issues)
 
-Fast, searchable, multilingual, and built to turn visual inspiration into copy-ready CSS in seconds.
+![Astro](https://img.shields.io/badge/Astro-5-111827?style=flat-square&logo=astro)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-111827?style=flat-square&logo=tailwindcss)
+![Static](https://img.shields.io/badge/Output-static-111827?style=flat-square)
+![Vercel](https://img.shields.io/badge/Deploy-Vercel-111827?style=flat-square&logo=vercel)
 
-[Live Site](https://color.xima.work) · [Star the Repo](https://github.com/proxima812/color.xima.work) · [Report an Issue](https://github.com/proxima812/color.xima.work/issues)
-
-</div>
-
-<p align="center">
-  <a href="https://github.com/proxima812/color.xima.work/stargazers"><img src="https://img.shields.io/github/stars/proxima812/color.xima.work?style=for-the-badge" alt="GitHub stars"></a>
-  <a href="https://github.com/proxima812/color.xima.work/blob/main/LICENSE"><img src="https://img.shields.io/github/license/proxima812/color.xima.work?style=for-the-badge" alt="License"></a>
-  <a href="https://color.xima.work"><img src="https://img.shields.io/badge/Live-color.xima.work-111827?style=for-the-badge" alt="Live site"></a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Astro-5-111827?style=flat-square&logo=astro" alt="Astro 5">
-  <img src="https://img.shields.io/badge/Tailwind-v4-111827?style=flat-square&logo=tailwindcss" alt="Tailwind CSS v4">
-  <img src="https://img.shields.io/badge/Output-Static-111827?style=flat-square" alt="Static output">
-  <img src="https://img.shields.io/badge/Locales-7-111827?style=flat-square" alt="7 locales">
-  <img src="https://img.shields.io/badge/Deploy-Vercel-111827?style=flat-square&logo=vercel" alt="Vercel">
-</p>
-
----
-
-## Overview
-
-`color.xima.work` is a curated gradient showcase for designers and frontend developers who want fast visual browsing and instant CSS extraction.
-
-Instead of digging through random snippets, you get a focused interface with reusable gradient cards, practical labels, multilingual routing, and a performance-first Astro setup.
-
-## Why It Feels Good To Use
-
-| Browse | Copy | Ship |
-| --- | --- | --- |
-| Curated gradients instead of noisy collections | One-click CSS copy for real projects | Static Astro delivery with SEO-ready pages |
-| Practical tags and search-oriented structure | Fast scanning for UI exploration | Easy deployment and low runtime complexity |
-| Clean gallery flow for inspiration sessions | Copy-ready output for implementation | Lightweight stack built for speed |
+`color.xima.work` is a curated collection of CSS gradients for designers and frontend developers. Browse visually, search with fuzzy matching, filter by style, and copy production-ready snippets in CSS3 or Tailwind CSS v4 format.
 
 ## Highlights
 
-- Curated CSS gradient gallery for modern interfaces
-- Copy-ready gradient snippets for quick implementation
-- Multilingual structure with `en`, `ru`, `es`, `zh`, `tt`, `kk`, `uk`
-- Static-site architecture with sitemap and SEO support
-- Astro + Tailwind v4 stack focused on speed and simplicity
-
-## Stack
-
-```text
-Astro 5
-Tailwind CSS v4
-Vercel adapter
-astro-seo
-astro-icon
-@astrojs/sitemap
-```
+- Curated gradient cards for hero sections, surfaces, cards, banners, and UI accents.
+- Smart search powered by Fuse.js.
+- Copy formats for both `CSS3` and `Tailwind CSS v4`.
+- Localized routes for `en`, `ru`, and `tt`.
+- Static Astro output with sitemap and SEO metadata.
+- Minimal runtime, Bun-first local workflow, Vercel deployment.
 
 ## Quick Start
 
@@ -66,6 +27,8 @@ bun install
 bun run dev
 ```
 
+Open `http://localhost:4321`.
+
 Production commands:
 
 ```bash
@@ -73,34 +36,63 @@ bun run build
 bun run preview
 ```
 
+## Stack
+
+```text
+Astro 5
+Tailwind CSS v4
+Fuse.js
+astro-seo
+astro-icon
+@astrojs/sitemap
+@astrojs/vercel
+```
+
 ## Project Structure
 
 ```text
 src/
-  components/colors/   gradient cards, gallery, filters, copy actions
-  config/              site config and SEO-related settings
-  i18n/                locale dictionaries and translations
+  components/colors/   gallery, cards, search, filters, copy controls
+  components/header/   theme and locale controls
+  config/              site and SEO settings
+  data/                gradient cards, tags, descriptions, copy snippets
+  i18n/                locale dictionaries
   layouts/             shared page shell
-  pages/               localized routes and entry pages
-  styles/              gradient data and visual styles
+  pages/               default and localized routes
+  styles/              global styles and gradient utilities
 ```
 
-## What This Repo Is Great For
+## Copy Formats
 
-- Building landing pages and hero sections faster
-- Exploring gradient directions before design handoff
-- Reusing curated color combinations in production UI
-- Running a content-friendly static gallery with multilingual routing
+Every gradient can be copied as a classic CSS class:
 
-## Local Development Notes
+```css
+.radial-glow-aurora-cyan {
+  background-image: radial-gradient(...);
+  border: 1px solid rgba(...);
+  box-shadow: ...;
+}
+```
+
+Or as Tailwind CSS v4 arbitrary utilities:
+
+```text
+bg-[radial-gradient(...)] border border-solid border-[rgba(...)] shadow-[...]
+```
+
+## Development Notes
 
 - Package manager: `bun`
+- Default locale: `en`
+- Supported locales: `en`, `ru`, `tt`
 - Site URL: `https://color.xima.work`
 - Output mode: static
 - Deployment target: Vercel
 
-## Support
+## Contributing
 
-If this project saves you time, give it a star:
+Issues and pull requests are welcome. Keep changes focused, preserve the existing Astro/Tailwind structure, and avoid broad UI rewrites unless they are part of the proposed change.
 
-**[github.com/proxima812/color.xima.work](https://github.com/proxima812/color.xima.work)**
+## License
+
+No license file is currently included in this repository.
