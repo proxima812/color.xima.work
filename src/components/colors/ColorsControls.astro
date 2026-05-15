@@ -1,5 +1,6 @@
 ---
 import type { Locale } from "../../i18n";
+import type { ColorCardItem } from "../../data/color-cards";
 import ColorSearch from "./ColorSearch.astro";
 import ColorTagFilters from "./ColorTagFilters.astro";
 import type { TagId } from "../../data/tags";
@@ -9,92 +10,63 @@ interface Props {
 	tagOptions: TagId[];
 	tagCounts: Partial<Record<TagId, number>>;
 	totalCount: number;
+	searchItems: ColorCardItem[];
 }
 
-const { locale, tagOptions, tagCounts, totalCount } = Astro.props;
+const { locale, tagOptions, tagCounts, totalCount, searchItems } = Astro.props;
+
+const fuseSearchItems = searchItems.map((card) => ({
+	id: String(card.id),
+	visibleId: String(card.id + 1),
+	name: card.name,
+	description: card.description,
+	tags: card.tags,
+	className: card.className,
+}));
 ---
 
-<div class="mb-12 flex items-center gap-2">
-	<!-- Sort by ID (left) -->
-	<button
-		type="button"
-		data-sort-btn
-		aria-label="Sort by ID"
-		aria-pressed="false"
-		class="flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-zinc-200 bg-white/90 px-3.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:bg-white hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800/90 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
-	>
-		<span class="text-xs font-semibold">ID</span>
-		<svg data-sort-icon class="h-3.5 w-3.5 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-			<path d="M8 2.5a.75.75 0 0 1 .75.75v8.69l2.72-2.72a.75.75 0 1 1 1.06 1.06l-4 4a.75.75 0 0 1-1.06 0l-4-4a.75.75 0 1 1 1.06-1.06L7.25 11.94V3.25A.75.75 0 0 1 8 2.5Z"/>
-		</svg>
-	</button>
-
-	<!-- Search (center, grows) -->
-	<div class="min-w-0 flex-1">
-		<ColorSearch locale={locale} />
-	</div>
-
-	<!-- Column switcher (right) -->
-	<div class="flex shrink-0 items-center rounded-full border border-zinc-200 bg-white/90 p-1 dark:border-zinc-700 dark:bg-zinc-800/90">
-		<!-- 1 column -->
-		<button
-			type="button"
-			data-cols-btn="1"
-			aria-label="1 column"
-			aria-pressed="false"
-			class="cols-btn flex h-8 w-8 items-center justify-center rounded-full text-zinc-400 transition hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-200"
-		>
-			<svg viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4" aria-hidden="true">
-				<rect x="2" y="2" width="12" height="3.5" rx="1"/>
-				<rect x="2" y="6.25" width="12" height="3.5" rx="1"/>
-				<rect x="2" y="10.5" width="12" height="3.5" rx="1"/>
-			</svg>
-		</button>
-		<!-- 2 columns -->
-		<button
-			type="button"
-			data-cols-btn="2"
-			aria-label="2 columns"
-			aria-pressed="true"
-			class="cols-btn flex h-8 w-8 items-center justify-center rounded-full text-zinc-400 transition hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-200"
-		>
-			<svg viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4" aria-hidden="true">
-				<rect x="2" y="2" width="5.5" height="12" rx="1"/>
-				<rect x="8.5" y="2" width="5.5" height="12" rx="1"/>
-			</svg>
-		</button>
-		<!-- 3 columns -->
-		<button
-			type="button"
-			data-cols-btn="3"
-			aria-label="3 columns"
-			aria-pressed="false"
-			class="cols-btn flex h-8 w-8 items-center justify-center rounded-full text-zinc-400 transition hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-200"
-		>
-			<svg viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4" aria-hidden="true">
-				<rect x="1" y="2" width="4" height="12" rx="1"/>
-				<rect x="6" y="2" width="4" height="12" rx="1"/>
-				<rect x="11" y="2" width="4" height="12" rx="1"/>
-			</svg>
-		</button>
-	</div>
+<div class="mb-12">
+	<ColorSearch locale={locale} />
 </div>
 
 <ColorTagFilters locale={locale} tagOptions={tagOptions} tagCounts={tagCounts} totalCount={totalCount} />
 
-<script is:inline>
+<script is:inline type="application/json" id="colors-search-data" set:html={JSON.stringify(fuseSearchItems)}></script>
+
+<script>
+	import Fuse from "fuse.js";
+
+	interface SearchItem {
+		id: string;
+		visibleId: string;
+		name: string;
+		description: string;
+		tags: string[];
+		className: string;
+	}
+
 	const root = document.getElementById("colors-gallery-root");
-	const searchInput = root?.querySelector("[data-search-input]");
+	const searchInput = root?.querySelector<HTMLInputElement>("[data-search-input]");
 	const searchShortcutButton = root?.querySelector("[data-search-shortcut]");
 	const shortcutModifier = root?.querySelector("[data-search-shortcut-mod]");
 	const tagButtons = root?.querySelectorAll("[data-tag-filter]");
-	const sortBtn = root?.querySelector("[data-sort-btn]");
-	const sortIcon = root?.querySelector("[data-sort-icon]");
-	const colsBtns = root?.querySelectorAll("[data-cols-btn]");
-	const grid = document.getElementById("colors-grid");
+	const searchDataElement = document.getElementById("colors-search-data");
+	const searchItems = (searchDataElement?.textContent ? JSON.parse(searchDataElement.textContent) : []) as SearchItem[];
+	const fuse = new Fuse<SearchItem>(searchItems, {
+		includeScore: true,
+		ignoreLocation: true,
+		threshold: 0.36,
+		keys: [
+			{ name: "name", weight: 0.42 },
+			{ name: "description", weight: 0.24 },
+			{ name: "tags", weight: 0.16 },
+			{ name: "className", weight: 0.1 },
+			{ name: "visibleId", weight: 0.05 },
+			{ name: "id", weight: 0.03 },
+		],
+	});
 
 	let activeTag = "all";
-	let sortAsc = true; // true = 0→N (по умолчанию)
 
 	// ── Search focus ──────────────────────────────────────
 	function focusSearch() {
@@ -104,7 +76,7 @@ const { locale, tagOptions, tagCounts, totalCount } = Astro.props;
 	}
 
 	if (shortcutModifier) {
-		const isMac = /mac|iphone|ipad|ipod/i.test(navigator.platform);
+		const isMac = /mac|iphone|ipad|ipod/i.test(navigator.userAgent);
 		shortcutModifier.textContent = isMac ? "Cmd" : "Ctrl";
 	}
 
@@ -134,13 +106,16 @@ const { locale, tagOptions, tagCounts, totalCount } = Astro.props;
 	}
 
 	function applyFilters() {
-		const colorItems = root?.querySelectorAll("[data-color-item]");
+		const colorItems = root?.querySelectorAll<HTMLElement>("[data-color-item]");
 		if (!colorItems?.length) return;
 		const term = searchInput?.value.trim().toLowerCase() ?? "";
+		const matchedIds =
+			term === "" ? null : new Set(fuse.search(term).map((result) => String(result.item.id)));
+
 		colorItems.forEach((item) => {
-			const searchIndex = item.getAttribute("data-color-search") ?? item.getAttribute("data-color-name") ?? "";
 			const tags = (item.getAttribute("data-color-tags") ?? "").split(",").filter(Boolean);
-			const searchPass = term === "" || searchIndex.includes(term);
+			const itemId = item.getAttribute("data-color-id") ?? "";
+			const searchPass = matchedIds === null || matchedIds.has(itemId);
 			const tagPass = activeTag === "all" || tags.includes(activeTag);
 			item.style.display = searchPass && tagPass ? "" : "none";
 		});
@@ -156,47 +131,6 @@ const { locale, tagOptions, tagCounts, totalCount } = Astro.props;
 				activeTag = tag;
 				updateTagButtons();
 				applyFilters();
-			});
-		});
-	}
-
-	// ── Sort ──────────────────────────────────────────────
-	function applySort() {
-		if (!grid) return;
-		const items = Array.from(grid.querySelectorAll("[data-color-item]"));
-		items.sort((a, b) => {
-			const aId = parseInt(a.getAttribute("data-color-id") ?? "0", 10);
-			const bId = parseInt(b.getAttribute("data-color-id") ?? "0", 10);
-			return sortAsc ? aId - bId : bId - aId;
-		});
-		items.forEach((item) => grid.appendChild(item));
-	}
-
-	if (sortBtn) {
-		sortBtn.addEventListener("click", () => {
-			sortAsc = !sortAsc;
-			sortBtn.setAttribute("aria-pressed", sortAsc ? "false" : "true");
-			if (sortIcon instanceof SVGElement) {
-				sortIcon.style.transform = sortAsc ? "" : "rotate(180deg)";
-			}
-			applySort();
-		});
-	}
-
-	// ── Column switcher ───────────────────────────────────
-	function setCols(cols) {
-		if (!grid) return;
-		grid.setAttribute("data-cols", cols);
-		colsBtns?.forEach((btn) => {
-			btn.setAttribute("aria-pressed", btn.getAttribute("data-cols-btn") === String(cols) ? "true" : "false");
-		});
-	}
-
-	if (colsBtns?.length) {
-		colsBtns.forEach((btn) => {
-			btn.addEventListener("click", () => {
-				const cols = btn.getAttribute("data-cols-btn");
-				if (cols) setCols(cols);
 			});
 		});
 	}

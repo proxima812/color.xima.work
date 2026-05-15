@@ -1,6 +1,7 @@
 ---
 import type { Locale } from "../../i18n";
 import type { TagId } from "../../data/tags";
+import type { CssSnippetFormats } from "../../data/css-snippets";
 import ColorCard from "./ColorCard.astro";
 
 interface CardItem {
@@ -15,7 +16,7 @@ interface CardItem {
 interface Props {
 	locale: Locale;
 	items: CardItem[];
-	cssSnippetMap: Record<string, string>;
+	cssSnippetMap: Record<string, CssSnippetFormats>;
 }
 
 const { locale, items, cssSnippetMap } = Astro.props;
@@ -28,6 +29,7 @@ const { locale, items, cssSnippetMap } = Astro.props;
 <script is:inline define:vars={{ cssSnippetMap }}>
 	const root = document.getElementById("colors-gallery-root");
 	const copyButtons = root?.querySelectorAll("[data-copy-btn]");
+	const formatButtons = root?.querySelectorAll("[data-copy-format]");
 
 	async function copyTextToClipboard(value) {
 		try {
@@ -52,7 +54,9 @@ const { locale, items, cssSnippetMap } = Astro.props;
 				const className = button.getAttribute("data-copy-class");
 				if (!className) return;
 
-				const value = cssSnippetMap[className] ?? className;
+				const card = button.closest("[data-color-item]");
+				const format = card?.getAttribute("data-copy-active-format") === "tailwind" ? "tailwind" : "css";
+				const value = cssSnippetMap[className]?.[format] ?? className;
 				const copied = await copyTextToClipboard(value);
 				if (!copied) return;
 
@@ -70,6 +74,23 @@ const { locale, items, cssSnippetMap } = Astro.props;
 						labelEl.textContent = defaultText;
 					}
 				}, 1500);
+			});
+		});
+	}
+
+	if (formatButtons?.length) {
+		formatButtons.forEach((button) => {
+			button.addEventListener("click", () => {
+				const card = button.closest("[data-color-item]");
+				const format = button.getAttribute("data-copy-format");
+				if (!card || !format) return;
+				card.setAttribute("data-copy-active-format", format);
+				card.querySelectorAll("[data-copy-format]").forEach((formatButton) => {
+					formatButton.setAttribute(
+						"aria-pressed",
+						formatButton.getAttribute("data-copy-format") === format ? "true" : "false",
+					);
+				});
 			});
 		});
 	}

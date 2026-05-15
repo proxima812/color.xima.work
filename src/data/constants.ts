@@ -1,15 +1,17 @@
 import type { Locale } from "../i18n";
+import { getLocalePath as buildLocalePath } from "../config/site";
 
-export const localeOptions: { code: Locale; label: string }[] = [
+export interface LocaleOption {
+	code: Locale;
+	label: string;
+}
+
+export const localeOptions: readonly LocaleOption[] = [
 	{ code: "en", label: "English" },
-	{ code: "tt", label: "Татарча" },
-	{ code: "zh", label: "中文" },
-	{ code: "kk", label: "Қазақша" },
-	{ code: "es", label: "Español" },
 	{ code: "ru", label: "Русский" },
-	{ code: "uk", label: "Українська" },
+	{ code: "tt", label: "Татарча" },
 ];
 
-export function getLocalePath(nextLocale: Locale) {
-	return `/${nextLocale}/`;
+export function getLocalePath(nextLocale: Locale): string {
+	return buildLocalePath(nextLocale);
 }

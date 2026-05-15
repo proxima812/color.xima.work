@@ -1,42 +1,17 @@
 ---
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "../config/site";
+import ColorsGallery from "../components/colors/ColorsGallery.astro";
+import { DEFAULT_LOCALE, getLocalePath } from "../config/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { t } from "../i18n";
+
+export const prerender = true;
 ---
 
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png?v=2" />
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png?v=2" />
-		<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png?v=2" />
-		<link rel="mask-icon" href="/favicons/safari-pinned-tab.svg?v=2" color="#222222" />
-		<link rel="shortcut icon" href="/favicons/favicon.ico?v=2" />
-		<meta http-equiv="refresh" content={`0;url=/${DEFAULT_LOCALE}/`} />
-		<title>Redirecting...</title>
-		<script is:inline define:vars={{ DEFAULT_LOCALE, SUPPORTED_LOCALES }}>
-			(function () {
-				const key = "preferred_locale";
-				const supported = new Set(SUPPORTED_LOCALES);
-				const fromCookie = document.cookie
-					.split(";")
-					.map((v) => v.trim())
-					.find((v) => v.startsWith(key + "="))
-					?.split("=")[1];
-
-				const fromNavigator =
-					(navigator.languages || [])
-						.map((lang) => lang.toLowerCase().split("-")[0])
-						.find((lang) => supported.has(lang)) || DEFAULT_LOCALE;
-
-				const locale = supported.has(fromCookie || "") ? fromCookie : fromNavigator;
-				if (!locale) return;
-				document.cookie = `${key}=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
-				window.location.replace(`/${locale}/`);
-			})();
-		</script>
-	</head>
-	<body>
-		<a href={`/${DEFAULT_LOCALE}/`} aria-label="Open default locale page">Go to color.xima</a>
-	</body>
-</html>
+<BaseLayout
+	title={t(DEFAULT_LOCALE, "pageTitle")}
+	description={t(DEFAULT_LOCALE, "pageDescription")}
+	locale={DEFAULT_LOCALE}
+	canonicalPath={getLocalePath(DEFAULT_LOCALE)}
+>
+	<ColorsGallery locale={DEFAULT_LOCALE} />
+</BaseLayout>

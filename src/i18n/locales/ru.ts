@@ -1,4 +1,6 @@
-export default {
+import type { TranslationDictionary } from "./en";
+
+const ru: TranslationDictionary = {
 	pageTitle: "color.xima — градиенты, создающие атмосферу",
 	pageDescription: "Коллекция градиентов для карточек, hero-блоков и современных интерфейсов.",
 	galleryTitle: "color.xima — градиенты, создающие атмосферу",
@@ -26,9 +28,7 @@ export default {
 	tagFlag: "Флаги",
 	language_en: "Английский",
 	language_ru: "Русский",
-	language_es: "Испанский",
-	language_zh: "Китайский",
 	language_tt: "Татарский",
-	language_kk: "Казахский",
-	language_uk: "Украинский",
 };
+
+export default ru;

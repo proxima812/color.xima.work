@@ -40,7 +40,13 @@ const tagCounts = colorCards.reduce(
 <div id="colors-gallery-root">
 	<ColorsHeader locale={locale} count={colorCards.length} lastUpdatedLabel={lastUpdatedLabel} />
 	<section>
-		<ColorsControls locale={locale} tagOptions={tagOptions} tagCounts={tagCounts} totalCount={colorCards.length} />
+		<ColorsControls
+			locale={locale}
+			tagOptions={tagOptions}
+			tagCounts={tagCounts}
+			totalCount={colorCards.length}
+			searchItems={colorCards}
+		/>
 		<ColorsGrid locale={locale} items={colorCards} cssSnippetMap={cssSnippetMap} />
 	</section>
 </div>

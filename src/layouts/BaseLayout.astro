@@ -2,7 +2,7 @@
 import Header from "@/components/Header.astro";
 import { SEO } from "astro-seo";
 import { SEO_CONFIG } from "../config/seo";
-import { DEFAULT_LOCALE, SITE_URL, SUPPORTED_LOCALES } from "../config/site";
+import { DEFAULT_LOCALE, SITE_URL, SUPPORTED_LOCALES, getLocalePath } from "../config/site";
 import type { Locale } from "../i18n";
 import "../styles/global.css";
 import Footer from "@/components/Footer.astro";
@@ -20,16 +20,12 @@ const { title, description, locale, canonicalPath, noindex = false } = Astro.pro
 const canonical = new URL(canonicalPath, `${SITE_URL}/`).toString();
 const languageAlternates = SUPPORTED_LOCALES.map((lang) => ({
 	hrefLang: lang,
-	href: `${SITE_URL}/${lang}/`,
+	href: new URL(getLocalePath(lang), `${SITE_URL}/`).toString(),
 }));
 const ogLocaleMap: Record<Locale, string> = {
 	en: "en_US",
 	ru: "ru_RU",
-	es: "es_ES",
-	zh: "zh_CN",
 	tt: "tt_RU",
-	kk: "kk_KZ",
-	uk: "uk_UA",
 };
 const openGraphLocale = ogLocaleMap[locale];
 const openGraphLocaleAlternate = SUPPORTED_LOCALES.filter((lang) => lang !== locale).map(
@@ -89,7 +85,11 @@ const openGraphLocaleAlternate = SUPPORTED_LOCALES.filter((lang) => lang !== loc
 			}}
 			extend={{
 				link: [
-					{ rel: "alternate", hreflang: "x-default", href: `${SITE_URL}/${DEFAULT_LOCALE}/` },
+					{
+						rel: "alternate",
+						hreflang: "x-default",
+						href: new URL(getLocalePath(DEFAULT_LOCALE), `${SITE_URL}/`).toString(),
+					},
 				],
 			}}
 		/>

@@ -1,4 +1,4 @@
-export default {
+const en = {
 	pageTitle: "color.xima — gradients that vibe",
 	pageDescription:
 		"Explore a curated gallery of gradients for cards, hero sections, and modern user interfaces.",
@@ -27,9 +27,11 @@ export default {
 	tagFlag: "Flags",
 	language_en: "English",
 	language_ru: "Russian",
-	language_es: "Spanish",
-	language_zh: "Chinese",
 	language_tt: "Tatar",
-	language_kk: "Kazakh",
-	language_uk: "Ukrainian",
+} as const;
+
+export type TranslationDictionary = {
+	[K in keyof typeof en]: string;
 };
+
+export default en;

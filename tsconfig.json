@@ -3,9 +3,7 @@
 	"include": [".astro/types.d.ts", "**/*"],
 	"exclude": ["dist"],
 	"compilerOptions": {
-		"strict": false,
-		"strictNullChecks": false,
-		"noImplicitAny": false,
+		"strict": true,
 		"checkJs": false,
 		"skipLibCheck": true,
 		"allowJs": true,

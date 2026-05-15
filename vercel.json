@@ -1,65 +1,11 @@
 {
   "headers": [
     {
-      "source": "/_astro/(.*)",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*).(jpg|jpeg|png|webp|avif|svg|ico|gif|css|js|woff|woff2|ttf|otf|txt|xml)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, s-maxage=2592000, stale-while-revalidate=2592000"
-        }
-      ]
-    },
-    {
-      "source": "/index.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, s-maxage=2592000, stale-while-revalidate=2592000"
-        }
-      ]
-    },
-    {
-      "source": "/(en|ru|es|zh|tt|kk|uk)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, s-maxage=2592000, stale-while-revalidate=2592000"
-        }
-      ]
-    },
-    {
-      "source": "/(en|ru|es|zh|tt|kk|uk)/",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, s-maxage=2592000, stale-while-revalidate=2592000"
-        }
-      ]
-    },
-    {
-      "source": "/(en|ru|es|zh|tt|kk|uk)/index.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, s-maxage=2592000, stale-while-revalidate=2592000"
+          "value": "public, max-age=604800, s-maxage=604800, stale-while-revalidate=604800"
         }
       ]
     }

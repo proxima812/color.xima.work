@@ -88,6 +88,16 @@
 	display: inline-flex;
 }
 
+#colors-gallery-root .copy-format-btn[aria-pressed="true"] {
+	background: rgb(24 24 27);
+	color: rgb(250 250 250);
+}
+
+.dark #colors-gallery-root .copy-format-btn[aria-pressed="true"] {
+	background: rgb(250 250 250);
+	color: rgb(24 24 27);
+}
+
 #colors-gallery-root .tag-filter-btn:is(:hover, :focus-visible) {
 	will-change: transform;
 }
@@ -184,28 +194,6 @@
 	}
 }
 
-/* ── Column switcher buttons ───────────────────────────── */
-#colors-gallery-root [data-cols-btn] {
-	color: rgb(161 161 170);
-	transition: color 0.15s ease, background-color 0.15s ease;
-}
-
-#colors-gallery-root [data-cols-btn]:hover {
-	color: rgb(63 63 70);
-}
-
-#colors-gallery-root [data-cols-btn][aria-pressed="true"] {
-	background: rgb(244 244 245);
-	color: rgb(24 24 27);
-}
-
-/* ── Sort button ───────────────────────────────────────── */
-#colors-gallery-root [data-sort-btn][aria-pressed="true"] {
-	background: rgb(24 24 27);
-	border-color: rgb(24 24 27);
-	color: rgb(250 250 250);
-}
-
 /* ── Dark mode ─────────────────────────────────────────── */
 .dark #colors-gallery-root .tag-filter-btn {
 	--tag-bg: rgb(39 39 42 / 0.8);
@@ -235,25 +223,6 @@
 }
 
 .dark #colors-gallery-root .lang-toggle-btn[aria-current="page"] {
-	background: rgb(250 250 250);
-	border-color: rgb(250 250 250);
-	color: rgb(24 24 27);
-}
-
-.dark #colors-gallery-root [data-cols-btn] {
-	color: rgb(113 113 122);
-}
-
-.dark #colors-gallery-root [data-cols-btn]:hover {
-	color: rgb(212 212 216);
-}
-
-.dark #colors-gallery-root [data-cols-btn][aria-pressed="true"] {
-	background: rgb(63 63 70);
-	color: rgb(250 250 250);
-}
-
-.dark #colors-gallery-root [data-sort-btn][aria-pressed="true"] {
 	background: rgb(250 250 250);
 	border-color: rgb(250 250 250);
 	color: rgb(24 24 27);

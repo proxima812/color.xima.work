@@ -7,7 +7,6 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const disabledLocaleCodes = new Set<Locale>(["zh", "es", "kk", "ru", "uk"]);
 const currentLocaleLabel =
 	localeOptions.find((option) => option.code === locale)?.label ?? locale.toUpperCase();
 ---
@@ -54,23 +53,21 @@ const currentLocaleLabel =
 		<div class="flex flex-col gap-0.5">
 			{
 				localeOptions.map(({ code, label }) => {
-					const isDisabled = disabledLocaleCodes.has(code);
 					const isCurrent = locale === code;
 
 					return (
 						<a
-							href={isDisabled ? undefined : getLocalePath(code)}
+							href={getLocalePath(code)}
 							class:list={[
 								"flex items-center justify-between rounded-xl px-2.5 py-2 text-sm transition",
 								isCurrent
 									? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900"
 									: "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800",
-								isDisabled ? "pointer-events-none opacity-40" : "cursor-pointer",
+								"cursor-pointer",
 							]}
-							data-lang-link={isDisabled ? undefined : "true"}
-							data-lang-btn={isDisabled ? undefined : code}
+							data-lang-link="true"
+							data-lang-btn={code}
 							aria-current={isCurrent ? "page" : "false"}
-							aria-disabled={isDisabled ? "true" : "false"}
 						>
 							<span>{label}</span>
 							<span class="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
