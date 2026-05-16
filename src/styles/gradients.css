@@ -30,7 +30,6 @@
 
   }
 
-
   .radial-forest-gradient {
     background-image: radial-gradient(140% 140% at 50% 50%,
         #f0fdf4 0%,
@@ -68,7 +67,6 @@
         #34d399 100%);
     border: solid 0.5px #d946ef;
 
-
   }
 
   .radial-galaxy-gradient {
@@ -88,8 +86,6 @@
         #7c3aed 100%);
     border: solid 0.5px #7c3aed;
   }
-
-
 
   /*===========================
   */
@@ -645,7 +641,6 @@
   border: 1px solid rgba(147, 197, 253, 0.2);
 }
 
-
 /* 23. Glow aurora cyan */
 .radial-glow-aurora-cyan {
   background-image:
@@ -1100,7 +1095,6 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84), 0 10px 24px -20px rgba(109, 40, 217, 0.34);
 }
 
-
 /* === AUTO: 100 additional gradients START === */
 
 /* linear 1 */
@@ -1225,62 +1219,82 @@
 
 /* conic 1 */
 .radial-conic-prism-spin {
-  background-image: conic-gradient(from 0deg at 50% 50%, #ecfeff 0deg, #67e8f9 150deg, #0ea5e9 300deg, #ecfeff 360deg);
-  border: 1px solid rgba(14, 116, 144, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 8deg at 50% 50%, #f8fafc 0deg, #bfdbfe 72deg, #38bdf8 156deg, #1d4ed8 278deg, #f8fafc 360deg);
+  border: 1px solid color-mix(in srgb, #1d4ed8 24%, transparent);
 }
 
 /* conic 2 */
 .radial-conic-lagoon-turn {
-  background-image: conic-gradient(from 18deg at 50% 50%, #fff7ed 0deg, #fdba74 150deg, #f97316 300deg, #fff7ed 360deg);
-  border: 1px solid rgba(194, 65, 12, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 25deg at 50% 50%, #fff7ed 0deg, #fed7aa 72deg, #fb923c 156deg, #c2410c 278deg, #fff7ed 360deg);
+  border: 1px solid color-mix(in srgb, #c2410c 24%, transparent);
 }
 
 /* conic 3 */
 .radial-conic-lava-ring {
-  background-image: conic-gradient(from 36deg at 50% 50%, #f5f3ff 0deg, #c4b5fd 150deg, #7c3aed 300deg, #f5f3ff 360deg);
-  border: 1px solid rgba(109, 40, 217, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 42deg at 50% 50%, #faf5ff 0deg, #ddd6fe 72deg, #a78bfa 156deg, #6d28d9 278deg, #faf5ff 360deg);
+  border: 1px solid color-mix(in srgb, #6d28d9 24%, transparent);
 }
 
 /* conic 4 */
 .radial-conic-aurora-wheel {
-  background-image: conic-gradient(from 54deg at 50% 50%, #ecfdf5 0deg, #6ee7b7 150deg, #10b981 300deg, #ecfdf5 360deg);
-  border: 1px solid rgba(5, 150, 105, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 59deg at 50% 50%, #ecfdf5 0deg, #bbf7d0 72deg, #34d399 156deg, #047857 278deg, #ecfdf5 360deg);
+  border: 1px solid color-mix(in srgb, #047857 24%, transparent);
 }
 
 /* conic 5 */
 .radial-conic-citrus-sweep {
-  background-image: conic-gradient(from 72deg at 50% 50%, #eff6ff 0deg, #93c5fd 150deg, #2563eb 300deg, #eff6ff 360deg);
-  border: 1px solid rgba(37, 99, 235, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 76deg at 50% 50%, #f0fdfa 0deg, #99f6e4 72deg, #2dd4bf 156deg, #0f766e 278deg, #f0fdfa 360deg);
+  border: 1px solid color-mix(in srgb, #0f766e 24%, transparent);
 }
 
 /* conic 6 */
 .radial-conic-berry-vortex {
-  background-image: conic-gradient(from 90deg at 50% 50%, #fdf2f8 0deg, #f9a8d4 150deg, #db2777 300deg, #fdf2f8 360deg);
-  border: 1px solid rgba(190, 24, 93, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 93deg at 50% 50%, #fdf2f8 0deg, #fbcfe8 72deg, #f472b6 156deg, #be185d 278deg, #fdf2f8 360deg);
+  border: 1px solid color-mix(in srgb, #be185d 24%, transparent);
 }
 
 /* conic 7 */
 .radial-conic-neon-disc {
-  background-image: conic-gradient(from 108deg at 50% 50%, #fffbeb 0deg, #fcd34d 150deg, #f59e0b 300deg, #fffbeb 360deg);
-  border: 1px solid rgba(180, 83, 9, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 110deg at 50% 50%, #fffbeb 0deg, #fde68a 72deg, #f59e0b 156deg, #92400e 278deg, #fffbeb 360deg);
+  border: 1px solid color-mix(in srgb, #92400e 24%, transparent);
 }
 
 /* conic 8 */
 .radial-conic-slate-swirl {
-  background-image: conic-gradient(from 126deg at 50% 50%, #f0fdfa 0deg, #5eead4 150deg, #0d9488 300deg, #f0fdfa 360deg);
-  border: 1px solid rgba(13, 148, 136, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 127deg at 50% 50%, #f8fafc 0deg, #cbd5e1 72deg, #64748b 156deg, #1e293b 278deg, #f8fafc 360deg);
+  border: 1px solid color-mix(in srgb, #1e293b 24%, transparent);
 }
 
 /* conic 9 */
 .radial-conic-tropic-loop {
-  background-image: conic-gradient(from 144deg at 50% 50%, #eef2ff 0deg, #818cf8 150deg, #4f46e5 300deg, #eef2ff 360deg);
-  border: 1px solid rgba(67, 56, 202, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 144deg at 50% 50%, #eef2ff 0deg, #c7d2fe 72deg, #818cf8 156deg, #3730a3 278deg, #eef2ff 360deg);
+  border: 1px solid color-mix(in srgb, #3730a3 24%, transparent);
 }
 
 /* conic 10 */
 .radial-conic-solar-fan {
-  background-image: conic-gradient(from 162deg at 50% 50%, #fef2f2 0deg, #fda4af 150deg, #e11d48 300deg, #fef2f2 360deg);
-  border: 1px solid rgba(190, 18, 60, 0.22);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 161deg at 50% 50%, #fff1f2 0deg, #fecdd3 72deg, #fb7185 156deg, #be123c 278deg, #fff1f2 360deg);
+  border: 1px solid color-mix(in srgb, #be123c 24%, transparent);
 }
 
 /* repLinear 1 */
@@ -1525,62 +1539,92 @@
 
 /* multi 1 */
 .radial-multi-stop-rainbow-soft {
-  background-image: linear-gradient(120deg, #ecfeff 0%, #ecfdf5 22%, #67e8f9 45%, #6ee7b7 68%, #0ea5e9 100%);
-  border: 1px solid rgba(14, 116, 144, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dbeafe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #38bdf8 40%, transparent) 0%, transparent 62%),
+    linear-gradient(118deg, #f8fafc 0%, #dbeafe 24%, #93c5fd 50%, #38bdf8 74%, #0f766e 100%);
+  border: 1px solid color-mix(in srgb, #0f766e 18%, transparent);
 }
 
 /* multi 2 */
 .radial-multi-stop-ocean-pop {
-  background-image: linear-gradient(127deg, #fff7ed 0%, #eff6ff 22%, #fdba74 45%, #93c5fd 68%, #f97316 100%);
-  border: 1px solid rgba(194, 65, 12, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fed7aa 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f97316 40%, transparent) 0%, transparent 62%),
+    linear-gradient(129deg, #fff7ed 0%, #fed7aa 24%, #fb923c 50%, #f97316 74%, #9a3412 100%);
+  border: 1px solid color-mix(in srgb, #9a3412 18%, transparent);
 }
 
 /* multi 3 */
 .radial-multi-stop-berry-nebula {
-  background-image: linear-gradient(134deg, #f5f3ff 0%, #fdf2f8 22%, #c4b5fd 45%, #f9a8d4 68%, #7c3aed 100%);
-  border: 1px solid rgba(109, 40, 217, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ede9fe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #a78bfa 40%, transparent) 0%, transparent 62%),
+    linear-gradient(140deg, #faf5ff 0%, #ede9fe 24%, #c4b5fd 50%, #a78bfa 74%, #581c87 100%);
+  border: 1px solid color-mix(in srgb, #581c87 18%, transparent);
 }
 
 /* multi 4 */
 .radial-multi-stop-sunrise-layer {
-  background-image: linear-gradient(141deg, #ecfdf5 0%, #fffbeb 22%, #6ee7b7 45%, #fcd34d 68%, #10b981 100%);
-  border: 1px solid rgba(5, 150, 105, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dcfce7 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #34d399 40%, transparent) 0%, transparent 62%),
+    linear-gradient(151deg, #ecfdf5 0%, #dcfce7 24%, #86efac 50%, #34d399 74%, #065f46 100%);
+  border: 1px solid color-mix(in srgb, #065f46 18%, transparent);
 }
 
 /* multi 5 */
 .radial-multi-stop-forest-stream {
-  background-image: linear-gradient(148deg, #eff6ff 0%, #f0fdfa 22%, #93c5fd 45%, #5eead4 68%, #2563eb 100%);
-  border: 1px solid rgba(37, 99, 235, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ccfbf1 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #14b8a6 40%, transparent) 0%, transparent 62%),
+    linear-gradient(162deg, #f0fdfa 0%, #ccfbf1 24%, #5eead4 50%, #14b8a6 74%, #134e4a 100%);
+  border: 1px solid color-mix(in srgb, #134e4a 18%, transparent);
 }
 
 /* multi 6 */
 .radial-multi-stop-neon-garden {
-  background-image: linear-gradient(155deg, #fdf2f8 0%, #eef2ff 22%, #f9a8d4 45%, #818cf8 68%, #db2777 100%);
-  border: 1px solid rgba(190, 24, 93, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fce7f3 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #ec4899 40%, transparent) 0%, transparent 62%),
+    linear-gradient(173deg, #fdf2f8 0%, #fce7f3 24%, #f9a8d4 50%, #ec4899 74%, #831843 100%);
+  border: 1px solid color-mix(in srgb, #831843 18%, transparent);
 }
 
 /* multi 7 */
 .radial-multi-stop-candy-cloud {
-  background-image: linear-gradient(162deg, #fffbeb 0%, #fef2f2 22%, #fcd34d 45%, #fda4af 68%, #f59e0b 100%);
-  border: 1px solid rgba(180, 83, 9, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fef3c7 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f59e0b 40%, transparent) 0%, transparent 62%),
+    linear-gradient(184deg, #fffbeb 0%, #fef3c7 24%, #fde68a 50%, #f59e0b 74%, #78350f 100%);
+  border: 1px solid color-mix(in srgb, #78350f 18%, transparent);
 }
 
 /* multi 8 */
 .radial-multi-stop-aurora-stack {
-  background-image: linear-gradient(169deg, #f0fdfa 0%, #ecfeff 22%, #5eead4 45%, #67e8f9 68%, #0d9488 100%);
-  border: 1px solid rgba(13, 148, 136, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e2e8f0 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #64748b 40%, transparent) 0%, transparent 62%),
+    linear-gradient(195deg, #f8fafc 0%, #e2e8f0 24%, #cbd5e1 50%, #64748b 74%, #0f172a 100%);
+  border: 1px solid color-mix(in srgb, #0f172a 18%, transparent);
 }
 
 /* multi 9 */
 .radial-multi-stop-desert-haze {
-  background-image: linear-gradient(176deg, #eef2ff 0%, #fff7ed 22%, #818cf8 45%, #fdba74 68%, #4f46e5 100%);
-  border: 1px solid rgba(67, 56, 202, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e0e7ff 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #6366f1 40%, transparent) 0%, transparent 62%),
+    linear-gradient(206deg, #eef2ff 0%, #e0e7ff 24%, #a5b4fc 50%, #6366f1 74%, #312e81 100%);
+  border: 1px solid color-mix(in srgb, #312e81 18%, transparent);
 }
 
 /* multi 10 */
 .radial-multi-stop-cosmic-ribbon {
-  background-image: linear-gradient(183deg, #fef2f2 0%, #f5f3ff 22%, #fda4af 45%, #c4b5fd 68%, #e11d48 100%);
-  border: 1px solid rgba(190, 18, 60, 0.22);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ffe4e6 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f43f5e 40%, transparent) 0%, transparent 62%),
+    linear-gradient(217deg, #fff1f2 0%, #ffe4e6 24%, #fda4af 50%, #f43f5e 74%, #881337 100%);
+  border: 1px solid color-mix(in srgb, #881337 18%, transparent);
 }
 
 /* transparent 1 */
@@ -2931,75 +2975,7 @@
 
 }
 
-
 /* === AUTO: extra gradients batch START === */
-
-.radial-linear-zen-cascade {
-  background-image:
-    linear-gradient(140deg,
-      oklch(82% 0.13 38) 0%,
-      color-mix(in oklch, oklch(86% 0.17 115) 72%, white) 32%,
-      color-mix(in oklch, oklch(78% 0.12 165) 74%, white) 68%,
-      oklch(65% 0.12 210) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
-}
-
-.radial-linear-saffron-current {
-  background-image:
-    linear-gradient(135deg,
-      oklch(84% 0.12 58) 0%,
-      color-mix(in oklch, oklch(82% 0.16 118) 72%, white) 34%,
-      color-mix(in oklch, oklch(71% 0.13 150) 70%, oklch(76% 0.06 200)) 72%,
-      oklch(58% 0.13 225) 100%);
-}
-
-.radial-linear-polar-bloom {
-  background-image:
-    linear-gradient(154deg,
-      oklch(88% 0.12 100) 0%,
-      color-mix(in oklch, oklch(82% 0.12 145) 76%, white) 30%,
-      color-mix(in oklch, oklch(74% 0.12 185) 66%, white) 68%,
-      oklch(55% 0.16 265) 100%);
-}
-
-.radial-linear-lilac-stream {
-  background-image:
-    linear-gradient(178deg,
-      oklch(90% 0.11 115) 0%,
-      color-mix(in oklch, oklch(82% 0.1 175) 72%, white) 36%,
-      color-mix(in oklch, oklch(73% 0.12 225) 70%, white) 72%,
-      oklch(56% 0.18 305) 100%);
-}
-
-.radial-linear-citrus-arc {
-  background-image:
-    linear-gradient(192deg,
-      oklch(88% 0.12 142) 0%,
-      color-mix(in oklch, oklch(80% 0.12 185) 74%, white) 40%,
-      color-mix(in oklch, oklch(71% 0.13 220) 66%, white) 70%,
-      oklch(57% 0.18 294) 100%);
-}
-
-.radial-linear-arbor-flow {
-  background-image: linear-gradient(211deg, hsl(103 92% 74%) 0%, hsl(203 86% 58%) 52%, hsl(291 80% 44%) 100%);
-}
-
-.radial-linear-lotus-veil {
-  background-image: linear-gradient(230deg, hsl(129 92% 74%) 0%, hsl(225 86% 58%) 52%, hsl(313 80% 44%) 100%);
-}
-
-.radial-linear-magma-drift {
-  background-image: linear-gradient(249deg, hsl(140 92% 74%) 0%, hsl(234 86% 58%) 52%, hsl(322 80% 44%) 100%);
-}
-
-.radial-linear-fjord-line {
-  background-image:
-    linear-gradient(268deg,
-      oklch(58% 0.18 14) 0%,
-      color-mix(in oklch, oklch(55% 0.2 300) 72%, oklch(70% 0.1 270)) 42%,
-      color-mix(in oklch, oklch(68% 0.1 260) 70%, white) 76%,
-      oklch(86% 0.07 175) 100%);
-}
 
 .radial-linear-skyline-flare {
   background-image: linear-gradient(287deg, hsl(186 92% 74%) 0%, hsl(276 86% 58%) 52%, hsl(4 80% 44%) 100%);
@@ -3013,21 +2989,8 @@
       oklch(82% 0.1 235) 100%);
 }
 
-.radial-linear-slate-wave {
-  background-image: linear-gradient(325deg, hsl(219 92% 74%) 0%, hsl(307 86% 58%) 52%, hsl(33 80% 44%) 100%);
-}
-
 .radial-linear-prism-trail {
   background-image: linear-gradient(344deg, hsl(241 92% 74%) 0%, hsl(329 86% 58%) 52%, hsl(51 80% 44%) 100%);
-}
-
-.radial-linear-melon-sheen {
-  background-image:
-    linear-gradient(180deg,
-      oklch(74% 0.13 72) 0%,
-      color-mix(in oklch, oklch(68% 0.18 8) 72%, oklch(82% 0.07 25)) 34%,
-      color-mix(in oklch, oklch(62% 0.18 338) 72%, oklch(76% 0.08 300)) 68%,
-      oklch(72% 0.12 270) 100%);
 }
 
 .radial-linear-mint-horizon {
@@ -3036,47 +2999,6 @@
       oklch(62% 0.19 24) 0%,
       color-mix(in oklch, oklch(66% 0.19 8) 72%, oklch(78% 0.06 338)) 44%,
       color-mix(in oklch, oklch(72% 0.12 82) 68%, oklch(76% 0.06 118)) 100%);
-}
-
-.radial-linear-royal-lane {
-  background-image:
-    linear-gradient(41deg,
-      oklch(71% 0.14 312) 0%,
-      color-mix(in oklch, oklch(74% 0.14 24) 72%, white) 54%,
-      oklch(70% 0.13 120) 100%);
-}
-
-.radial-linear-pearl-slide {
-  background-image:
-    linear-gradient(60deg,
-      oklch(80% 0.11 336) 0%,
-      color-mix(in oklch, oklch(83% 0.14 58) 74%, white) 48%,
-      color-mix(in oklch, oklch(70% 0.12 120) 76%, white) 100%);
-}
-
-.radial-linear-bloom-drive {
-  background-image: linear-gradient(79deg, hsl(323 92% 74%) 0%, hsl(45 86% 58%) 52%, hsl(141 80% 44%) 100%);
-}
-
-.radial-linear-thunder-wisp {
-  background-image: linear-gradient(98deg, hsl(345 92% 74%) 0%, hsl(65 86% 58%) 52%, hsl(163 80% 44%) 100%);
-}
-
-.radial-linear-lagoon-stride {
-  background-image: linear-gradient(117deg, hsl(5 92% 74%) 0%, hsl(87 86% 58%) 52%, hsl(187 80% 44%) 100%);
-}
-
-.radial-linear-honey-shift {
-  background-image: linear-gradient(136deg, hsl(14 92% 74%) 0%, hsl(98 86% 58%) 52%, hsl(198 80% 44%) 100%);
-}
-
-.radial-linear-orchid-streak {
-  background-image:
-    linear-gradient(155deg,
-      oklch(84% 0.11 65) 0%,
-      color-mix(in oklch, oklch(80% 0.15 122) 74%, white) 36%,
-      color-mix(in oklch, oklch(70% 0.11 180) 70%, white) 70%,
-      oklch(57% 0.17 250) 100%);
 }
 
 .radial-radial-opal-core {
@@ -3120,175 +3042,334 @@
 }
 
 .radial-conic-auric-tornado {
-  background-image: conic-gradient(from 18deg at 50% 50%, hsl(28 90% 78%) 0deg, hsl(118 84% 58%) 154deg, hsl(214 78% 40%) 308deg, hsl(28 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 178deg at 50% 50%, #f0f9ff 0deg, #bae6fd 72deg, #0ea5e9 156deg, #075985 278deg, #f0f9ff 360deg);
+  border: 1px solid color-mix(in srgb, #075985 24%, transparent);
 }
 
 .radial-conic-mint-gyro {
-  background-image: conic-gradient(from 45deg at 50% 50%, hsl(46 90% 78%) 0deg, hsl(142 84% 58%) 154deg, hsl(236 78% 40%) 308deg, hsl(46 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 195deg at 50% 50%, #f7fee7 0deg, #d9f99d 72deg, #84cc16 156deg, #3f6212 278deg, #f7fee7 360deg);
+  border: 1px solid color-mix(in srgb, #3f6212 24%, transparent);
 }
 
 .radial-conic-cobalt-helix {
-  background-image: conic-gradient(from 72deg at 50% 50%, hsl(66 90% 78%) 0deg, hsl(164 84% 58%) 154deg, hsl(256 78% 40%) 308deg, hsl(66 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 212deg at 50% 50%, #f8fafc 0deg, #bfdbfe 72deg, #38bdf8 156deg, #1d4ed8 278deg, #f8fafc 360deg);
+  border: 1px solid color-mix(in srgb, #1d4ed8 24%, transparent);
 }
 
 .radial-conic-coral-spiral {
-  background-image: conic-gradient(from 99deg at 50% 50%, hsl(88 90% 78%) 0deg, hsl(188 84% 58%) 154deg, hsl(278 78% 40%) 308deg, hsl(88 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 229deg at 50% 50%, #fff7ed 0deg, #fed7aa 72deg, #fb923c 156deg, #c2410c 278deg, #fff7ed 360deg);
+  border: 1px solid color-mix(in srgb, #c2410c 24%, transparent);
 }
 
 .radial-conic-ember-wheel {
-  background-image: conic-gradient(from 126deg at 50% 50%, hsl(99 90% 78%) 0deg, hsl(199 84% 58%) 154deg, hsl(287 78% 40%) 308deg, hsl(99 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 246deg at 50% 50%, #faf5ff 0deg, #ddd6fe 72deg, #a78bfa 156deg, #6d28d9 278deg, #faf5ff 360deg);
+  border: 1px solid color-mix(in srgb, #6d28d9 24%, transparent);
 }
 
 .radial-conic-petal-spin {
-  background-image: conic-gradient(from 153deg at 50% 50%, hsl(125 90% 78%) 0deg, hsl(221 84% 58%) 154deg, hsl(309 78% 40%) 308deg, hsl(125 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 263deg at 50% 50%, #ecfdf5 0deg, #bbf7d0 72deg, #34d399 156deg, #047857 278deg, #ecfdf5 360deg);
+  border: 1px solid color-mix(in srgb, #047857 24%, transparent);
 }
 
 .radial-conic-neon-crown {
-  background-image: conic-gradient(from 180deg at 50% 50%, hsl(149 90% 78%) 0deg, hsl(243 84% 58%) 154deg, hsl(331 78% 40%) 308deg, hsl(149 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 280deg at 50% 50%, #f0fdfa 0deg, #99f6e4 72deg, #2dd4bf 156deg, #0f766e 278deg, #f0fdfa 360deg);
+  border: 1px solid color-mix(in srgb, #0f766e 24%, transparent);
 }
 
 .radial-conic-sky-funnel {
-  background-image: conic-gradient(from 207deg at 50% 50%, hsl(158 90% 78%) 0deg, hsl(250 84% 58%) 154deg, hsl(340 78% 40%) 308deg, hsl(158 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 297deg at 50% 50%, #fdf2f8 0deg, #fbcfe8 72deg, #f472b6 156deg, #be185d 278deg, #fdf2f8 360deg);
+  border: 1px solid color-mix(in srgb, #be185d 24%, transparent);
 }
 
 .radial-conic-lunar-reel {
-  background-image: conic-gradient(from 234deg at 50% 50%, hsl(182 90% 78%) 0deg, hsl(272 84% 58%) 154deg, hsl(0 78% 40%) 308deg, hsl(182 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 314deg at 50% 50%, #fffbeb 0deg, #fde68a 72deg, #f59e0b 156deg, #92400e 278deg, #fffbeb 360deg);
+  border: 1px solid color-mix(in srgb, #92400e 24%, transparent);
 }
 
 .radial-conic-lagoon-vane {
-  background-image: conic-gradient(from 261deg at 50% 50%, hsl(206 90% 78%) 0deg, hsl(294 84% 58%) 154deg, hsl(22 78% 40%) 308deg, hsl(206 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 331deg at 50% 50%, #f8fafc 0deg, #cbd5e1 72deg, #64748b 156deg, #1e293b 278deg, #f8fafc 360deg);
+  border: 1px solid color-mix(in srgb, #1e293b 24%, transparent);
 }
 
 .radial-conic-ruby-orbit {
-  background-image: conic-gradient(from 288deg at 50% 50%, hsl(215 90% 78%) 0deg, hsl(303 84% 58%) 154deg, hsl(29 78% 40%) 308deg, hsl(215 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 348deg at 50% 50%, #eef2ff 0deg, #c7d2fe 72deg, #818cf8 156deg, #3730a3 278deg, #eef2ff 360deg);
+  border: 1px solid color-mix(in srgb, #3730a3 24%, transparent);
 }
 
 .radial-conic-glacier-swirl {
-  background-image: conic-gradient(from 315deg at 50% 50%, hsl(237 90% 78%) 0deg, hsl(325 84% 58%) 154deg, hsl(47 78% 40%) 308deg, hsl(237 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 5deg at 50% 50%, #fff1f2 0deg, #fecdd3 72deg, #fb7185 156deg, #be123c 278deg, #fff1f2 360deg);
+  border: 1px solid color-mix(in srgb, #be123c 24%, transparent);
 }
 
 .radial-conic-lime-rosette {
-  background-image: conic-gradient(from 342deg at 50% 50%, hsl(257 90% 78%) 0deg, hsl(347 84% 58%) 154deg, hsl(67 78% 40%) 308deg, hsl(257 90% 78%) 360deg);
+  background-image:
+    radial-gradient(70% 70% at 50% 50%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 62%),
+    conic-gradient(from 22deg at 50% 50%, #f0f9ff 0deg, #bae6fd 72deg, #0ea5e9 156deg, #075985 278deg, #f0f9ff 360deg);
+  border: 1px solid color-mix(in srgb, #075985 24%, transparent);
 }
 
 .radial-multi-stop-nectar-rush {
-  background-image: linear-gradient(104deg, hsl(12 94% 78%) 0%, hsl(76 90% 64%) 26%, hsl(156 86% 56%) 51%, hsl(232 82% 48%) 76%, hsl(302 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e0f2fe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #0284c7 40%, transparent) 0%, transparent 62%),
+    linear-gradient(228deg, #f0f9ff 0%, #e0f2fe 24%, #7dd3fc 50%, #0284c7 74%, #0c4a6e 100%);
+  border: 1px solid color-mix(in srgb, #0c4a6e 18%, transparent);
 }
 
 .radial-multi-stop-ruby-lagoon {
-  background-image: linear-gradient(127deg, hsl(32 94% 78%) 0%, hsl(100 90% 64%) 26%, hsl(180 86% 56%) 51%, hsl(252 82% 48%) 76%, hsl(324 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ecfccb 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #65a30d 40%, transparent) 0%, transparent 62%),
+    linear-gradient(239deg, #f7fee7 0%, #ecfccb 24%, #bef264 50%, #65a30d 74%, #365314 100%);
+  border: 1px solid color-mix(in srgb, #365314 18%, transparent);
 }
 
 .radial-multi-stop-aurora-glint {
-  background-image: linear-gradient(150deg, hsl(50 94% 78%) 0%, hsl(126 90% 64%) 26%, hsl(204 86% 56%) 51%, hsl(274 82% 48%) 76%, hsl(346 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dbeafe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #38bdf8 40%, transparent) 0%, transparent 62%),
+    linear-gradient(250deg, #f8fafc 0%, #dbeafe 24%, #93c5fd 50%, #38bdf8 74%, #0f766e 100%);
+  border: 1px solid color-mix(in srgb, #0f766e 18%, transparent);
 }
 
 .radial-multi-stop-lime-lattice {
-  background-image: linear-gradient(173deg, hsl(70 94% 78%) 0%, hsl(150 90% 64%) 26%, hsl(226 86% 56%) 51%, hsl(296 82% 48%) 76%, hsl(6 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fed7aa 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f97316 40%, transparent) 0%, transparent 62%),
+    linear-gradient(261deg, #fff7ed 0%, #fed7aa 24%, #fb923c 50%, #f97316 74%, #9a3412 100%);
+  border: 1px solid color-mix(in srgb, #9a3412 18%, transparent);
 }
 
 .radial-multi-stop-plasma-splash {
-  background-image: linear-gradient(196deg, hsl(79 94% 78%) 0%, hsl(159 90% 64%) 26%, hsl(235 86% 56%) 51%, hsl(305 82% 48%) 76%, hsl(15 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ede9fe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #a78bfa 40%, transparent) 0%, transparent 62%),
+    linear-gradient(272deg, #faf5ff 0%, #ede9fe 24%, #c4b5fd 50%, #a78bfa 74%, #581c87 100%);
+  border: 1px solid color-mix(in srgb, #581c87 18%, transparent);
 }
 
 .radial-multi-stop-indigo-garden {
-  background-image: linear-gradient(219deg, hsl(103 94% 78%) 0%, hsl(183 90% 64%) 26%, hsl(255 86% 56%) 51%, hsl(327 82% 48%) 76%, hsl(35 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dcfce7 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #34d399 40%, transparent) 0%, transparent 62%),
+    linear-gradient(283deg, #ecfdf5 0%, #dcfce7 24%, #86efac 50%, #34d399 74%, #065f46 100%);
+  border: 1px solid color-mix(in srgb, #065f46 18%, transparent);
 }
 
 .radial-multi-stop-coral-prism {
-  background-image: linear-gradient(242deg, hsl(129 94% 78%) 0%, hsl(207 90% 64%) 26%, hsl(277 86% 56%) 51%, hsl(349 82% 48%) 76%, hsl(53 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ccfbf1 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #14b8a6 40%, transparent) 0%, transparent 62%),
+    linear-gradient(294deg, #f0fdfa 0%, #ccfbf1 24%, #5eead4 50%, #14b8a6 74%, #134e4a 100%);
+  border: 1px solid color-mix(in srgb, #134e4a 18%, transparent);
 }
 
 .radial-multi-stop-sky-velour {
-  background-image: linear-gradient(265deg, hsl(140 94% 78%) 0%, hsl(216 90% 64%) 26%, hsl(286 86% 56%) 51%, hsl(356 82% 48%) 76%, hsl(60 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fce7f3 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #ec4899 40%, transparent) 0%, transparent 62%),
+    linear-gradient(305deg, #fdf2f8 0%, #fce7f3 24%, #f9a8d4 50%, #ec4899 74%, #831843 100%);
+  border: 1px solid color-mix(in srgb, #831843 18%, transparent);
 }
 
 .radial-multi-stop-melon-wave {
-  background-image: linear-gradient(288deg, hsl(162 94% 78%) 0%, hsl(238 90% 64%) 26%, hsl(308 86% 56%) 51%, hsl(18 82% 48%) 76%, hsl(82 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fef3c7 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f59e0b 40%, transparent) 0%, transparent 62%),
+    linear-gradient(316deg, #fffbeb 0%, #fef3c7 24%, #fde68a 50%, #f59e0b 74%, #78350f 100%);
+  border: 1px solid color-mix(in srgb, #78350f 18%, transparent);
 }
 
 .radial-multi-stop-tropic-ribbon {
-  background-image: linear-gradient(311deg, hsl(186 94% 78%) 0%, hsl(258 90% 64%) 26%, hsl(330 86% 56%) 51%, hsl(38 82% 48%) 76%, hsl(106 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e2e8f0 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #64748b 40%, transparent) 0%, transparent 62%),
+    linear-gradient(327deg, #f8fafc 0%, #e2e8f0 24%, #cbd5e1 50%, #64748b 74%, #0f172a 100%);
+  border: 1px solid color-mix(in srgb, #0f172a 18%, transparent);
 }
 
 .radial-multi-stop-nebula-shine {
-  background-image: linear-gradient(334deg, hsl(197 94% 78%) 0%, hsl(267 90% 64%) 26%, hsl(339 86% 56%) 51%, hsl(43 82% 48%) 76%, hsl(119 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e0e7ff 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #6366f1 40%, transparent) 0%, transparent 62%),
+    linear-gradient(338deg, #eef2ff 0%, #e0e7ff 24%, #a5b4fc 50%, #6366f1 74%, #312e81 100%);
+  border: 1px solid color-mix(in srgb, #312e81 18%, transparent);
 }
 
 .radial-multi-stop-candy-lumen {
-  background-image: linear-gradient(357deg, hsl(219 94% 78%) 0%, hsl(289 90% 64%) 26%, hsl(359 86% 56%) 51%, hsl(63 82% 48%) 76%, hsl(143 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ffe4e6 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f43f5e 40%, transparent) 0%, transparent 62%),
+    linear-gradient(349deg, #fff1f2 0%, #ffe4e6 24%, #fda4af 50%, #f43f5e 74%, #881337 100%);
+  border: 1px solid color-mix(in srgb, #881337 18%, transparent);
 }
 
 .radial-multi-stop-jade-horizon {
-  background-image: linear-gradient(20deg, hsl(241 94% 78%) 0%, hsl(311 90% 64%) 26%, hsl(21 86% 56%) 51%, hsl(85 82% 48%) 76%, hsl(165 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e0f2fe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #0284c7 40%, transparent) 0%, transparent 62%),
+    linear-gradient(0deg, #f0f9ff 0%, #e0f2fe 24%, #7dd3fc 50%, #0284c7 74%, #0c4a6e 100%);
+  border: 1px solid color-mix(in srgb, #0c4a6e 18%, transparent);
 }
 
 .radial-multi-stop-fuchsia-flow {
-  background-image: linear-gradient(43deg, hsl(248 94% 78%) 0%, hsl(320 90% 64%) 26%, hsl(28 86% 56%) 51%, hsl(96 82% 48%) 76%, hsl(176 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ecfccb 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #65a30d 40%, transparent) 0%, transparent 62%),
+    linear-gradient(11deg, #f7fee7 0%, #ecfccb 24%, #bef264 50%, #65a30d 74%, #365314 100%);
+  border: 1px solid color-mix(in srgb, #365314 18%, transparent);
 }
 
 .radial-multi-stop-solar-thread {
-  background-image: linear-gradient(66deg, hsl(270 94% 78%) 0%, hsl(342 90% 64%) 26%, hsl(46 86% 56%) 51%, hsl(122 82% 48%) 76%, hsl(200 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dbeafe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #38bdf8 40%, transparent) 0%, transparent 62%),
+    linear-gradient(22deg, #f8fafc 0%, #dbeafe 24%, #93c5fd 50%, #38bdf8 74%, #0f766e 100%);
+  border: 1px solid color-mix(in srgb, #0f766e 18%, transparent);
 }
 
 .radial-multi-stop-oasis-sheen {
-  background-image: linear-gradient(89deg, hsl(292 94% 78%) 0%, hsl(2 90% 64%) 26%, hsl(66 86% 56%) 51%, hsl(146 82% 48%) 76%, hsl(222 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fed7aa 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f97316 40%, transparent) 0%, transparent 62%),
+    linear-gradient(33deg, #fff7ed 0%, #fed7aa 24%, #fb923c 50%, #f97316 74%, #9a3412 100%);
+  border: 1px solid color-mix(in srgb, #9a3412 18%, transparent);
 }
 
 .radial-multi-stop-lilac-reverb {
-  background-image: linear-gradient(112deg, hsl(314 94% 78%) 0%, hsl(24 90% 64%) 26%, hsl(88 86% 56%) 51%, hsl(168 82% 48%) 76%, hsl(244 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ede9fe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #a78bfa 40%, transparent) 0%, transparent 62%),
+    linear-gradient(44deg, #faf5ff 0%, #ede9fe 24%, #c4b5fd 50%, #a78bfa 74%, #581c87 100%);
+  border: 1px solid color-mix(in srgb, #581c87 18%, transparent);
 }
 
 .radial-multi-stop-honey-pop {
-  background-image: linear-gradient(135deg, hsl(323 94% 78%) 0%, hsl(31 90% 64%) 26%, hsl(99 86% 56%) 51%, hsl(179 82% 48%) 76%, hsl(251 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dcfce7 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #34d399 40%, transparent) 0%, transparent 62%),
+    linear-gradient(55deg, #ecfdf5 0%, #dcfce7 24%, #86efac 50%, #34d399 74%, #065f46 100%);
+  border: 1px solid color-mix(in srgb, #065f46 18%, transparent);
 }
 
 .radial-multi-stop-cosmo-velvet {
-  background-image: linear-gradient(158deg, hsl(345 94% 78%) 0%, hsl(49 90% 64%) 26%, hsl(125 86% 56%) 51%, hsl(203 82% 48%) 76%, hsl(273 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ccfbf1 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #14b8a6 40%, transparent) 0%, transparent 62%),
+    linear-gradient(66deg, #f0fdfa 0%, #ccfbf1 24%, #5eead4 50%, #14b8a6 74%, #134e4a 100%);
+  border: 1px solid color-mix(in srgb, #134e4a 18%, transparent);
 }
 
 .radial-multi-stop-arctic-burst {
-  background-image: linear-gradient(181deg, hsl(5 94% 78%) 0%, hsl(69 90% 64%) 26%, hsl(149 86% 56%) 51%, hsl(225 82% 48%) 76%, hsl(295 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fce7f3 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #ec4899 40%, transparent) 0%, transparent 62%),
+    linear-gradient(77deg, #fdf2f8 0%, #fce7f3 24%, #f9a8d4 50%, #ec4899 74%, #831843 100%);
+  border: 1px solid color-mix(in srgb, #831843 18%, transparent);
 }
 
 .radial-multi-stop-berry-surge {
-  background-image: linear-gradient(204deg, hsl(14 94% 78%) 0%, hsl(78 90% 64%) 26%, hsl(158 86% 56%) 51%, hsl(234 82% 48%) 76%, hsl(304 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fef3c7 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f59e0b 40%, transparent) 0%, transparent 62%),
+    linear-gradient(88deg, #fffbeb 0%, #fef3c7 24%, #fde68a 50%, #f59e0b 74%, #78350f 100%);
+  border: 1px solid color-mix(in srgb, #78350f 18%, transparent);
 }
 
 .radial-multi-stop-cobalt-petal {
-  background-image: linear-gradient(227deg, hsl(34 94% 78%) 0%, hsl(102 90% 64%) 26%, hsl(182 86% 56%) 51%, hsl(254 82% 48%) 76%, hsl(326 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e2e8f0 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #64748b 40%, transparent) 0%, transparent 62%),
+    linear-gradient(99deg, #f8fafc 0%, #e2e8f0 24%, #cbd5e1 50%, #64748b 74%, #0f172a 100%);
+  border: 1px solid color-mix(in srgb, #0f172a 18%, transparent);
 }
 
 .radial-multi-stop-citrus-luster {
-  background-image: linear-gradient(250deg, hsl(52 94% 78%) 0%, hsl(128 90% 64%) 26%, hsl(206 86% 56%) 51%, hsl(276 82% 48%) 76%, hsl(348 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e0e7ff 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #6366f1 40%, transparent) 0%, transparent 62%),
+    linear-gradient(110deg, #eef2ff 0%, #e0e7ff 24%, #a5b4fc 50%, #6366f1 74%, #312e81 100%);
+  border: 1px solid color-mix(in srgb, #312e81 18%, transparent);
 }
 
 .radial-multi-stop-pearl-spectrum {
-  background-image: linear-gradient(273deg, hsl(59 94% 78%) 0%, hsl(139 90% 64%) 26%, hsl(215 86% 56%) 51%, hsl(285 82% 48%) 76%, hsl(355 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ffe4e6 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f43f5e 40%, transparent) 0%, transparent 62%),
+    linear-gradient(121deg, #fff1f2 0%, #ffe4e6 24%, #fda4af 50%, #f43f5e 74%, #881337 100%);
+  border: 1px solid color-mix(in srgb, #881337 18%, transparent);
 }
 
 .radial-multi-stop-magma-cascade {
-  background-image: linear-gradient(296deg, hsl(81 94% 78%) 0%, hsl(161 90% 64%) 26%, hsl(237 86% 56%) 51%, hsl(307 82% 48%) 76%, hsl(17 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #e0f2fe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #0284c7 40%, transparent) 0%, transparent 62%),
+    linear-gradient(132deg, #f0f9ff 0%, #e0f2fe 24%, #7dd3fc 50%, #0284c7 74%, #0c4a6e 100%);
+  border: 1px solid color-mix(in srgb, #0c4a6e 18%, transparent);
 }
 
 .radial-multi-stop-icefire-braid {
-  background-image: linear-gradient(319deg, hsl(105 94% 78%) 0%, hsl(185 90% 64%) 26%, hsl(257 86% 56%) 51%, hsl(329 82% 48%) 76%, hsl(37 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ecfccb 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #65a30d 40%, transparent) 0%, transparent 62%),
+    linear-gradient(143deg, #f7fee7 0%, #ecfccb 24%, #bef264 50%, #65a30d 74%, #365314 100%);
+  border: 1px solid color-mix(in srgb, #365314 18%, transparent);
 }
 
 .radial-multi-stop-sakura-blend {
-  background-image: linear-gradient(342deg, hsl(118 94% 78%) 0%, hsl(196 90% 64%) 26%, hsl(266 86% 56%) 51%, hsl(338 82% 48%) 76%, hsl(42 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dbeafe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #38bdf8 40%, transparent) 0%, transparent 62%),
+    linear-gradient(154deg, #f8fafc 0%, #dbeafe 24%, #93c5fd 50%, #38bdf8 74%, #0f766e 100%);
+  border: 1px solid color-mix(in srgb, #0f766e 18%, transparent);
 }
 
 .radial-multi-stop-opal-vector {
-  background-image: linear-gradient(5deg, hsl(142 94% 78%) 0%, hsl(218 90% 64%) 26%, hsl(288 86% 56%) 51%, hsl(358 82% 48%) 76%, hsl(62 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #fed7aa 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #f97316 40%, transparent) 0%, transparent 62%),
+    linear-gradient(165deg, #fff7ed 0%, #fed7aa 24%, #fb923c 50%, #f97316 74%, #9a3412 100%);
+  border: 1px solid color-mix(in srgb, #9a3412 18%, transparent);
 }
 
 .radial-multi-stop-violet-splash {
-  background-image: linear-gradient(28deg, hsl(164 94% 78%) 0%, hsl(240 90% 64%) 26%, hsl(310 86% 56%) 51%, hsl(20 82% 48%) 76%, hsl(84 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #ede9fe 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #a78bfa 40%, transparent) 0%, transparent 62%),
+    linear-gradient(176deg, #faf5ff 0%, #ede9fe 24%, #c4b5fd 50%, #a78bfa 74%, #581c87 100%);
+  border: 1px solid color-mix(in srgb, #581c87 18%, transparent);
 }
 
 .radial-multi-stop-mint-carnival {
-  background-image: linear-gradient(51deg, hsl(188 94% 78%) 0%, hsl(260 90% 64%) 26%, hsl(332 86% 56%) 51%, hsl(40 82% 48%) 76%, hsl(108 78% 40%) 100%);
+  background-image:
+    radial-gradient(80% 90% at 18% 16%, color-mix(in srgb, #dcfce7 56%, transparent) 0%, transparent 58%),
+    radial-gradient(72% 84% at 84% 82%, color-mix(in srgb, #34d399 40%, transparent) 0%, transparent 62%),
+    linear-gradient(187deg, #ecfdf5 0%, #dcfce7 24%, #86efac 50%, #34d399 74%, #065f46 100%);
+  border: 1px solid color-mix(in srgb, #065f46 18%, transparent);
 }
 
 .radial-mesh-nova-aether-field {

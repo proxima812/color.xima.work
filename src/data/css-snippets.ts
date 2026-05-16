@@ -87,9 +87,25 @@ function getTailwindSnippetByClassName(gradientsCssText: string, className: stri
 		.join(" ");
 }
 
+function toReactStyleKey(property: string): string {
+	return property.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
+}
+
+function getReactStyleSnippetByClassName(gradientsCssText: string, className: string): string {
+	const ruleBody = getRuleBodyByClassName(gradientsCssText, className);
+	if (!ruleBody) return `/* React style not found for ${className} */`;
+
+	const entries = parseDeclarations(ruleBody)
+		.map(([property, value]) => `  ${JSON.stringify(toReactStyleKey(property))}: ${JSON.stringify(value)}`)
+		.join(",\n");
+
+	return `{\n${entries}\n}`;
+}
+
 export interface CssSnippetFormats {
 	css: string;
 	tailwind: string;
+	react: string;
 }
 
 export function buildCssSnippetMap(classNames: readonly string[]): Record<string, CssSnippetFormats> {
@@ -101,6 +117,7 @@ export function buildCssSnippetMap(classNames: readonly string[]): Record<string
 		acc[className] = {
 			css: getCssSnippetByClassName(gradientsCssText, className),
 			tailwind: getTailwindSnippetByClassName(gradientsCssText, className),
+			react: getReactStyleSnippetByClassName(gradientsCssText, className),
 		};
 		return acc;
 	}, {});

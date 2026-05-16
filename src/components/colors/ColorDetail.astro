@@ -1,0 +1,142 @@
+---
+import { getCollectionPath } from "@/config";
+import type { ColorCardItem, CssSnippetFormats } from "@/data";
+import { Icon } from "astro-icon/components";
+import { codeToHtml } from "shiki";
+import CopyFormatIcon from "./CopyFormatIcon.astro";
+
+interface Props {
+	card: ColorCardItem;
+	snippets: CssSnippetFormats;
+	backHref?: string;
+}
+
+const { card, snippets, backHref = getCollectionPath(card.tags[0]) } = Astro.props;
+const copyFormats = [
+	["tailwind", "Tailwind", snippets.tailwind],
+	["css", "CSS3", snippets.css],
+] as const;
+
+const highlightedSnippets = await Promise.all(
+	copyFormats.map(async ([format, label, value]) => [
+		format,
+		label,
+		value,
+		await codeToHtml(value, {
+			lang: format === "tailwind" ? "html" : "css",
+			themes: {
+				light: "github-light",
+				dark: "github-dark",
+			},
+			defaultColor: false,
+		}),
+	] as const),
+);
+---
+
+<article class="mx-auto max-w-full space-y-10" data-detail-copy-root>
+	<a
+		href={backHref}
+		class="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-400 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-50"
+		data-back-link
+	>
+		<Icon name="mdi:arrow-left" aria-hidden="true" />
+		<span>Back</span>
+	</a>
+	<header class="space-y-5">
+		<div class="flex flex-wrap items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+			{card.tags.map((tag) => (
+				<a class="rounded-xl border border-zinc-200 px-3 py-1 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-700 dark:hover:border-zinc-500 dark:hover:text-zinc-100" href={getCollectionPath(tag)}>
+					{tag}
+				</a>
+			))}
+		</div>
+		<div class="space-y-3">
+			<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Gradient #{card.id + 1}</p>
+			<h1 class="text-5xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">{card.name}</h1>
+		</div>
+	</header>
+
+	<div class={`${card.className} grid min-h-80 place-items-center rounded-xl border border-black/5 shadow-sm`}>
+		<span class="rounded-xl bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm backdrop-blur dark:bg-zinc-950/70 dark:text-zinc-200">{card.className}</span>
+	</div>
+
+	<section class="max-w-full space-y-4">
+		<h2 class="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">Copy styles</h2>
+		<div class="grid min-w-0 gap-4">
+			{highlightedSnippets.map(([format, label, value, highlightedCode]) => (
+				<div class="min-w-0 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+					<div class="mb-3 flex items-center justify-between gap-3">
+						<span class="inline-flex items-center gap-2 text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+							<CopyFormatIcon format={format} />
+							{label}
+						</span>
+						<button
+								type="button"
+								class="inline-flex items-center gap-1.5 rounded-xl bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white data-[copy-state=copied]:opacity-70 [&[data-copy-state=copied]_[data-copy-icon='check']]:inline-flex [&[data-copy-state=copied]_[data-copy-icon='copy']]:hidden"
+								data-detail-copy-btn
+							data-detail-copy-value={value}
+							aria-label={`Copy ${label}`}
+						>
+								<span data-copy-icon="copy" aria-hidden="true"><Icon name="mdi:content-copy" /></span>
+								<span class="hidden" data-copy-icon="check" aria-hidden="true"><Icon name="mdi:check-bold" /></span>
+								<span data-copy-label data-copy-default="Copy" data-copy-copied="Copied">Copy</span>
+						</button>
+					</div>
+					<div
+						class="max-w-full overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 text-xs leading-6 dark:border-zinc-800 dark:bg-zinc-950 [&_pre]:max-h-72 [&_pre]:max-w-full [&_pre]:overflow-auto [&_pre]:p-4 [&_pre]:leading-6 [&_pre]:[background-color:var(--shiki-light-bg)!important] [&_pre]:[color:var(--shiki-light)] [&_span]:[color:var(--shiki-light)!important] dark:[&_pre]:[background-color:var(--shiki-dark-bg)!important] dark:[&_pre]:[color:var(--shiki-dark)] dark:[&_span]:[color:var(--shiki-dark)!important]"
+						set:html={highlightedCode}
+					/>
+				</div>
+			))}
+		</div>
+	</section>
+</article>
+
+<script is:inline>
+	const copyRoot = document.querySelector("[data-detail-copy-root]");
+	const copyButtons = copyRoot?.querySelectorAll("[data-detail-copy-btn]");
+
+	async function copyText(value) {
+		try {
+			await navigator.clipboard.writeText(value);
+			return true;
+		} catch {
+			const textarea = document.createElement("textarea");
+			textarea.value = value;
+			textarea.style.position = "fixed";
+			textarea.style.left = "-9999px";
+			document.body.appendChild(textarea);
+			textarea.select();
+			const ok = document.execCommand("copy");
+			document.body.removeChild(textarea);
+			return ok;
+		}
+	}
+
+	copyButtons?.forEach((button) => {
+		button.addEventListener("click", async () => {
+			const value = button.getAttribute("data-detail-copy-value");
+			if (!value) return;
+			const copied = await copyText(value);
+			if (!copied) return;
+				button.setAttribute("data-copy-state", "copied");
+				const label = button.querySelector("[data-copy-label]");
+			if (label) label.textContent = label.getAttribute("data-copy-copied") || "Copied";
+			window.setTimeout(() => {
+					button.removeAttribute("data-copy-state");
+				if (label) label.textContent = label.getAttribute("data-copy-default") || "Copy";
+			}, 1400);
+		});
+	});
+
+	const backLink = copyRoot?.querySelector("[data-back-link]");
+	if (backLink instanceof HTMLAnchorElement && document.referrer) {
+		try {
+			const referrer = new URL(document.referrer);
+			if (referrer.origin === window.location.origin && referrer.href !== window.location.href) {
+				backLink.href = referrer.href;
+			}
+		} catch {}
+	}
+</script>

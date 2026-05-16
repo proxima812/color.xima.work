@@ -9,13 +9,6 @@ export default defineConfig({
 	prefetch: {
 		defaultStrategy: "load",
 	},
-	i18n: {
-		locales: ["en", "ru", "tt"],
-		defaultLocale: "en",
-		routing: {
-			prefixDefaultLocale: false,
-		},
-	},
 	integrations: [sitemap(), icon()],
 	vite: {
 		plugins: [tailwindcss()],

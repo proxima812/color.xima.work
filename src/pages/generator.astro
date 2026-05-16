@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+import { GradientGenerator } from "@/components/colors";
+import { getGeneratorPath } from "@/config";
+import { buildColorCards, buildCssSnippetMap } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+function getBackgroundImage(css: string): string {
+	const match = css.match(/background-image:\s*([\s\S]*?);/);
+	return match?.[1]?.trim() ?? "linear-gradient(90deg,#18181b,#71717a)";
+}
+
+const cards = buildColorCards(await getCollection("colors"));
+const snippets = buildCssSnippetMap(cards.map((card) => card.className));
+const generatorItems = cards.map((card) => ({
+	...card,
+	snippets: snippets[card.className],
+	backgroundImage: getBackgroundImage(snippets[card.className].css),
+}));
+---
+
+<BaseLayout
+	title="Gradient generator - color.xima"
+	description="Generate color blocks and text gradients from the color.xima gradient library."
+	canonicalPath={getGeneratorPath()}
+>
+	<GradientGenerator items={generatorItems} />
+</BaseLayout>

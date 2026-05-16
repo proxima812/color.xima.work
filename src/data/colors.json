@@ -582,60 +582,6 @@
     "className": "radial-linear-amber-rush"
   },
   {
-    "id": "linear-zen-cascade",
-    "name": "linear-zen-cascade",
-    "index": 97,
-    "className": "radial-linear-zen-cascade"
-  },
-  {
-    "id": "linear-saffron-current",
-    "name": "linear-saffron-current",
-    "index": 98,
-    "className": "radial-linear-saffron-current"
-  },
-  {
-    "id": "linear-polar-bloom",
-    "name": "linear-polar-bloom",
-    "index": 99,
-    "className": "radial-linear-polar-bloom"
-  },
-  {
-    "id": "linear-lilac-stream",
-    "name": "linear-lilac-stream",
-    "index": 100,
-    "className": "radial-linear-lilac-stream"
-  },
-  {
-    "id": "linear-citrus-arc",
-    "name": "linear-citrus-arc",
-    "index": 101,
-    "className": "radial-linear-citrus-arc"
-  },
-  {
-    "id": "linear-arbor-flow",
-    "name": "linear-arbor-flow",
-    "index": 102,
-    "className": "radial-linear-arbor-flow"
-  },
-  {
-    "id": "linear-lotus-veil",
-    "name": "linear-lotus-veil",
-    "index": 103,
-    "className": "radial-linear-lotus-veil"
-  },
-  {
-    "id": "linear-magma-drift",
-    "name": "linear-magma-drift",
-    "index": 104,
-    "className": "radial-linear-magma-drift"
-  },
-  {
-    "id": "linear-fjord-line",
-    "name": "linear-fjord-line",
-    "index": 105,
-    "className": "radial-linear-fjord-line"
-  },
-  {
     "id": "linear-skyline-flare",
     "name": "linear-skyline-flare",
     "index": 106,
@@ -648,70 +594,16 @@
     "className": "radial-linear-coral-tide"
   },
   {
-    "id": "linear-slate-wave",
-    "name": "linear-slate-wave",
-    "index": 108,
-    "className": "radial-linear-slate-wave"
-  },
-  {
     "id": "linear-prism-trail",
     "name": "linear-prism-trail",
     "index": 109,
     "className": "radial-linear-prism-trail"
   },
   {
-    "id": "linear-melon-sheen",
-    "name": "linear-melon-sheen",
-    "index": 110,
-    "className": "radial-linear-melon-sheen"
-  },
-  {
     "id": "linear-mint-horizon",
     "name": "linear-mint-horizon",
     "index": 111,
     "className": "radial-linear-mint-horizon"
-  },
-  {
-    "id": "linear-royal-lane",
-    "name": "linear-royal-lane",
-    "index": 112,
-    "className": "radial-linear-royal-lane"
-  },
-  {
-    "id": "linear-pearl-slide",
-    "name": "linear-pearl-slide",
-    "index": 113,
-    "className": "radial-linear-pearl-slide"
-  },
-  {
-    "id": "linear-bloom-drive",
-    "name": "linear-bloom-drive",
-    "index": 114,
-    "className": "radial-linear-bloom-drive"
-  },
-  {
-    "id": "linear-thunder-wisp",
-    "name": "linear-thunder-wisp",
-    "index": 115,
-    "className": "radial-linear-thunder-wisp"
-  },
-  {
-    "id": "linear-lagoon-stride",
-    "name": "linear-lagoon-stride",
-    "index": 116,
-    "className": "radial-linear-lagoon-stride"
-  },
-  {
-    "id": "linear-honey-shift",
-    "name": "linear-honey-shift",
-    "index": 117,
-    "className": "radial-linear-honey-shift"
-  },
-  {
-    "id": "linear-orchid-streak",
-    "name": "linear-orchid-streak",
-    "index": 118,
-    "className": "radial-linear-orchid-streak"
   },
   {
     "id": "radial-cyan-orb",

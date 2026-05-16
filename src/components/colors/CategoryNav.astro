@@ -1,0 +1,57 @@
+---
+import { getCardsPath, getCollectionPath } from "@/config";
+import { tagOrder, type TagId } from "@/data";
+
+interface Props {
+	activeTag?: TagId;
+}
+
+const { activeTag } = Astro.props;
+const tagLabels: Record<TagId, string> = {
+	glow: "Glow",
+	mesh: "Mesh",
+	linear: "Linear",
+	radial: "Radial",
+	conic: "Conic",
+	repeating: "Repeating",
+	"multi-stop": "Multi-stop",
+	transparent: "Transparent",
+	border: "Border",
+	noise: "Noise",
+	femme: "Femme",
+	masc: "Masc",
+	flag: "Flags",
+	other: "Other",
+};
+---
+
+<nav class="flex flex-wrap items-center gap-2" aria-label="Gradient categories">
+	<a
+		class:list={[
+			"rounded-xl border px-3 py-1.5 text-xs font-medium transition",
+			!activeTag
+				? "border-zinc-950 bg-zinc-950 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-950"
+				: "border-zinc-200 text-zinc-500 hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100",
+		]}
+		href={getCardsPath()}
+		aria-current={!activeTag ? "page" : undefined}
+	>
+		All
+	</a>
+	{
+		tagOrder.map((tag) => (
+			<a
+				class:list={[
+					"rounded-xl border px-3 py-1.5 text-xs font-medium transition",
+					activeTag === tag
+						? "border-zinc-950 bg-zinc-950 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-950"
+						: "border-zinc-200 text-zinc-500 hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100",
+				]}
+				href={getCollectionPath(tag)}
+				aria-current={activeTag === tag ? "page" : undefined}
+			>
+				{tagLabels[tag]}
+			</a>
+		))
+	}
+</nav>

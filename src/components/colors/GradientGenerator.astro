@@ -1,0 +1,229 @@
+---
+import type { ColorCardItem, CssSnippetFormats } from "@/data";
+import { Icon } from "astro-icon/components";
+
+interface GeneratorItem extends ColorCardItem {
+	snippets: CssSnippetFormats;
+	backgroundImage: string;
+}
+
+interface Props {
+	items: GeneratorItem[];
+}
+
+const { items } = Astro.props;
+const firstItem = items[0];
+---
+
+<section class="space-y-8" data-gradient-generator>
+	<header class="space-y-4">
+		<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Generator</p>
+		<h1 class="max-w-3xl text-5xl font-semibold leading-none tracking-tight text-zinc-950 md:text-6xl dark:text-zinc-50">
+			Create with color.xima gradients
+		</h1>
+		<p class="max-w-2xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
+			Choose any existing gradient, preview it as a block or as text, then copy Tailwind or CSS3.
+		</p>
+	</header>
+
+	<div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
+		<div class="min-w-0 space-y-5 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+			<div class="flex flex-wrap items-center justify-between gap-3">
+				<div class="inline-flex rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-sm font-medium text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" role="tablist" aria-label="Generator mode">
+					<button class="rounded-xl px-3 py-1.5 transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50" type="button" data-generator-mode="color" aria-selected="true">Color</button>
+					<button class="rounded-xl px-3 py-1.5 transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50" type="button" data-generator-mode="text" aria-selected="false">Text</button>
+				</div>
+				<div class="inline-flex rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-xs font-semibold text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" aria-label="Copy format">
+					<button class="rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50" type="button" data-generator-format="tailwind" aria-pressed="true">Tailwind</button>
+					<button class="rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50" type="button" data-generator-format="css" aria-pressed="false">CSS3</button>
+				</div>
+			</div>
+
+			<div class="grid min-h-[24rem] place-items-center overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-zinc-950">
+				<div class={`${firstItem?.className ?? ""} grid min-h-72 w-full place-items-center rounded-xl border border-black/5 p-6 shadow-sm`} data-color-preview>
+					<p class="rounded-xl bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm backdrop-blur dark:bg-zinc-950/70 dark:text-zinc-200" data-color-label>{firstItem?.name}</p>
+				</div>
+				<div class="hidden w-full place-items-center py-10" data-text-preview-wrap>
+					<p class="max-w-full break-words bg-clip-text text-center text-5xl font-semibold leading-tight text-transparent sm:text-7xl" style={`background-image: ${firstItem?.backgroundImage ?? "linear-gradient(90deg,#18181b,#71717a)"};`} data-text-preview>
+						color.xima
+					</p>
+				</div>
+			</div>
+
+			<label class="block space-y-2" data-text-input-wrap hidden>
+				<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Text</span>
+				<textarea class="min-h-24 w-full resize-y rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600" data-generator-text spellcheck="false">color.xima</textarea>
+			</label>
+
+			<div class="min-w-0 rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-950">
+				<div class="mb-2 flex items-center justify-between gap-3">
+					<span class="truncate text-sm font-medium text-zinc-700 dark:text-zinc-300" data-code-label>Tailwind</span>
+					<button class="inline-flex items-center gap-1.5 rounded-xl bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white" type="button" data-generator-copy>
+						<Icon name="mdi:content-copy" aria-hidden="true" />
+						<span data-copy-label>Copy</span>
+					</button>
+				</div>
+				<pre class="max-h-48 max-w-full overflow-auto rounded-xl bg-white p-3 text-xs leading-6 text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"><code data-generator-code>{firstItem?.snippets.tailwind}</code></pre>
+			</div>
+		</div>
+
+		<aside class="min-w-0 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
+			<div class="mb-3 flex items-center justify-between gap-3 px-1">
+				<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Gradients</h2>
+				<span class="text-xs text-zinc-400">{items.length}</span>
+			</div>
+			<div class="grid max-h-[42rem] gap-2 overflow-auto pr-1">
+				{
+					items.map((item, index) => (
+						<button
+							type="button"
+							class="grid grid-cols-[3.5rem_minmax(0,1fr)] items-center gap-3 rounded-xl border border-transparent p-2 text-left transition hover:bg-zinc-50 aria-pressed:border-zinc-300 aria-pressed:bg-zinc-50 dark:hover:bg-zinc-950 dark:aria-pressed:border-zinc-700 dark:aria-pressed:bg-zinc-950"
+							data-gradient-option
+							data-index={index}
+							aria-pressed={index === 0 ? "true" : "false"}
+						>
+							<span class={`${item.className} h-12 rounded-xl border border-black/5`} aria-hidden="true" />
+							<span class="min-w-0">
+								<span class="block truncate text-sm font-medium text-zinc-800 dark:text-zinc-200">{item.name}</span>
+								<span class="block truncate text-xs text-zinc-500 dark:text-zinc-400">{item.tags.join(", ")}</span>
+							</span>
+						</button>
+					))
+				}
+			</div>
+		</aside>
+	</div>
+</section>
+
+<script is:inline type="application/json" id="gradient-generator-data" set:html={JSON.stringify(items)}></script>
+
+<script>
+	interface GeneratorItem {
+		name: string;
+		className: string;
+		backgroundImage: string;
+		snippets: {
+			css: string;
+			tailwind: string;
+		};
+	}
+
+	const root = document.querySelector("[data-gradient-generator]");
+	const dataElement = document.getElementById("gradient-generator-data");
+	const items = (dataElement?.textContent ? JSON.parse(dataElement.textContent) : []) as GeneratorItem[];
+	const modeButtons = root?.querySelectorAll<HTMLButtonElement>("[data-generator-mode]");
+	const formatButtons = root?.querySelectorAll<HTMLButtonElement>("[data-generator-format]");
+	const optionButtons = root?.querySelectorAll<HTMLButtonElement>("[data-gradient-option]");
+	const colorPreview = root?.querySelector<HTMLElement>("[data-color-preview]");
+	const colorLabel = root?.querySelector<HTMLElement>("[data-color-label]");
+	const textPreviewWrap = root?.querySelector<HTMLElement>("[data-text-preview-wrap]");
+	const textPreview = root?.querySelector<HTMLElement>("[data-text-preview]");
+	const textInputWrap = root?.querySelector<HTMLElement>("[data-text-input-wrap]");
+	const textInput = root?.querySelector<HTMLTextAreaElement>("[data-generator-text]");
+	const code = root?.querySelector<HTMLElement>("[data-generator-code]");
+	const codeLabel = root?.querySelector<HTMLElement>("[data-code-label]");
+	const copyButton = root?.querySelector<HTMLButtonElement>("[data-generator-copy]");
+	const copyLabel = root?.querySelector<HTMLElement>("[data-copy-label]");
+
+	let activeIndex = 0;
+	let activeMode: "color" | "text" = "color";
+	let activeFormat: "tailwind" | "css" = "tailwind";
+
+	function getActiveItem() {
+		return items[activeIndex] ?? items[0];
+	}
+
+	function getSnippet(item: GeneratorItem) {
+		if (activeMode === "text") {
+			if (activeFormat === "tailwind") {
+				return `bg-clip-text text-transparent bg-[${item.backgroundImage.replace(/\s*,\s*/g, ",").replace(/\s+/g, "_")}]`;
+			}
+			return `.gradient-text {\n  background-image: ${item.backgroundImage};\n  background-clip: text;\n  -webkit-background-clip: text;\n  color: transparent;\n}`;
+		}
+		return item.snippets[activeFormat];
+	}
+
+	function render() {
+		const item = getActiveItem();
+		if (!item) return;
+
+		if (colorPreview) {
+			colorPreview.className = `${item.className} grid min-h-72 w-full place-items-center rounded-xl border border-black/5 p-6 shadow-sm`;
+			colorPreview.classList.toggle("hidden", activeMode !== "color");
+		}
+		if (colorLabel) colorLabel.textContent = item.name;
+		if (textPreviewWrap) {
+			textPreviewWrap.classList.toggle("hidden", activeMode !== "text");
+			textPreviewWrap.classList.toggle("grid", activeMode === "text");
+		}
+		if (textPreview) {
+			textPreview.style.backgroundImage = item.backgroundImage;
+			textPreview.textContent = textInput?.value || "color.xima";
+		}
+		if (textInputWrap) textInputWrap.hidden = activeMode !== "text";
+		if (code) code.textContent = getSnippet(item);
+		if (codeLabel) codeLabel.textContent = activeFormat === "tailwind" ? "Tailwind" : "CSS3";
+
+		modeButtons?.forEach((button) => {
+			button.setAttribute("aria-selected", button.dataset.generatorMode === activeMode ? "true" : "false");
+		});
+		formatButtons?.forEach((button) => {
+			button.setAttribute("aria-pressed", button.dataset.generatorFormat === activeFormat ? "true" : "false");
+		});
+		optionButtons?.forEach((button) => {
+			button.setAttribute("aria-pressed", button.dataset.index === String(activeIndex) ? "true" : "false");
+		});
+	}
+
+	async function copyText(value: string) {
+		try {
+			await navigator.clipboard.writeText(value);
+			return true;
+		} catch {
+			const textarea = document.createElement("textarea");
+			textarea.value = value;
+			textarea.style.position = "fixed";
+			textarea.style.left = "-9999px";
+			document.body.appendChild(textarea);
+			textarea.select();
+			const ok = document.execCommand("copy");
+			document.body.removeChild(textarea);
+			return ok;
+		}
+	}
+
+	modeButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			activeMode = button.dataset.generatorMode === "text" ? "text" : "color";
+			render();
+		});
+	});
+
+	formatButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			activeFormat = button.dataset.generatorFormat === "css" ? "css" : "tailwind";
+			render();
+		});
+	});
+
+	optionButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			activeIndex = Number(button.dataset.index ?? 0);
+			render();
+		});
+	});
+
+	textInput?.addEventListener("input", render);
+	copyButton?.addEventListener("click", async () => {
+		const value = code?.textContent ?? "";
+		if (!value) return;
+		const copied = await copyText(value);
+		if (!copied || !copyLabel) return;
+		copyLabel.textContent = "Copied";
+		window.setTimeout(() => {
+			copyLabel.textContent = "Copy";
+		}, 1400);
+	});
+
+	render();
+</script>

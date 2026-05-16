@@ -1,11 +1,10 @@
 ---
-import type { Locale } from "../../i18n";
-import type { TagId } from "../../data/tags";
-import type { CssSnippetFormats } from "../../data/css-snippets";
+import type { CssSnippetFormats, TagId } from "@/data";
 import ColorCard from "./ColorCard.astro";
 
 interface CardItem {
 	id: number;
+	slug: string;
 	name: string;
 	lowerName: string;
 	className: string;
@@ -14,16 +13,19 @@ interface CardItem {
 }
 
 interface Props {
-	locale: Locale;
 	items: CardItem[];
 	cssSnippetMap: Record<string, CssSnippetFormats>;
 }
 
-const { locale, items, cssSnippetMap } = Astro.props;
+const { items, cssSnippetMap } = Astro.props;
 ---
 
-<div id="colors-grid" class="grid" data-cols="2" role="list">
-	{items.map((card) => <ColorCard locale={locale} {...card} />)}
+<div
+	id="colors-grid"
+	class="grid gap-16 grid-cols-1 md:grid-cols-2"
+	role="list"
+>
+	{items.map((card) => <ColorCard {...card} />)}
 </div>
 
 <script is:inline define:vars={{ cssSnippetMap }}>
@@ -55,20 +57,21 @@ const { locale, items, cssSnippetMap } = Astro.props;
 				if (!className) return;
 
 				const card = button.closest("[data-color-item]");
-				const format = card?.getAttribute("data-copy-active-format") === "tailwind" ? "tailwind" : "css";
+				const activeFormat = card?.getAttribute("data-copy-active-format");
+				const format = activeFormat === "css" || activeFormat === "react" ? activeFormat : "tailwind";
 				const value = cssSnippetMap[className]?.[format] ?? className;
 				const copied = await copyTextToClipboard(value);
 				if (!copied) return;
 
-				button.classList.add("is-copied");
-				const labelEl = button.querySelector(".copy-btn-label");
+				button.setAttribute("data-copy-state", "copied");
+				const labelEl = button.querySelector("[data-copy-label]");
 				if (labelEl) {
 					const copiedText = labelEl.getAttribute("data-copy-copied") || "Copied";
 					labelEl.textContent = copiedText;
 				}
 
 				window.setTimeout(() => {
-					button.classList.remove("is-copied");
+					button.removeAttribute("data-copy-state");
 					if (labelEl) {
 						const defaultText = labelEl.getAttribute("data-copy-default") || "Copy";
 						labelEl.textContent = defaultText;

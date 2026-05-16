@@ -1,0 +1,13 @@
+---
+import { getCollection } from "astro:content";
+import { GradientRedirect } from "@/components/colors";
+import { getRandomPath } from "@/config";
+import { buildColorCards } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+const cards = buildColorCards(await getCollection("colors"));
+---
+
+<BaseLayout title="Random gradient - color.xima" description="Open a random gradient from color.xima.work." canonicalPath={getRandomPath()} noindex>
+	<GradientRedirect items={cards} mode="random" />
+</BaseLayout>

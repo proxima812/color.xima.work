@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import { CategoryNav, ColorsGrid } from "@/components/colors";
+import { getCollectionPath } from "@/config";
+import { buildColorCards, buildCssSnippetMap, tagOrder, type TagId } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+export function getStaticPaths() {
+	return tagOrder.map((tag) => ({ params: { tag } }));
+}
+
+const tag = Astro.params.tag as TagId;
+const cards = buildColorCards(await getCollection("colors")).filter((card) => card.tags.includes(tag));
+const cssSnippetMap = buildCssSnippetMap(cards.map((card) => card.className));
+---
+
+<BaseLayout title={`${tag} gradients - color.xima`} description={`Curated ${tag} gradients for modern UI work.`} canonicalPath={getCollectionPath(tag)}>
+	<section class="space-y-8">
+		<header class="space-y-3">
+			<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Collection</p>
+			<h1 class="text-5xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">{tag} gradients</h1>
+			<p class="text-lg text-zinc-500 dark:text-zinc-400">{cards.length} gradients ready to copy as CSS3 or Tailwind CSS v4.</p>
+		</header>
+		<CategoryNav activeTag={tag} />
+		<div id="colors-gallery-root">
+			<ColorsGrid items={cards} cssSnippetMap={cssSnippetMap} />
+		</div>
+	</section>
+</BaseLayout>

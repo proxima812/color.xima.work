@@ -1,25 +1,22 @@
 ---
-import type { Locale } from "../../i18n";
-import { t } from "../../i18n";
 interface Props {
-	locale: Locale;
 	count: number;
 	lastUpdatedLabel: string;
 }
 
-const { locale, count } = Astro.props;
-const countText = t(locale, "blocksCountTemplate").replace("{count}", String(count));
+const { count } = Astro.props;
+const countText = `More than ${count} blocks of colors`;
 ---
 
-<main >
+<main class="mb-24">
 	<h1
 		class="flex items-center gap-3 text-[56px] text-zinc-900 tracking-[-1.2px] font-semibold leading-15 dark:text-zinc-50"
 	>
 		<!-- <Logotype /> -->
-    <span>{t(locale, "galleryTitle")}</span>
+    <span>color.xima — gradients that vibe</span>
 	</h1>
 	<div
-		class="flex md:gap-3 flex-wrap gap-1.5 mb-24 items-center mt-6 text-xl text-zinc-400 md:leading-relaxed dark:text-zinc-500"
+		class="flex md:gap-3 flex-wrap gap-1.5 items-center mt-6 text-xl text-zinc-400 md:leading-relaxed dark:text-zinc-500"
 	>
 		<span
 			set:html={countText.replace(
@@ -28,6 +25,7 @@ const countText = t(locale, "blocksCountTemplate").replace("{count}", String(cou
 			)}
 		/>
 		<span>⦁</span>
-		<span>{t(locale, "blocksWillUpdate")}</span>
+		<span>The blocks will be updated</span>
 	</div>
+	<slot />
 </main>

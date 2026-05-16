@@ -1,0 +1,146 @@
+---
+import { getCollection } from "astro:content";
+import { getGradientPath } from "@/config";
+import { buildColorCards } from "@/data";
+
+const cards = buildColorCards(await getCollection("colors"));
+const searchItems = cards.map((card) => ({
+	id: String(card.id),
+	name: card.name,
+	description: card.description,
+	tags: card.tags,
+	className: card.className,
+	url: getGradientPath(card.slug),
+}));
+---
+
+<div class="fixed inset-0 z-[100] hidden size-full" data-search-overlay aria-hidden="true">
+	<div class="absolute inset-0 size-full bg-white/45 backdrop-blur-md dark:bg-zinc-950/45" data-search-backdrop></div>
+	<div class="relative mx-auto mt-24 w-[calc(100%-2.5rem)] max-w-xl overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl shadow-zinc-950/20 dark:border-zinc-800 dark:bg-zinc-950" role="dialog" aria-modal="true" aria-label="Search gradients">
+		<div class="flex items-center gap-3 border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+			<svg class="h-4 w-4 shrink-0 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+				<path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3m1.8-5.2a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+			</svg>
+			<input class="min-w-0 flex-1 bg-transparent text-sm text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-zinc-100 dark:placeholder:text-zinc-500" type="search" placeholder="Search gradients..." data-search-input autocomplete="off" spellcheck="false" />
+			<button type="button" class="rounded-xl border border-zinc-200 bg-zinc-50 px-2 py-1 text-[11px] font-medium uppercase text-zinc-500 transition hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100" data-search-close aria-label="Close search">
+				Esc
+			</button>
+		</div>
+		<div class="max-h-80 overflow-auto p-2" data-search-results>
+			<p class="py-14 text-center text-sm text-zinc-500 dark:text-zinc-400">Type to search...</p>
+		</div>
+	</div>
+</div>
+
+<script is:inline type="application/json" id="site-search-data" set:html={JSON.stringify(searchItems)}></script>
+
+<script>
+	import Fuse from "fuse.js";
+
+	interface SearchItem {
+		id: string;
+		name: string;
+		description: string;
+		tags: string[];
+		className: string;
+		url: string;
+	}
+
+	const overlay = document.querySelector("[data-search-overlay]");
+	const closeButton = document.querySelector("[data-search-close]");
+	const input = document.querySelector<HTMLInputElement>("[data-search-input]");
+	const results = document.querySelector("[data-search-results]");
+	const dataElement = document.getElementById("site-search-data");
+	const items = (dataElement?.textContent ? JSON.parse(dataElement.textContent) : []) as SearchItem[];
+	const fuse = new Fuse<SearchItem>(items, {
+		includeScore: true,
+		ignoreLocation: true,
+		threshold: 0.36,
+		keys: [
+			{ name: "name", weight: 0.48 },
+			{ name: "description", weight: 0.24 },
+			{ name: "tags", weight: 0.18 },
+			{ name: "className", weight: 0.1 },
+		],
+	});
+
+	function escapeHtml(value: string) {
+		return value
+			.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;");
+	}
+
+	function renderResults(query: string) {
+		if (!results) return;
+		const term = query.trim();
+		if (!term) {
+			results.innerHTML = `<p class="py-14 text-center text-sm text-zinc-500 dark:text-zinc-400">Type to search...</p>`;
+			return;
+		}
+
+		const matches = fuse.search(term).slice(0, 8).map((result) => result.item);
+		if (!matches.length) {
+			results.innerHTML = `<p class="py-14 text-center text-sm text-zinc-500 dark:text-zinc-400">No gradients found</p>`;
+			return;
+		}
+
+		results.innerHTML = matches
+			.map(
+				(item) => `
+					<a class="flex items-center justify-between gap-4 rounded-xl px-3 py-2 text-sm transition hover:bg-zinc-100 dark:hover:bg-zinc-900" href="${item.url}">
+						<span class="min-w-0">
+							<span class="block truncate font-medium text-zinc-900 dark:text-zinc-100">${escapeHtml(item.name)}</span>
+							<span class="block truncate text-xs text-zinc-500 dark:text-zinc-400">${escapeHtml(item.tags.join(", "))}</span>
+						</span>
+						<span class="shrink-0 rounded-xl border border-zinc-200 px-2 py-1 text-[10px] uppercase text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">Open</span>
+					</a>
+				`,
+			)
+			.join("");
+	}
+
+	function openSearch() {
+		if (!(overlay instanceof HTMLElement)) return;
+		overlay.classList.remove("hidden");
+		overlay.setAttribute("aria-hidden", "false");
+		document.documentElement.classList.add("overflow-hidden");
+		window.setTimeout(() => input?.focus(), 0);
+	}
+
+	function closeSearch() {
+		if (!(overlay instanceof HTMLElement)) return;
+		overlay.classList.add("hidden");
+		overlay.setAttribute("aria-hidden", "true");
+		document.documentElement.classList.remove("overflow-hidden");
+		if (input) input.value = "";
+		renderResults("");
+	}
+
+	document.addEventListener("click", (event) => {
+		const target = event.target;
+		if (!(target instanceof HTMLElement)) return;
+		if (target.closest("[data-search-open]")) openSearch();
+		if (target.hasAttribute("data-search-backdrop")) closeSearch();
+	});
+	closeButton?.addEventListener("click", closeSearch);
+	input?.addEventListener("input", () => renderResults(input.value));
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") {
+			closeSearch();
+			return;
+		}
+		if (event.key.toLowerCase() !== "k") return;
+		if (!event.metaKey && !event.ctrlKey) return;
+		const target = event.target;
+		const isEditable =
+			target instanceof HTMLInputElement ||
+			target instanceof HTMLTextAreaElement ||
+			(target instanceof HTMLElement && target.isContentEditable);
+		if (isEditable && target !== input) return;
+		event.preventDefault();
+		openSearch();
+	});
+</script>

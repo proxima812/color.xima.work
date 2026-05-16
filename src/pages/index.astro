@@ -1,17 +1,62 @@
 ---
-import ColorsGallery from "../components/colors/ColorsGallery.astro";
-import { DEFAULT_LOCALE, getLocalePath } from "../config/site";
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { t } from "../i18n";
+import { getCardsPath, getCollectionPath } from "@/config";
+import { tagOrder, type TagId } from "@/data";
+import { BaseLayout } from "@/layouts";
 
 export const prerender = true;
+
+const tagLabels: Record<TagId, string> = {
+	glow: "Glow",
+	mesh: "Mesh",
+	linear: "Linear",
+	radial: "Radial",
+	conic: "Conic",
+	repeating: "Repeating",
+	"multi-stop": "Multi-stop",
+	transparent: "Transparent",
+	border: "Border",
+	noise: "Noise",
+	femme: "Femme",
+	masc: "Masc",
+	flag: "Flags",
+	other: "Other",
+};
 ---
 
 <BaseLayout
-	title={t(DEFAULT_LOCALE, "pageTitle")}
-	description={t(DEFAULT_LOCALE, "pageDescription")}
-	locale={DEFAULT_LOCALE}
-	canonicalPath={getLocalePath(DEFAULT_LOCALE)}
+	title="color.xima — gradients that vibe"
+	description="Explore a curated gallery of gradients for cards, hero sections, and modern user interfaces."
+	canonicalPath="/"
 >
-	<ColorsGallery locale={DEFAULT_LOCALE} />
+	<section class="grid min-h-[calc(100vh-16rem)] place-items-center py-12 text-center">
+		<div class="w-full max-w-3xl space-y-8">
+			<div class="space-y-4">
+				<h1 class="text-5xl font-semibold leading-none tracking-tight text-zinc-950 sm:text-7xl dark:text-zinc-50">
+					color.xima
+				</h1>
+				<p class="mx-auto max-w-xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
+					Gradients that vibe for modern UI, cards, hero sections, copy-ready CSS, Tailwind classes, and a gradient generator.
+				</p>
+			</div>
+
+			<div class="flex flex-wrap justify-center gap-2">
+				<a
+					class="rounded-xl border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-50"
+					href={getCardsPath()}
+				>
+					All cards
+				</a>
+				{
+					tagOrder.map((tag) => (
+						<a
+							class="rounded-xl border border-zinc-200 px-4 py-2 text-sm text-zinc-500 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100"
+							href={getCollectionPath(tag)}
+						>
+							{tagLabels[tag]}
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
 </BaseLayout>

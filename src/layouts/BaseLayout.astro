@@ -1,39 +1,23 @@
 ---
-import Header from "@/components/Header.astro";
+import { Footer, Header, SearchOverlay } from "@/components";
 import { SEO } from "astro-seo";
-import { SEO_CONFIG } from "../config/seo";
-import { DEFAULT_LOCALE, SITE_URL, SUPPORTED_LOCALES, getLocalePath } from "../config/site";
-import type { Locale } from "../i18n";
+import { SEO_CONFIG, SITE_URL } from "@/config";
 import "../styles/global.css";
-import Footer from "@/components/Footer.astro";
 
 interface Props {
 	title: string;
 	description: string;
-	locale: Locale;
 	canonicalPath: string;
 	noindex?: boolean;
+	ogImage?: string;
 }
 
-const { title, description, locale, canonicalPath, noindex = false } = Astro.props;
+const { title, description, canonicalPath, noindex = false, ogImage = SEO_CONFIG.defaultOgImage } = Astro.props;
 
 const canonical = new URL(canonicalPath, `${SITE_URL}/`).toString();
-const languageAlternates = SUPPORTED_LOCALES.map((lang) => ({
-	hrefLang: lang,
-	href: new URL(getLocalePath(lang), `${SITE_URL}/`).toString(),
-}));
-const ogLocaleMap: Record<Locale, string> = {
-	en: "en_US",
-	ru: "ru_RU",
-	tt: "tt_RU",
-};
-const openGraphLocale = ogLocaleMap[locale];
-const openGraphLocaleAlternate = SUPPORTED_LOCALES.filter((lang) => lang !== locale).map(
-	(lang) => ogLocaleMap[lang],
-);
 ---
 
-<html lang={locale}>
+<html lang="en">
 	<head class="scroll-smooth">
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -62,18 +46,16 @@ const openGraphLocaleAlternate = SUPPORTED_LOCALES.filter((lang) => lang !== loc
 			noindex={noindex}
 			nofollow={noindex}
 			robotsExtras="max-image-preview:large"
-			languageAlternates={languageAlternates}
 			openGraph={{
 				basic: {
 					title,
 					type: "website",
-					image: `${SITE_URL}${SEO_CONFIG.defaultOgImage}`,
+					image: `${SITE_URL}${ogImage}`,
 					url: canonical,
 				},
 				optional: {
 					description,
-					locale: openGraphLocale,
-					localeAlternate: openGraphLocaleAlternate,
+					locale: "en_US",
 					siteName: SEO_CONFIG.siteName,
 				},
 			}}
@@ -81,23 +63,15 @@ const openGraphLocaleAlternate = SUPPORTED_LOCALES.filter((lang) => lang !== loc
 				card: SEO_CONFIG.twitterCard,
 				title,
 				description,
-				image: `${SITE_URL}${SEO_CONFIG.defaultOgImage}`,
-			}}
-			extend={{
-				link: [
-					{
-						rel: "alternate",
-						hreflang: "x-default",
-						href: new URL(getLocalePath(DEFAULT_LOCALE), `${SITE_URL}/`).toString(),
-					},
-				],
+				image: `${SITE_URL}${ogImage}`,
 			}}
 		/>
 	</head>
 	<body
 		class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 antialiased dark:text-zinc-100"
 	>
-		<Header locale={locale} />
+		<Header />
+		<SearchOverlay />
 		<main class="mx-auto w-full max-w-5xl container px-5 py-12">
 			<slot />
 		</main>

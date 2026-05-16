@@ -1,27 +1,27 @@
 <style>
-	.header-shell {
+	[data-header-shell] {
 		will-change: transform, opacity, filter;
 	}
 
-	.header-shell[data-header-state="hidden"] {
+	[data-header-shell][data-header-state="hidden"] {
 		transform: translateY(calc(-100% - 2.25rem));
 		opacity: 0;
 		filter: blur(6px);
 		pointer-events: none;
 	}
 
-	.header-shell[data-header-state="hidden"] .header-surface {
+	[data-header-shell][data-header-state="hidden"] [data-header-surface] {
 		transform: scale(0.985);
 		opacity: 0.92;
 	}
 
-	.header-shell[data-header-scrolled="true"] .header-surface {
+	[data-header-shell][data-header-scrolled="true"] [data-header-surface] {
 		background: rgba(255, 255, 255, 0.88);
 		border-color: rgba(255, 255, 255, 0.92);
 		box-shadow: 0 18px 44px -28px rgba(15, 23, 42, 0.34);
 	}
 
-	:global(.dark) .header-shell[data-header-scrolled="true"] .header-surface {
+	:global(.dark) [data-header-shell][data-header-scrolled="true"] [data-header-surface] {
 		background: rgba(9, 9, 11, 0.9);
 		border-color: rgba(63, 63, 70, 0.6);
 		box-shadow: 0 18px 44px -28px rgba(0, 0, 0, 0.6);
@@ -29,21 +29,9 @@
 </style>
 
 <script is:inline>
-	const langLinks = document.querySelectorAll("[data-lang-link]");
-	const header = document.querySelector(".header-shell");
-	const dropdown = document.querySelector(".header-locale-dropdown");
+	const header = document.querySelector("[data-header-shell]");
 	let lastScrollY = window.scrollY;
 	let ticking = false;
-
-	if (langLinks.length) {
-		langLinks.forEach((link) => {
-			link.addEventListener("click", () => {
-				const lang = link.getAttribute("data-lang-btn");
-				if (!lang) return;
-				document.cookie = `preferred_locale=${lang}; Path=/; Max-Age=31536000; SameSite=Lax`;
-			});
-		});
-	}
 
 	function updateHeaderVisibility() {
 		if (!(header instanceof HTMLElement)) return;
@@ -57,9 +45,6 @@
 			header.dataset.headerState = "visible";
 		} else if (delta > 10) {
 			header.dataset.headerState = "hidden";
-			if (dropdown instanceof HTMLDetailsElement) {
-				dropdown.removeAttribute("open");
-			}
 		}
 
 		lastScrollY = currentScrollY;
@@ -80,10 +65,4 @@
 		},
 		{ passive: true },
 	);
-
-	document.addEventListener("click", (event) => {
-		if (!(dropdown instanceof HTMLDetailsElement)) return;
-		if (dropdown.contains(event.target instanceof Node ? event.target : null)) return;
-		dropdown.removeAttribute("open");
-	});
 </script>

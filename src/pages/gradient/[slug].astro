@@ -1,0 +1,25 @@
+---
+import { getCollection } from "astro:content";
+import { CategoryNav, ColorDetail } from "@/components/colors";
+import { getCollectionPath, getGradientPath } from "@/config";
+import { buildColorCards, buildCssSnippetMap } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+export async function getStaticPaths() {
+	const cards = buildColorCards(await getCollection("colors"));
+	return cards.map((card) => ({ params: { slug: card.slug }, props: { slug: card.slug } }));
+}
+
+const { slug } = Astro.props;
+const cards = buildColorCards(await getCollection("colors"));
+const card = cards.find((item) => item.slug === slug);
+if (!card) return Astro.redirect("/");
+const snippets = buildCssSnippetMap([card.className])[card.className];
+---
+
+<BaseLayout title={`${card.name} - color.xima`} description={card.description} canonicalPath={getGradientPath(card.slug)} ogImage={`/og/${card.slug}.svg`}>
+	<div class="mb-10">
+		<CategoryNav activeTag={card.tags[0]} />
+	</div>
+	<ColorDetail card={card} snippets={snippets} backHref={getCollectionPath(card.tags[0])} />
+</BaseLayout>

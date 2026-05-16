@@ -1,81 +1,79 @@
 ---
-import { t } from "@/i18n";
+import { getGradientPath } from "@/config";
 import { Icon } from "astro-icon/components";
+import CopyFormatIcon from "./CopyFormatIcon.astro";
 
-const { locale, ...card } = Astro.props;
+const card = Astro.props;
 
-const copyDefaultLabel = t(locale, "copyDefault");
-const copyCopiedLabel = t(locale, "copyCopied");
+const copyDefaultLabel = "Copy";
+const copyCopiedLabel = "Copied";
 ---
 
 <article
-	class="color-card flex gap-6 items-center"
+	class="grid gap-4 rounded-xl border border-zinc-200 bg-white/70 p-3 shadow-sm shadow-zinc-950/[0.03] transition-colors hover:border-zinc-300 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:p-4 dark:border-zinc-800 dark:bg-zinc-900/70 dark:shadow-black/10 dark:hover:border-zinc-700"
 	data-color-item
 	data-color-id={card.id}
 	data-color-name={card.lowerName}
 	data-color-tags={card.tags.join(",")}
-	data-copy-active-format="css"
+	data-copy-active-format="tailwind"
 	role="listitem"
 	aria-label={card.name}
 >
-	<div class="color-card-preview">
-		<div class="text-zinc-500 flex justify-between items-center mb-2 dark:text-zinc-400">
-			<span class="text-sm">{card.name}</span>
-			<span class="text-xs">{t(locale, "idLabel")}: {card.id + 1}</span>
-		</div>
-		<div
-			data-my-action="screen"
-			class={`${card.className} rounded-3xl h-36 grid place-items-center ring-1 ring-black/5`}
-			aria-hidden="true"
-		>
-		</div>
+	<div
+		data-my-action="screen"
+		class={`${card.className} aspect-[4/3] min-h-32 rounded-xl ring-1 ring-black/5 sm:min-h-0 dark:ring-white/10`}
+		aria-hidden="true"
+	>
 	</div>
 
-	<div
-		class="color-card-content text-xs md:text-sm flex justify-between gap-2 flex-col h-full py-8 items-end text-zinc-500 leading-relaxed desc-text dark:text-zinc-400"
+	<aside
+		class="flex min-w-0 flex-col justify-between gap-4 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950/60"
 	>
-		<span>{card.description}</span>
-		<div class="flex items-center gap-3 font-medium">
+		<div class="min-w-0 space-y-3">
+			<a
+				class="block truncate text-base font-medium text-zinc-700 decoration-blue-400 decoration-dashed underline underline-offset-4 transition hover:text-zinc-950 dark:text-zinc-200 dark:hover:text-zinc-50"
+				href={getGradientPath(card.slug)}>{card.name}</a
+			>
 			<div
-				class="inline-flex rounded-md border border-zinc-200 bg-white p-0.5 text-[10px] font-semibold text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
+				class="inline-flex max-w-full rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-xs font-semibold text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400"
 				aria-label="Copy format"
 			>
 				<button
 					type="button"
-					class="copy-format-btn rounded px-1.5 py-1 transition"
+					class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-zinc-900 aria-pressed:text-zinc-50 dark:aria-pressed:bg-zinc-100 dark:aria-pressed:text-zinc-950"
 					data-copy-format="css"
-					aria-pressed="true"
+					aria-pressed="false"
+					aria-label="CSS3"
 				>
-					CSS3
+					<CopyFormatIcon format="css" />
+					<span>CSS3</span>
 				</button>
 				<button
 					type="button"
-					class="copy-format-btn rounded px-1.5 py-1 transition"
+					class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-zinc-900 aria-pressed:text-zinc-50 dark:aria-pressed:bg-zinc-100 dark:aria-pressed:text-zinc-950"
 					data-copy-format="tailwind"
-					aria-pressed="false"
+					aria-pressed="true"
+					aria-label="Tailwind CSS"
 				>
-					TW
+					<CopyFormatIcon format="tailwind" />
+					<span>Tailwind CSS</span>
 				</button>
 			</div>
-			<button
-				type="button"
-				class="copy-btn cursor-pointer ring-1 ring-inset ring-zinc-400/30 inline-flex gap-1.5 items-center px-3 py-2 rounded-md text-xs text-black bg-white dark:bg-zinc-800 dark:text-zinc-200 dark:ring-zinc-600/50"
-				data-copy-btn
-				data-copy-class={card.className}
-				aria-label={`${copyDefaultLabel} CSS: ${card.name}`}
-			>
-				<span class="copy-btn-icon copy-btn-icon-copy" aria-hidden="true"
-					><Icon name="mdi:content-copy" /></span
-				>
-				<span class="copy-btn-icon copy-btn-icon-check" aria-hidden="true"
-					><Icon name="mdi:check-bold" /></span
-				>
-				<span
-					class="copy-btn-label"
-					data-copy-default={copyDefaultLabel}
-					data-copy-copied={copyCopiedLabel}>{copyDefaultLabel}</span
-				>
-			</button>
 		</div>
-	</div>
+		<button
+			type="button"
+			class="inline-flex w-fit cursor-pointer items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-900 transition-[opacity,border-color,background-color,color] duration-200 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:border-zinc-700 dark:hover:bg-zinc-800 data-[copy-state=copied]:opacity-70 [&[data-copy-state=copied]_[data-copy-icon='check']]:inline-flex [&[data-copy-state=copied]_[data-copy-icon='copy']]:hidden"
+			data-copy-btn
+			data-copy-class={card.className}
+			aria-label={`${copyDefaultLabel} Tailwind CSS: ${card.name}`}
+		>
+			<span data-copy-icon="copy" aria-hidden="true"><Icon name="mdi:content-copy" /></span>
+			<span class="hidden" data-copy-icon="check" aria-hidden="true"><Icon name="mdi:check-bold" /></span>
+			<span
+				data-copy-label
+				data-copy-default={copyDefaultLabel}
+				data-copy-copied={copyCopiedLabel}>{copyDefaultLabel}</span
+			>
+		</button>
+	</aside>
 </article>

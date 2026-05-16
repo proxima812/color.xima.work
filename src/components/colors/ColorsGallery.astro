@@ -1,25 +1,21 @@
 ---
 import { getCollection } from "astro:content";
-import { LAST_UPDATED_ISO } from "../../config/site";
-import { buildColorCards } from "../../data/color-cards";
-import { buildCssSnippetMap } from "../../data/css-snippets";
-import { getLastUpdatedLabel } from "../../data/descriptions";
-import { tagOrder } from "../../data/tags";
-import type { Locale } from "../../i18n";
+import { LAST_UPDATED_ISO } from "@/config";
+import { buildColorCards, buildCssSnippetMap, getLastUpdatedLabel, tagOrder } from "@/data";
 import ColorsControls from "./ColorsControls.astro";
 import ColorsGrid from "./ColorsGrid.astro";
 import ColorsHeader from "./ColorsHeader.astro";
 
 interface Props {
-	locale: Locale;
 	lastUpdated?: string;
+	showControls?: boolean;
 }
 
-const { locale = "en", lastUpdated: lastUpdatedInput = LAST_UPDATED_ISO } = Astro.props;
+const { lastUpdated: lastUpdatedInput = LAST_UPDATED_ISO, showControls = true } = Astro.props;
 const colorEntries = await getCollection("colors");
 
-const lastUpdatedLabel = getLastUpdatedLabel(locale, lastUpdatedInput);
-const colorCards = buildColorCards(locale, colorEntries);
+const lastUpdatedLabel = getLastUpdatedLabel(lastUpdatedInput);
+const colorCards = buildColorCards(colorEntries);
 const cssSnippetMap = buildCssSnippetMap(colorCards.map((card) => card.className));
 
 const usedTags = new Set(colorCards.flatMap((card) => card.tags));
@@ -38,15 +34,20 @@ const tagCounts = colorCards.reduce(
 ---
 
 <div id="colors-gallery-root">
-	<ColorsHeader locale={locale} count={colorCards.length} lastUpdatedLabel={lastUpdatedLabel} />
+	<ColorsHeader count={colorCards.length} lastUpdatedLabel={lastUpdatedLabel}>
+		<slot name="after-header" />
+	</ColorsHeader>
 	<section>
-		<ColorsControls
-			locale={locale}
-			tagOptions={tagOptions}
-			tagCounts={tagCounts}
-			totalCount={colorCards.length}
-			searchItems={colorCards}
-		/>
-		<ColorsGrid locale={locale} items={colorCards} cssSnippetMap={cssSnippetMap} />
+		{
+			showControls && (
+				<ColorsControls
+					tagOptions={tagOptions}
+					tagCounts={tagCounts}
+					totalCount={colorCards.length}
+					searchItems={colorCards}
+				/>
+			)
+		}
+		<ColorsGrid items={colorCards} cssSnippetMap={cssSnippetMap} />
 	</section>
 </div>

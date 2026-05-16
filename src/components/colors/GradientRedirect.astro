@@ -1,0 +1,26 @@
+---
+import { getGradientPath } from "@/config";
+import type { ColorCardItem } from "@/data";
+
+interface Props {
+	items: ColorCardItem[];
+	mode: "daily" | "random";
+}
+
+const { items, mode } = Astro.props;
+const fallbackPath = getGradientPath(items[0]?.slug ?? "");
+const redirectItems = items.map((item) => item.slug);
+---
+
+<p class="text-zinc-500 dark:text-zinc-400">Opening a gradient...</p>
+<script is:inline define:vars={{ redirectItems, mode, fallbackPath }}>
+	const dayIndex = () => Math.floor(Date.now() / 86400000);
+	const index = mode === "daily"
+		? dayIndex() % redirectItems.length
+		: Math.floor(Math.random() * redirectItems.length);
+	const slug = redirectItems[index];
+	window.location.replace(slug ? `/gradient/${slug}/` : fallbackPath);
+</script>
+<noscript>
+	<a class="underline" href={fallbackPath}>Open first gradient</a>
+</noscript>

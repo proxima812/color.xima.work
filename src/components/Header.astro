@@ -1,29 +1,40 @@
 ---
-import type { Locale } from "../i18n";
-import GithubStarsBadge from "./colors/GithubStarsBadge.astro";
-import HeaderBehavior from "./header/HeaderBehavior.astro";
-import HeaderLocaleMenu from "./header/HeaderLocaleMenu.astro";
-import ThemeToggle from "./header/ThemeToggle.astro";
+import { GithubStarsBadge } from "@/components/colors";
+import { HeaderBehavior, HeaderSearch, ThemeToggle } from "@/components/header";
+import { getGeneratorPath, getRandomPath } from "@/config";
+import { Icon } from "astro-icon/components";
 import Logotype from "./logotype.astro";
-
-interface Props {
-	locale: Locale;
-}
-
-const { locale } = Astro.props;
 ---
 
 <header
-	class="px-5 mx-auto w-full max-w-5xl container header-shell sticky top-5 z-50 mb-10 translate-y-0 select-none opacity-100 transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+	class="px-5 mx-auto w-full max-w-5xl container sticky top-5 z-50 mb-10 translate-y-0 select-none opacity-100 transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+	data-header-shell
 >
-	<div class="bg-white/50 dark:bg-black/50 backdrop-blur-lg px-5 py-2.5 rounded-xl">
+	<div class="bg-white/50 dark:bg-black/50 backdrop-blur-lg px-5 py-2.5 rounded-xl" data-header-surface>
 		<div class="flex justify-between items-center">
-			<div class="space-x-2 flex">
+			<div class="flex items-center gap-2">
 				<Logotype />
+				<span class="h-5 w-px bg-zinc-200 dark:bg-zinc-800" aria-hidden="true"></span>
 				<GithubStarsBadge owner="proxima812" repo="color.xima.work" />
 			</div>
-			<div class="space-x-2 flex">
-				<HeaderLocaleMenu locale={locale} />
+			<div class="flex items-center gap-2">
+				<a
+					href={getGeneratorPath()}
+					class="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200 bg-white/70 px-3 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+					aria-label="Open gradient generator"
+				>
+					<Icon name="mdi:palette-outline" class="h-4 w-4" aria-hidden="true" />
+					<span class="hidden sm:inline">Generator</span>
+				</a>
+				<a
+					href={getRandomPath()}
+					class="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200 bg-white/70 px-3 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+					aria-label="Open random gradient"
+				>
+					<Icon name="mdi:shuffle-variant" class="h-4 w-4" aria-hidden="true" />
+					<span class="hidden sm:inline">Random</span>
+				</a>
+				<HeaderSearch />
 				<ThemeToggle />
 			</div>
 		</div>

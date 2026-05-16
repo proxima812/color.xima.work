@@ -1,0 +1,13 @@
+---
+import { getCollection } from "astro:content";
+import { GradientRedirect } from "@/components/colors";
+import { getDailyPath } from "@/config";
+import { buildColorCards } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+const cards = buildColorCards(await getCollection("colors"));
+---
+
+<BaseLayout title="Daily gradient - color.xima" description="Open today's gradient from color.xima.work." canonicalPath={getDailyPath()}>
+	<GradientRedirect items={cards} mode="daily" />
+</BaseLayout>
