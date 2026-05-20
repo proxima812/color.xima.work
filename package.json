@@ -16,7 +16,8 @@
     "astro-icon": "^1.1.5",
     "astro-seo": "^1.1.0",
     "fuse.js": "^7.3.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "wrangler": "^4.92.0"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.3"

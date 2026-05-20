@@ -9,15 +9,15 @@ A fast gradient gallery for modern UI work.
 ![Static](https://img.shields.io/badge/Output-static-111827?style=flat-square)
 ![Vercel](https://img.shields.io/badge/Deploy-Vercel-111827?style=flat-square&logo=vercel)
 
-`color.xima.work` is a curated collection of CSS gradients for designers and frontend developers. Browse visually, search with fuzzy matching, filter by style, and copy production-ready snippets in CSS3 or Tailwind CSS v4 format.
+`color.xima.work` is a curated collection of CSS gradients for designers and frontend developers. Browse visually, search with fuzzy matching, filter by style, open detail pages, and copy production-ready snippets in CSS3 or Tailwind CSS v4 format.
 
 ## Highlights
 
 - Curated gradient cards for hero sections, surfaces, cards, banners, and UI accents.
 - Smart search powered by Fuse.js.
-- Copy formats for both `CSS3` and `Tailwind CSS v4`.
-- Localized routes for `en`, `ru`, and `tt`.
-- Static Astro output with sitemap and SEO metadata.
+- Copy formats for both CSS3 and Tailwind CSS v4.
+- Detail pages, category collections, daily/random redirects, and a gradient generator.
+- Static Astro output with sitemap, robots.txt, canonical URLs, and dynamic SVG OG images.
 - Minimal runtime, Bun-first local workflow, Vercel deployment.
 
 ## Quick Start
@@ -40,6 +40,7 @@ bun run preview
 
 ```text
 Astro 5
+Astro content collections
 Tailwind CSS v4
 Fuse.js
 astro-seo
@@ -53,13 +54,26 @@ astro-icon
 ```text
 src/
   components/colors/   gallery, cards, search, filters, copy controls
-  components/header/   theme and locale controls
+  components/header/   search and theme controls
   config/              site and SEO settings
-  data/                gradient cards, tags, descriptions, copy snippets
-  i18n/                locale dictionaries
+  data/                gradient source, tags, descriptions, copy snippets
   layouts/             shared page shell
-  pages/               default and localized routes
+  pages/               gallery, detail, collection, generator, redirects, robots, OG routes
   styles/              global styles and gradient utilities
+```
+
+## Routes
+
+```text
+/                         main gallery
+/cards/                   all copy-ready gradient cards
+/gradient/[slug]/         gradient detail page
+/collection/[tag]/        filtered collection page
+/generator/               gradient generator
+/daily/                   daily gradient redirect
+/random/                  random gradient redirect
+/og/[slug].svg            dynamic SVG social image
+/robots.txt               robots policy with sitemap link
 ```
 
 ## Copy Formats
@@ -83,11 +97,10 @@ bg-[radial-gradient(...)] border border-solid border-[rgba(...)] shadow-[...]
 ## Development Notes
 
 - Package manager: `bun`
-- Default locale: `en`
-- Supported locales: `en`, `ru`, `tt`
 - Site URL: `https://color.xima.work`
 - Output mode: static
 - Deployment target: Vercel
+- Gradient collection loader: `src/content.config.ts` reads `src/data/colors.json`
 
 ## Contributing
 

@@ -13,6 +13,38 @@ interface Props {
 
 const { items } = Astro.props;
 const firstItem = items[0];
+
+const copyFormats = [
+	["tailwind", "Tailwind"],
+	["css", "CSS3"],
+	["background", "Background"],
+	["react", "React"],
+] as const;
+
+const previewPresets = [
+	["card", "Card"],
+	["hero", "Hero"],
+	["button", "Button"],
+] as const;
+
+const textSizes = [
+	["sm", "Small"],
+	["md", "Medium"],
+	["lg", "Large"],
+] as const;
+
+const textWeights = [
+	["medium", "Medium"],
+	["semibold", "Semibold"],
+	["bold", "Bold"],
+] as const;
+
+const textAnimations = [
+	["none", "None"],
+	["pan", "Pan"],
+	["pulse", "Pulse"],
+	["rise", "Rise"],
+] as const;
 ---
 
 <section class="space-y-8" data-gradient-generator>
@@ -33,9 +65,40 @@ const firstItem = items[0];
 					<button class="rounded-xl px-3 py-1.5 transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50" type="button" data-generator-mode="color" aria-selected="true">Color</button>
 					<button class="rounded-xl px-3 py-1.5 transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50" type="button" data-generator-mode="text" aria-selected="false">Text</button>
 				</div>
-				<div class="inline-flex rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-xs font-semibold text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" aria-label="Copy format">
-					<button class="rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50" type="button" data-generator-format="tailwind" aria-pressed="true">Tailwind</button>
-					<button class="rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50" type="button" data-generator-format="css" aria-pressed="false">CSS3</button>
+				<button class="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900" type="button" data-generator-random>
+					<Icon name="mdi:shuffle-variant" aria-hidden="true" />
+					Randomize
+				</button>
+			</div>
+
+			<div class="grid gap-3 xl:grid-cols-[minmax(0,1fr)_auto]">
+				<div class="inline-flex max-w-full overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-xs font-semibold text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" aria-label="Copy format">
+					{
+						copyFormats.map(([format, label], index) => (
+							<button
+								class="whitespace-nowrap rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50"
+								type="button"
+								data-generator-format={format}
+								aria-pressed={index === 0 ? "true" : "false"}
+							>
+								{label}
+							</button>
+						))
+					}
+				</div>
+				<div class="inline-flex max-w-full overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-xs font-semibold text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" aria-label="Preview preset">
+					{
+						previewPresets.map(([preset, label], index) => (
+							<button
+								class="whitespace-nowrap rounded-xl px-2.5 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50"
+								type="button"
+								data-generator-preset={preset}
+								aria-pressed={index === 0 ? "true" : "false"}
+							>
+								{label}
+							</button>
+						))
+					}
 				</div>
 			</div>
 
@@ -50,10 +113,34 @@ const firstItem = items[0];
 				</div>
 			</div>
 
-			<label class="block space-y-2" data-text-input-wrap hidden>
-				<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Text</span>
-				<textarea class="min-h-24 w-full resize-y rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600" data-generator-text spellcheck="false">color.xima</textarea>
-			</label>
+			<div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto]" data-text-input-wrap hidden>
+				<label class="block space-y-2">
+					<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Text</span>
+					<textarea class="min-h-24 w-full resize-y rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600" data-generator-text spellcheck="false">color.xima</textarea>
+				</label>
+				<label class="block space-y-2">
+					<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Size</span>
+					<select class="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600" data-generator-text-size>
+						{textSizes.map(([value, label]) => <option value={value}>{label}</option>)}
+					</select>
+				</label>
+				<label class="block space-y-2">
+					<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Weight</span>
+					<select class="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600" data-generator-text-weight>
+						{textWeights.map(([value, label]) => <option value={value}>{label}</option>)}
+					</select>
+				</label>
+				<label class="block space-y-2">
+					<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Animation</span>
+					<select class="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600" data-generator-text-animation>
+						{textAnimations.map(([value, label]) => <option value={value}>{label}</option>)}
+					</select>
+				</label>
+			</div>
+
+			<p class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs leading-5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" data-generator-hint>
+				For gradient text, keep a readable fallback color for forced-color and high-contrast modes.
+			</p>
 
 			<div class="min-w-0 rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-950">
 				<div class="mb-2 flex items-center justify-between gap-3">
@@ -70,8 +157,12 @@ const firstItem = items[0];
 		<aside class="min-w-0 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
 			<div class="mb-3 flex items-center justify-between gap-3 px-1">
 				<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Gradients</h2>
-				<span class="text-xs text-zinc-400">{items.length}</span>
+				<span class="text-xs text-zinc-400" data-gradient-count>{items.length}</span>
 			</div>
+			<label class="mb-3 block px-1">
+				<span class="sr-only">Search gradients</span>
+				<input class="h-10 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600" type="search" placeholder="Search by name or tag" data-gradient-search autocomplete="off" spellcheck="false" />
+			</label>
 			<div class="grid max-h-[42rem] gap-2 overflow-auto pr-1">
 				{
 					items.map((item, index) => (
@@ -90,10 +181,64 @@ const firstItem = items[0];
 						</button>
 					))
 				}
+				<p class="hidden py-10 text-center text-sm text-zinc-500 dark:text-zinc-400" data-gradient-empty>No gradients found</p>
+			</div>
+			<div class="mt-3 grid gap-2 border-t border-zinc-200 px-1 pt-3 text-sm dark:border-zinc-800">
+				<a class="inline-flex items-center justify-between gap-2 rounded-xl px-2 py-2 font-medium text-zinc-700 transition hover:bg-zinc-50 dark:text-zinc-200 dark:hover:bg-zinc-950" href={`/gradient/${firstItem?.slug ?? ""}/`} data-detail-link>
+					<span>Open detail</span>
+					<Icon name="mdi:arrow-right" aria-hidden="true" />
+				</a>
+				<a class="inline-flex items-center justify-between gap-2 rounded-xl px-2 py-2 font-medium text-zinc-700 transition hover:bg-zinc-50 dark:text-zinc-200 dark:hover:bg-zinc-950" href={`/collection/${firstItem?.tags[0] ?? ""}/`} data-collection-link>
+					<span data-collection-label>More {firstItem?.tags[0]} gradients</span>
+					<Icon name="mdi:arrow-right" aria-hidden="true" />
+				</a>
 			</div>
 		</aside>
 	</div>
 </section>
+
+<style>
+	@keyframes gradient-text-pan {
+		0%,
+		100% {
+			background-position: 0% 50%;
+		}
+
+		50% {
+			background-position: 100% 50%;
+		}
+	}
+
+	@keyframes gradient-text-pulse {
+		0%,
+		100% {
+			opacity: 1;
+			filter: saturate(1);
+		}
+
+		50% {
+			opacity: 0.82;
+			filter: saturate(1.28);
+		}
+	}
+
+	@keyframes gradient-text-rise {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+
+		50% {
+			transform: translateY(-0.08em);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		[data-text-preview] {
+			animation: none;
+		}
+	}
+</style>
 
 <script is:inline type="application/json" id="gradient-generator-data" set:html={JSON.stringify(items)}></script>
 
@@ -105,7 +250,10 @@ const firstItem = items[0];
 		snippets: {
 			css: string;
 			tailwind: string;
+			react: string;
 		};
+		slug: string;
+		tags: string[];
 	}
 
 	const root = document.querySelector("[data-gradient-generator]");
@@ -113,45 +261,188 @@ const firstItem = items[0];
 	const items = (dataElement?.textContent ? JSON.parse(dataElement.textContent) : []) as GeneratorItem[];
 	const modeButtons = root?.querySelectorAll<HTMLButtonElement>("[data-generator-mode]");
 	const formatButtons = root?.querySelectorAll<HTMLButtonElement>("[data-generator-format]");
+	const presetButtons = root?.querySelectorAll<HTMLButtonElement>("[data-generator-preset]");
 	const optionButtons = root?.querySelectorAll<HTMLButtonElement>("[data-gradient-option]");
+	const randomButton = root?.querySelector<HTMLButtonElement>("[data-generator-random]");
 	const colorPreview = root?.querySelector<HTMLElement>("[data-color-preview]");
 	const colorLabel = root?.querySelector<HTMLElement>("[data-color-label]");
 	const textPreviewWrap = root?.querySelector<HTMLElement>("[data-text-preview-wrap]");
 	const textPreview = root?.querySelector<HTMLElement>("[data-text-preview]");
 	const textInputWrap = root?.querySelector<HTMLElement>("[data-text-input-wrap]");
 	const textInput = root?.querySelector<HTMLTextAreaElement>("[data-generator-text]");
+	const textSizeSelect = root?.querySelector<HTMLSelectElement>("[data-generator-text-size]");
+	const textWeightSelect = root?.querySelector<HTMLSelectElement>("[data-generator-text-weight]");
+	const textAnimationSelect = root?.querySelector<HTMLSelectElement>("[data-generator-text-animation]");
 	const code = root?.querySelector<HTMLElement>("[data-generator-code]");
 	const codeLabel = root?.querySelector<HTMLElement>("[data-code-label]");
 	const copyButton = root?.querySelector<HTMLButtonElement>("[data-generator-copy]");
 	const copyLabel = root?.querySelector<HTMLElement>("[data-copy-label]");
+	const searchInput = root?.querySelector<HTMLInputElement>("[data-gradient-search]");
+	const gradientCount = root?.querySelector<HTMLElement>("[data-gradient-count]");
+	const emptyState = root?.querySelector<HTMLElement>("[data-gradient-empty]");
+	const detailLink = root?.querySelector<HTMLAnchorElement>("[data-detail-link]");
+	const collectionLink = root?.querySelector<HTMLAnchorElement>("[data-collection-link]");
+	const collectionLabel = root?.querySelector<HTMLElement>("[data-collection-label]");
+	const hint = root?.querySelector<HTMLElement>("[data-generator-hint]");
 
 	let activeIndex = 0;
 	let activeMode: "color" | "text" = "color";
-	let activeFormat: "tailwind" | "css" = "tailwind";
+	let activeFormat: "tailwind" | "css" | "background" | "react" = "tailwind";
+	let activePreset: "card" | "hero" | "button" = "card";
+	let activeTextSize: "sm" | "md" | "lg" = "md";
+	let activeTextWeight: "medium" | "semibold" | "bold" = "semibold";
+	let activeTextAnimation: "none" | "pan" | "pulse" | "rise" = "none";
+	let query = "";
+
+	const formatLabels = {
+		tailwind: "Tailwind",
+		css: "CSS3",
+		background: "Background",
+		react: "React",
+	};
+
+	const colorPresetClasses = {
+		card: "grid min-h-72 w-full place-items-center rounded-xl border border-black/5 p-6 shadow-sm",
+		hero: "grid min-h-80 w-full place-items-center rounded-xl border border-black/5 p-8 shadow-sm",
+		button: "grid min-h-72 w-full place-items-center rounded-xl border border-black/5 p-6 shadow-sm",
+	};
+
+	const colorLabelClasses = {
+		card: "rounded-xl bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm backdrop-blur dark:bg-zinc-950/70 dark:text-zinc-200",
+		hero: "rounded-xl bg-white/80 px-5 py-3 text-xl font-semibold text-zinc-800 shadow-sm backdrop-blur dark:bg-zinc-950/70 dark:text-zinc-100",
+		button: "rounded-full bg-white px-5 py-2 text-sm font-semibold text-zinc-900 shadow-sm dark:bg-zinc-950 dark:text-zinc-100",
+	};
+
+	const textSizeClasses = {
+		sm: "text-4xl sm:text-5xl",
+		md: "text-5xl sm:text-7xl",
+		lg: "text-6xl sm:text-8xl",
+	};
+
+	const textWeightClasses = {
+		medium: "font-medium",
+		semibold: "font-semibold",
+		bold: "font-bold",
+	};
+
+	const textAnimationClasses = {
+		none: "",
+		pan: "animate-[gradient-text-pan_6s_ease-in-out_infinite] bg-[length:200%_200%]",
+		pulse: "animate-[gradient-text-pulse_3.6s_ease-in-out_infinite]",
+		rise: "animate-[gradient-text-rise_4.8s_ease-in-out_infinite]",
+	};
+
+	const animationKeyframes = {
+		pan: `@keyframes gradient-text-pan {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}`,
+		pulse: `@keyframes gradient-text-pulse {
+  0%, 100% {
+    opacity: 1;
+    filter: saturate(1);
+  }
+  50% {
+    opacity: 0.82;
+    filter: saturate(1.28);
+  }
+}`,
+		rise: `@keyframes gradient-text-rise {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.08em);
+  }
+}`,
+	};
+
+	const animationDeclarations = {
+		none: "",
+		pan: "  background-size: 200% 200%;\n  animation: gradient-text-pan 6s ease-in-out infinite;",
+		pulse: "  animation: gradient-text-pulse 3.6s ease-in-out infinite;",
+		rise: "  animation: gradient-text-rise 4.8s ease-in-out infinite;",
+	};
+
+	function normalizeValue(value: string | null, allowed: string[], fallback: string) {
+		return value && allowed.includes(value) ? value : fallback;
+	}
+
+	function initFromUrl() {
+		const params = new URLSearchParams(window.location.search);
+		const gradient = params.get("gradient");
+		const gradientIndex = gradient ? items.findIndex((item) => item.slug === gradient || item.name === gradient) : -1;
+		activeIndex = gradientIndex >= 0 ? gradientIndex : 0;
+		activeMode = normalizeValue(params.get("mode"), ["color", "text"], "color") as typeof activeMode;
+		activeFormat = normalizeValue(params.get("format"), ["tailwind", "css", "background", "react"], "tailwind") as typeof activeFormat;
+		activePreset = normalizeValue(params.get("preset"), ["card", "hero", "button"], "card") as typeof activePreset;
+		activeTextSize = normalizeValue(params.get("size"), ["sm", "md", "lg"], "md") as typeof activeTextSize;
+		activeTextWeight = normalizeValue(params.get("weight"), ["medium", "semibold", "bold"], "semibold") as typeof activeTextWeight;
+		activeTextAnimation = normalizeValue(params.get("animation"), ["none", "pan", "pulse", "rise"], "none") as typeof activeTextAnimation;
+		if (textInput && params.get("text")) textInput.value = params.get("text") ?? textInput.value;
+		if (textSizeSelect) textSizeSelect.value = activeTextSize;
+		if (textWeightSelect) textWeightSelect.value = activeTextWeight;
+		if (textAnimationSelect) textAnimationSelect.value = activeTextAnimation;
+	}
 
 	function getActiveItem() {
 		return items[activeIndex] ?? items[0];
 	}
 
+	function getTailwindBackground(item: GeneratorItem) {
+		return `bg-[${item.backgroundImage.replace(/\s*,\s*/g, ",").replace(/\s+/g, "_")}]`;
+	}
+
 	function getSnippet(item: GeneratorItem) {
+		if (activeFormat === "background") return `background-image: ${item.backgroundImage};`;
+		if (activeFormat === "react") return item.snippets.react;
 		if (activeMode === "text") {
+			const animationClass = textAnimationClasses[activeTextAnimation];
 			if (activeFormat === "tailwind") {
-				return `bg-clip-text text-transparent bg-[${item.backgroundImage.replace(/\s*,\s*/g, ",").replace(/\s+/g, "_")}]`;
+				return ["bg-clip-text", "text-transparent", getTailwindBackground(item), animationClass].filter(Boolean).join(" ");
 			}
-			return `.gradient-text {\n  background-image: ${item.backgroundImage};\n  background-clip: text;\n  -webkit-background-clip: text;\n  color: transparent;\n}`;
+			const animationCss =
+				activeTextAnimation === "none"
+					? ""
+					: `\n\n${animationKeyframes[activeTextAnimation]}\n\n@media (prefers-reduced-motion: reduce) {\n  .gradient-text {\n    animation: none;\n  }\n}`;
+			return `.gradient-text {\n  background-image: ${item.backgroundImage};\n  background-clip: text;\n  -webkit-background-clip: text;\n  color: transparent;${animationDeclarations[activeTextAnimation] ? `\n${animationDeclarations[activeTextAnimation]}` : ""}\n}${animationCss}`;
 		}
 		return item.snippets[activeFormat];
 	}
 
-	function render() {
+	function updateUrl() {
+		const item = getActiveItem();
+		if (!item) return;
+		const params = new URLSearchParams();
+		params.set("gradient", item.slug);
+		params.set("mode", activeMode);
+		params.set("format", activeFormat);
+		params.set("preset", activePreset);
+		if (activeMode === "text") {
+			params.set("size", activeTextSize);
+			params.set("weight", activeTextWeight);
+			params.set("animation", activeTextAnimation);
+			if (textInput?.value) params.set("text", textInput.value);
+		}
+		window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
+	}
+
+	function render(syncUrl = true) {
 		const item = getActiveItem();
 		if (!item) return;
 
 		if (colorPreview) {
-			colorPreview.className = `${item.className} grid min-h-72 w-full place-items-center rounded-xl border border-black/5 p-6 shadow-sm`;
+			colorPreview.className = `${item.className} ${colorPresetClasses[activePreset]}`;
 			colorPreview.classList.toggle("hidden", activeMode !== "color");
 		}
-		if (colorLabel) colorLabel.textContent = item.name;
+		if (colorLabel) {
+			colorLabel.className = colorLabelClasses[activePreset];
+			colorLabel.textContent = activePreset === "button" ? "Use gradient" : item.name;
+		}
 		if (textPreviewWrap) {
 			textPreviewWrap.classList.toggle("hidden", activeMode !== "text");
 			textPreviewWrap.classList.toggle("grid", activeMode === "text");
@@ -159,10 +450,15 @@ const firstItem = items[0];
 		if (textPreview) {
 			textPreview.style.backgroundImage = item.backgroundImage;
 			textPreview.textContent = textInput?.value || "color.xima";
+			textPreview.className = `max-w-full break-words bg-clip-text text-center leading-tight text-transparent ${textSizeClasses[activeTextSize]} ${textWeightClasses[activeTextWeight]} ${textAnimationClasses[activeTextAnimation]}`;
 		}
 		if (textInputWrap) textInputWrap.hidden = activeMode !== "text";
 		if (code) code.textContent = getSnippet(item);
-		if (codeLabel) codeLabel.textContent = activeFormat === "tailwind" ? "Tailwind" : "CSS3";
+		if (codeLabel) codeLabel.textContent = formatLabels[activeFormat];
+		if (detailLink) detailLink.href = `/gradient/${item.slug}/`;
+		if (collectionLink) collectionLink.href = `/collection/${item.tags[0]}/`;
+		if (collectionLabel) collectionLabel.textContent = `More ${item.tags[0]} gradients`;
+		if (hint) hint.hidden = activeMode !== "text";
 
 		modeButtons?.forEach((button) => {
 			button.setAttribute("aria-selected", button.dataset.generatorMode === activeMode ? "true" : "false");
@@ -170,9 +466,26 @@ const firstItem = items[0];
 		formatButtons?.forEach((button) => {
 			button.setAttribute("aria-pressed", button.dataset.generatorFormat === activeFormat ? "true" : "false");
 		});
+		presetButtons?.forEach((button) => {
+			button.setAttribute("aria-pressed", button.dataset.generatorPreset === activePreset ? "true" : "false");
+		});
 		optionButtons?.forEach((button) => {
 			button.setAttribute("aria-pressed", button.dataset.index === String(activeIndex) ? "true" : "false");
 		});
+		if (syncUrl) updateUrl();
+	}
+
+	function renderSearch() {
+		let visibleCount = 0;
+		optionButtons?.forEach((button) => {
+			const item = items[Number(button.dataset.index ?? 0)];
+			const haystack = `${item?.name ?? ""} ${item?.tags?.join(" ") ?? ""}`.toLowerCase();
+			const visible = !query || haystack.includes(query);
+			button.hidden = !visible;
+			if (visible) visibleCount += 1;
+		});
+		if (gradientCount) gradientCount.textContent = String(visibleCount);
+		if (emptyState) emptyState.classList.toggle("hidden", visibleCount > 0);
 	}
 
 	async function copyText(value: string) {
@@ -201,7 +514,14 @@ const firstItem = items[0];
 
 	formatButtons?.forEach((button) => {
 		button.addEventListener("click", () => {
-			activeFormat = button.dataset.generatorFormat === "css" ? "css" : "tailwind";
+			activeFormat = normalizeValue(button.dataset.generatorFormat ?? "", ["tailwind", "css", "background", "react"], "tailwind") as typeof activeFormat;
+			render();
+		});
+	});
+
+	presetButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			activePreset = normalizeValue(button.dataset.generatorPreset ?? "", ["card", "hero", "button"], "card") as typeof activePreset;
 			render();
 		});
 	});
@@ -213,7 +533,32 @@ const firstItem = items[0];
 		});
 	});
 
-	textInput?.addEventListener("input", render);
+	randomButton?.addEventListener("click", () => {
+		if (items.length < 2) return;
+		let nextIndex = Math.floor(Math.random() * items.length);
+		if (nextIndex === activeIndex) nextIndex = (nextIndex + 1) % items.length;
+		activeIndex = nextIndex;
+		render();
+	});
+
+	searchInput?.addEventListener("input", () => {
+		query = searchInput.value.trim().toLowerCase();
+		renderSearch();
+	});
+
+	textInput?.addEventListener("input", () => render());
+	textSizeSelect?.addEventListener("change", () => {
+		activeTextSize = normalizeValue(textSizeSelect.value, ["sm", "md", "lg"], "md") as typeof activeTextSize;
+		render();
+	});
+	textWeightSelect?.addEventListener("change", () => {
+		activeTextWeight = normalizeValue(textWeightSelect.value, ["medium", "semibold", "bold"], "semibold") as typeof activeTextWeight;
+		render();
+	});
+	textAnimationSelect?.addEventListener("change", () => {
+		activeTextAnimation = normalizeValue(textAnimationSelect.value, ["none", "pan", "pulse", "rise"], "none") as typeof activeTextAnimation;
+		render();
+	});
 	copyButton?.addEventListener("click", async () => {
 		const value = code?.textContent ?? "";
 		if (!value) return;
@@ -225,5 +570,7 @@ const firstItem = items[0];
 		}, 1400);
 	});
 
-	render();
+	initFromUrl();
+	render(false);
+	renderSearch();
 </script>

@@ -7,6 +7,6 @@ export {
 	getDailyPath,
 	getGeneratorPath,
 	getGradientPath,
-	getLocalizedPath,
+	normalizePath,
 	getRandomPath,
 } from "./site";

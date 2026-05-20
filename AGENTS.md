@@ -2,7 +2,7 @@
 
 ## Project
 
-`color.xima.work` is a static Astro gradient gallery for designers and frontend developers. The site focuses on fast browsing, localized UI, SEO-ready static pages, and copy-ready CSS gradient snippets.
+`color.xima.work` is a static Astro gradient gallery for designers and frontend developers. The site focuses on fast browsing, English UI, SEO-ready static pages, and copy-ready CSS gradient snippets.
 
 ## Stack
 
@@ -10,8 +10,8 @@
 - Tailwind CSS v4 through `@tailwindcss/vite`.
 - Astro components, TypeScript data/config files, and small client scripts.
 - Package manager: Bun.
-- Main source folders: `src/pages`, `src/components`, `src/components/colors`, `src/config`, `src/data`, `src/i18n`, `src/layouts`, `src/styles`.
-- Locales: `en`, `ru`, `es`, `zh`, `tt`, `kk`, `uk`; default locale is `en` without a URL prefix.
+- Main source folders: `src/pages`, `src/components`, `src/components/colors`, `src/config`, `src/data`, `src/layouts`, `src/styles`.
+- Language: English only.
 
 ## Working Rules
 
@@ -35,11 +35,10 @@
 ## Content, Data, And SEO
 
 - Gradient source data lives primarily in `src/data`.
-- Locale dictionaries live in `src/i18n/locales`.
 - Shared site and SEO settings live in `src/config`.
 - Preserve gradient IDs/slugs, labels, tag semantics, copied CSS output, and route behavior unless the task explicitly changes them.
-- Preserve canonical URLs, robots behavior, sitemap assumptions, headings, metadata, and alternate locale behavior.
-- When adding UI text, add the key to all locale dictionaries and use the existing i18n helpers.
+- Preserve canonical URLs, robots behavior, sitemap assumptions, headings, and metadata.
+- Keep visible UI copy in English.
 
 ## Validation
 

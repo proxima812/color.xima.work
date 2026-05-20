@@ -5,31 +5,31 @@ export const SITE_URL = (import.meta.env.PUBLIC_SITE_URL || "https://color.xima.
 
 export const LAST_UPDATED_ISO = "2026-02-16T02:02:00";
 
-export function getLocalizedPath(path: string): string {
+export function normalizePath(path: string): string {
 	const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 	return normalizedPath;
 }
 
 export function getGradientPath(slug: string): string {
-	return getLocalizedPath(`/gradient/${slug}/`);
+	return normalizePath(`/gradient/${slug}/`);
 }
 
 export function getCollectionPath(tag: string): string {
-	return getLocalizedPath(`/collection/${tag}/`);
+	return normalizePath(`/collection/${tag}/`);
 }
 
 export function getCardsPath(): string {
-	return getLocalizedPath("/cards/");
+	return normalizePath("/cards/");
 }
 
 export function getGeneratorPath(): string {
-	return getLocalizedPath("/generator/");
+	return normalizePath("/generator/");
 }
 
 export function getDailyPath(): string {
-	return getLocalizedPath("/daily/");
+	return normalizePath("/daily/");
 }
 
 export function getRandomPath(): string {
-	return getLocalizedPath("/random/");
+	return normalizePath("/random/");
 }
