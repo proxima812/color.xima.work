@@ -1,8 +1,13 @@
 ---
-import { getCollectionPath } from "@/config";
-import type { ColorCardItem, CssSnippetFormats } from "@/data";
+import { getCollectionPath, getGeneratorMeshPath } from "@/config";
+import {
+	getGradientsCssText,
+	getLiteralStopColors,
+	highlightSnippet,
+	type ColorCardItem,
+	type CssSnippetFormats,
+} from "@/data";
 import { Icon } from "astro-icon/components";
-import { codeToHtml } from "shiki";
 import CopyFormatIcon from "./CopyFormatIcon.astro";
 
 interface Props {
@@ -12,37 +17,78 @@ interface Props {
 }
 
 const { card, snippets, backHref = getCollectionPath(card.tags[0]) } = Astro.props;
-const copyFormats = [
-	["tailwind", "Tailwind", snippets.tailwind],
-	["css", "CSS3", snippets.css],
-] as const;
 
-const highlightedSnippets = await Promise.all(
-	copyFormats.map(async ([format, label, value]) => [
-		format,
-		label,
-		value,
-		await codeToHtml(value, {
-			lang: format === "tailwind" ? "html" : "css",
-			themes: {
-				light: "github-light",
-				dark: "github-dark",
-			},
-			defaultColor: false,
-		}),
-	] as const),
+type CopyFormat = "tailwind" | "css" | "react";
+
+interface CopyFormatEntry {
+	format: CopyFormat;
+	label: string;
+	lang: string;
+	/** Empty when the format cannot express this gradient; `note` explains why instead. */
+	value: string;
+	note: string;
+}
+
+const copyFormats: CopyFormatEntry[] = [
+	{ format: "tailwind", label: "Tailwind", lang: "html", value: snippets.tailwind, note: "" },
+	{ format: "css", label: "CSS3", lang: "css", value: snippets.css, note: "" },
+	{ format: "react", label: "React", lang: "js", value: snippets.react, note: "" },
+];
+
+const panels = await Promise.all(
+	copyFormats.map(async (entry) => ({
+		...entry,
+		html: entry.value ? await highlightSnippet(entry.value, entry.lang) : "",
+	})),
 );
+
+const tabClass =
+	"inline-flex cursor-pointer items-center gap-1.5 rounded-xl px-2.5 py-1.5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 aria-selected:bg-zinc-900 aria-selected:text-zinc-50 dark:focus-visible:outline-zinc-100 dark:aria-selected:bg-zinc-100 dark:aria-selected:text-zinc-950";
+
+const secondaryActionClass =
+	"inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-400 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-50";
+
+const backdropToggleButtonClass =
+	"inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-[0.625rem] text-zinc-500 transition aria-pressed:bg-zinc-900 aria-pressed:text-zinc-50 dark:text-zinc-400 dark:aria-pressed:bg-zinc-100 dark:aria-pressed:text-zinc-950";
+
+// Reuses the SwiftUI/Flutter parsing machinery to pull literal hex stops for the mesh generator
+// bridge; `null` when the gradient can't be reduced to literal stops (conic, multi-layer, etc).
+const stopColors = getLiteralStopColors(getGradientsCssText(), card.className);
+const meshSeedHref =
+	stopColors && stopColors.length >= 2
+		? `${getGeneratorMeshPath()}?seed=${encodeURIComponent(stopColors.join(","))}`
+		: null;
 ---
 
 <article class="mx-auto max-w-full space-y-10" data-detail-copy-root>
-	<a
-		href={backHref}
-		class="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:border-zinc-400 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:text-zinc-50"
-		data-back-link
-	>
-		<Icon name="mdi:arrow-left" aria-hidden="true" />
-		<span>Back</span>
-	</a>
+	<div class="flex flex-wrap items-center justify-between gap-3">
+		<a href={backHref} class={secondaryActionClass} data-back-link>
+			<Icon name="mdi:arrow-left" aria-hidden="true" />
+			<span>Back</span>
+		</a>
+		<div class="flex flex-wrap items-center gap-2">
+			{
+				meshSeedHref && (
+					<a href={meshSeedHref} class={secondaryActionClass}>
+						<Icon name="mdi:blur" aria-hidden="true" />
+						<span>Use in mesh</span>
+					</a>
+				)
+			}
+			<button
+				type="button"
+				class={`${secondaryActionClass} cursor-pointer [&[aria-pressed=true]_[data-favorite-icon='filled']]:inline-flex [&[aria-pressed=true]_[data-favorite-icon='outline']]:hidden`}
+				data-favorite-toggle
+				data-favorite-slug={card.slug}
+				aria-pressed="false"
+				aria-label={`Favorite ${card.name}`}
+			>
+				<span data-favorite-icon="outline" aria-hidden="true"><Icon name="mdi:heart-outline" /></span>
+				<span class="hidden" data-favorite-icon="filled" aria-hidden="true"><Icon name="mdi:heart" /></span>
+				<span data-favorite-label data-favorite-default="Save" data-favorite-saved="Saved">Save</span>
+			</button>
+		</div>
+	</div>
 	<header class="space-y-5">
 		<div class="flex flex-wrap items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
 			{card.tags.map((tag) => (
@@ -57,41 +103,160 @@ const highlightedSnippets = await Promise.all(
 		</div>
 	</header>
 
-	<div class={`${card.className} grid min-h-80 place-items-center rounded-xl border border-black/5 shadow-sm`}>
-		<span class="rounded-xl bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm backdrop-blur dark:bg-zinc-950/70 dark:text-zinc-200">{card.className}</span>
+	<div class="space-y-3">
+		<div class="flex justify-end">
+			<div
+				class="inline-flex rounded-xl border border-zinc-200 p-0.5 dark:border-zinc-800"
+				role="group"
+				aria-label="Preview backdrop"
+			>
+				<button
+					type="button"
+					class={backdropToggleButtonClass}
+					data-preview-backdrop-btn="dark"
+					aria-pressed="true"
+					aria-label="Dark backdrop"
+				>
+					<Icon name="mdi:weather-night" class="h-4 w-4" />
+				</button>
+				<button
+					type="button"
+					class={backdropToggleButtonClass}
+					data-preview-backdrop-btn="light"
+					aria-pressed="false"
+					aria-label="Light backdrop"
+				>
+					<Icon name="mdi:white-balance-sunny" class="h-4 w-4" />
+				</button>
+			</div>
+		</div>
+		<div
+			class="rounded-xl transition-colors data-[preview-backdrop=light]:border data-[preview-backdrop=light]:border-zinc-200 data-[preview-backdrop=light]:bg-white data-[preview-backdrop=light]:p-4 sm:data-[preview-backdrop=light]:p-6"
+			data-preview-backdrop="dark"
+		>
+			<div
+				class={`${card.className} grid min-h-80 place-items-center rounded-xl border border-black/5 shadow-sm`}
+				data-detail-preview
+			>
+				<span class="rounded-xl bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm backdrop-blur dark:bg-zinc-950/70 dark:text-zinc-200">{card.className}</span>
+			</div>
+		</div>
 	</div>
 
 	<section class="max-w-full space-y-4">
-		<h2 class="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">Copy styles</h2>
-		<div class="grid min-w-0 gap-4">
-			{highlightedSnippets.map(([format, label, value, highlightedCode]) => (
-				<div class="min-w-0 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-					<div class="mb-3 flex items-center justify-between gap-3">
-						<span class="inline-flex items-center gap-2 text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-							<CopyFormatIcon format={format} />
-							{label}
-						</span>
+		<div class="flex flex-wrap items-center justify-between gap-3">
+			<h2 class="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">Copy styles</h2>
+			<button
+				type="button"
+				class="inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white data-[download-state=done]:opacity-70 [&[data-download-state=done]_[data-download-icon='check']]:inline-flex [&[data-download-state=done]_[data-download-icon='download']]:hidden"
+				data-download-png-btn
+				data-download-filename={`${card.slug}.png`}
+				aria-label={`Download PNG: ${card.name}`}
+			>
+				<span data-download-icon="download" aria-hidden="true"><Icon name="mdi:download" /></span>
+				<span class="hidden" data-download-icon="check" aria-hidden="true"><Icon name="mdi:check-bold" /></span>
+				<span data-download-label data-download-default="Download PNG" data-download-done="Saved">Download PNG</span>
+			</button>
+		</div>
+		<div class="min-w-0 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900" data-detail-tabs>
+			<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+				<div
+					class="inline-flex max-w-full flex-wrap gap-1 rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-xs font-semibold text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400"
+					role="tablist"
+					aria-label="Snippet format"
+				>
+					{panels.map((panel, index) => (
 						<button
-								type="button"
-								class="inline-flex items-center gap-1.5 rounded-xl bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white data-[copy-state=copied]:opacity-70 [&[data-copy-state=copied]_[data-copy-icon='check']]:inline-flex [&[data-copy-state=copied]_[data-copy-icon='copy']]:hidden"
-								data-detail-copy-btn
-							data-detail-copy-value={value}
-							aria-label={`Copy ${label}`}
+							type="button"
+							class={tabClass}
+							role="tab"
+							id={`snippet-tab-${panel.format}`}
+							aria-controls={`snippet-panel-${panel.format}`}
+							aria-selected={index === 0 ? "true" : "false"}
+							tabindex={index === 0 ? 0 : -1}
+							data-detail-tab={panel.format}
 						>
+							<CopyFormatIcon format={panel.format} />
+							<span>{panel.label}</span>
+							{!panel.value && <span class="sr-only">(not available for this gradient)</span>}
+						</button>
+					))}
+				</div>
+				<div>
+					{panels.map((panel, index) =>
+						panel.value ? (
+							<button
+								type="button"
+								class="inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white data-[copy-state=copied]:opacity-70 [&[data-copy-state=copied]_[data-copy-icon='check']]:inline-flex [&[data-copy-state=copied]_[data-copy-icon='copy']]:hidden"
+								data-detail-copy-btn
+								data-detail-copy-value={panel.value}
+								data-detail-copy-for={panel.format}
+								hidden={index !== 0}
+								aria-label={`Copy ${panel.label}`}
+							>
 								<span data-copy-icon="copy" aria-hidden="true"><Icon name="mdi:content-copy" /></span>
 								<span class="hidden" data-copy-icon="check" aria-hidden="true"><Icon name="mdi:check-bold" /></span>
 								<span data-copy-label data-copy-default="Copy" data-copy-copied="Copied">Copy</span>
-						</button>
-					</div>
-					<div
-						class="max-w-full overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 text-xs leading-6 dark:border-zinc-800 dark:bg-zinc-950 [&_pre]:max-h-72 [&_pre]:max-w-full [&_pre]:overflow-auto [&_pre]:p-4 [&_pre]:leading-6 [&_pre]:[background-color:var(--shiki-light-bg)!important] [&_pre]:[color:var(--shiki-light)] [&_span]:[color:var(--shiki-light)!important] dark:[&_pre]:[background-color:var(--shiki-dark-bg)!important] dark:[&_pre]:[color:var(--shiki-dark)] dark:[&_span]:[color:var(--shiki-dark)!important]"
-						set:html={highlightedCode}
-					/>
+							</button>
+						) : null,
+					)}
+				</div>
+			</div>
+			{panels.map((panel, index) => (
+				<div
+					role="tabpanel"
+					id={`snippet-panel-${panel.format}`}
+					aria-labelledby={`snippet-tab-${panel.format}`}
+					tabindex="0"
+					hidden={index !== 0}
+					data-detail-tabpanel={panel.format}
+				>
+					{panel.value ? (
+						<div
+							class="max-w-full overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 text-xs leading-6 dark:border-zinc-800 dark:bg-zinc-950 [&_pre]:max-h-72 [&_pre]:max-w-full [&_pre]:overflow-auto [&_pre]:p-4 [&_pre]:leading-6 [&_pre]:[background-color:var(--shiki-light-bg)!important] [&_pre]:[color:var(--shiki-light)] [&_span]:[color:var(--shiki-light)!important] dark:[&_pre]:[background-color:var(--shiki-dark-bg)!important] dark:[&_pre]:[color:var(--shiki-dark)] dark:[&_span]:[color:var(--shiki-dark)!important]"
+							set:html={panel.html}
+						/>
+					) : (
+						<p class="flex items-start gap-2 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-xs leading-6 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">
+							<Icon name="mdi:information-outline" class="mt-1 h-4 w-4 shrink-0" aria-hidden="true" />
+							<span>{panel.note}</span>
+						</p>
+					)}
 				</div>
 			))}
 		</div>
 	</section>
 </article>
+
+<script>
+	import { FAVORITES_EVENT, isFavorite, toggleFavorite, type FavoritesChangedDetail } from "@/scripts/favorites";
+
+	const favoriteButton = document.querySelector<HTMLButtonElement>("[data-favorite-toggle]");
+
+	function setFavoriteState(button: HTMLButtonElement, favorited: boolean) {
+		button.setAttribute("aria-pressed", favorited ? "true" : "false");
+		const label = button.querySelector<HTMLElement>("[data-favorite-label]");
+		if (label) {
+			label.textContent = favorited
+				? (label.getAttribute("data-favorite-saved") ?? "Saved")
+				: (label.getAttribute("data-favorite-default") ?? "Save");
+		}
+	}
+
+	if (favoriteButton) {
+		const slug = favoriteButton.getAttribute("data-favorite-slug");
+		if (slug) {
+			setFavoriteState(favoriteButton, isFavorite(slug));
+			favoriteButton.addEventListener("click", () => {
+				setFavoriteState(favoriteButton, toggleFavorite(slug));
+			});
+			window.addEventListener(FAVORITES_EVENT, (event) => {
+				const detail = (event as CustomEvent<FavoritesChangedDetail>).detail;
+				if (detail && detail.slug === slug) setFavoriteState(favoriteButton, detail.favorited);
+			});
+		}
+	}
+</script>
 
 <script is:inline>
 	const copyRoot = document.querySelector("[data-detail-copy-root]");
@@ -130,6 +295,39 @@ const highlightedSnippets = await Promise.all(
 		});
 	});
 
+	const tabsRoot = copyRoot?.querySelector("[data-detail-tabs]");
+	const tabs = Array.from(tabsRoot?.querySelectorAll("[data-detail-tab]") ?? []);
+
+	function selectTab(format, moveFocus) {
+		tabs.forEach((tab) => {
+			const isActive = tab.getAttribute("data-detail-tab") === format;
+			tab.setAttribute("aria-selected", isActive ? "true" : "false");
+			tab.tabIndex = isActive ? 0 : -1;
+			if (isActive && moveFocus) tab.focus();
+		});
+		tabsRoot?.querySelectorAll("[data-detail-tabpanel]").forEach((panel) => {
+			panel.hidden = panel.getAttribute("data-detail-tabpanel") !== format;
+		});
+		tabsRoot?.querySelectorAll("[data-detail-copy-for]").forEach((button) => {
+			button.hidden = button.getAttribute("data-detail-copy-for") !== format;
+		});
+	}
+
+	tabs.forEach((tab, index) => {
+		tab.addEventListener("click", () => selectTab(tab.getAttribute("data-detail-tab"), false));
+		tab.addEventListener("keydown", (event) => {
+			const lastIndex = tabs.length - 1;
+			let nextIndex = -1;
+			if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = index === lastIndex ? 0 : index + 1;
+			else if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = index === 0 ? lastIndex : index - 1;
+			else if (event.key === "Home") nextIndex = 0;
+			else if (event.key === "End") nextIndex = lastIndex;
+			if (nextIndex === -1) return;
+			event.preventDefault();
+			selectTab(tabs[nextIndex].getAttribute("data-detail-tab"), true);
+		});
+	});
+
 	const backLink = copyRoot?.querySelector("[data-back-link]");
 	if (backLink instanceof HTMLAnchorElement && document.referrer) {
 		try {
@@ -138,5 +336,83 @@ const highlightedSnippets = await Promise.all(
 				backLink.href = referrer.href;
 			}
 		} catch {}
+	}
+
+	// ── Preview backdrop toggle (local, cosmetic — does not touch the site's own dark theme) ──
+	const backdropWrapper = copyRoot?.querySelector("[data-preview-backdrop]");
+	const backdropButtons = copyRoot?.querySelectorAll("[data-preview-backdrop-btn]");
+
+	function setPreviewBackdrop(mode) {
+		if (backdropWrapper) backdropWrapper.setAttribute("data-preview-backdrop", mode);
+		backdropButtons?.forEach((button) => {
+			button.setAttribute("aria-pressed", button.getAttribute("data-preview-backdrop-btn") === mode ? "true" : "false");
+		});
+	}
+
+	backdropButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			const mode = button.getAttribute("data-preview-backdrop-btn");
+			if (mode) setPreviewBackdrop(mode);
+		});
+	});
+
+	// ── PNG export ────────────────────────────────────────
+	// Captures the rendered gradient via an SVG foreignObject, using getComputedStyle() rather
+	// than the element's Tailwind classes so the export has no dependency on the page stylesheet
+	// being available inside the isolated SVG document.
+	async function downloadPng(sourceEl, filename) {
+		const rect = sourceEl.getBoundingClientRect();
+		const scale = 2;
+		const width = Math.max(1, Math.round(rect.width * scale));
+		const height = Math.max(1, Math.round(rect.height * scale));
+		const computed = getComputedStyle(sourceEl);
+		const backgroundImage = computed.backgroundImage;
+		const backgroundColor = computed.backgroundColor;
+		const borderRadius = computed.borderRadius;
+		const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${rect.width}" height="${rect.height}">
+			<foreignObject width="100%" height="100%">
+				<div xmlns="http://www.w3.org/1999/xhtml" style="width:${rect.width}px;height:${rect.height}px;background-image:${backgroundImage};background-color:${backgroundColor};border-radius:${borderRadius};"></div>
+			</foreignObject>
+		</svg>`;
+		const dataUrl = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+		const img = new Image();
+		img.src = dataUrl;
+		await new Promise((resolve, reject) => {
+			img.onload = resolve;
+			img.onerror = reject;
+		});
+		const canvas = document.createElement("canvas");
+		canvas.width = width;
+		canvas.height = height;
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+		ctx.drawImage(img, 0, 0, width, height);
+		const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+		if (!blob) return;
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = filename;
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	const downloadButton = copyRoot?.querySelector("[data-download-png-btn]");
+	const previewSurface = copyRoot?.querySelector("[data-detail-preview]");
+
+	if (downloadButton && previewSurface) {
+		downloadButton.addEventListener("click", async () => {
+			const filename = downloadButton.getAttribute("data-download-filename") || "gradient.png";
+			try {
+				await downloadPng(previewSurface, filename);
+				downloadButton.setAttribute("data-download-state", "done");
+				const label = downloadButton.querySelector("[data-download-label]");
+				if (label) label.textContent = label.getAttribute("data-download-done") || "Saved";
+				window.setTimeout(() => {
+					downloadButton.removeAttribute("data-download-state");
+					if (label) label.textContent = label.getAttribute("data-download-default") || "Download PNG";
+				}, 1400);
+			} catch {}
+		});
 	}
 </script>

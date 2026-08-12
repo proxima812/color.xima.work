@@ -1,7 +1,7 @@
 ---
 import { GithubStarsBadge } from "@/components/colors";
-import { HeaderBehavior, HeaderSearch, ThemeToggle } from "@/components/header";
-import { getGeneratorPath, getRandomPath } from "@/config";
+import { HeaderBehavior, HeaderSearch } from "@/components/header";
+import { getCardsPath, getFavoritesPath, getGeneratorPath, getRandomPath } from "@/config";
 import { Icon } from "astro-icon/components";
 import Logotype from "./logotype.astro";
 ---
@@ -10,7 +10,10 @@ import Logotype from "./logotype.astro";
 	class="px-5 mx-auto w-full max-w-5xl container sticky top-5 z-50 mb-10 translate-y-0 select-none opacity-100 transition-[transform,opacity,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
 	data-header-shell
 >
-	<div class="bg-white/50 dark:bg-black/50 backdrop-blur-lg px-5 py-2.5 rounded-xl" data-header-surface>
+	<div
+		class="bg-white/50 dark:bg-black/50 backdrop-blur-lg px-5 py-2.5 rounded-xl"
+		data-header-surface
+	>
 		<div class="flex justify-between items-center">
 			<div class="flex items-center gap-2">
 				<Logotype />
@@ -18,6 +21,14 @@ import Logotype from "./logotype.astro";
 				<GithubStarsBadge owner="proxima812" repo="color.xima.work" />
 			</div>
 			<div class="flex items-center gap-2">
+				<a
+					href={getCardsPath()}
+					class="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200 bg-white/70 px-3 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+					aria-label="Browse all colors"
+				>
+					<Icon name="mdi:palette-swatch-outline" class="h-4 w-4" aria-hidden="true" />
+					<span class="hidden sm:inline">Colors</span>
+				</a>
 				<a
 					href={getGeneratorPath()}
 					class="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200 bg-white/70 px-3 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
@@ -34,11 +45,45 @@ import Logotype from "./logotype.astro";
 					<Icon name="mdi:shuffle-variant" class="h-4 w-4" aria-hidden="true" />
 					<span class="hidden sm:inline">Random</span>
 				</a>
+				<a
+					href={getFavoritesPath()}
+					class="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-white/70 text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+					aria-label="Favorites"
+				>
+					<Icon name="mdi:heart-outline" class="h-4 w-4" aria-hidden="true" />
+					<span
+						class="absolute -top-1 -right-1 hidden h-4 min-w-4 items-center justify-center rounded-full bg-zinc-900 px-1 text-[0.6875rem] font-bold text-white dark:bg-zinc-100 dark:text-zinc-950"
+						data-favorites-count
+						aria-hidden="true"
+					></span>
+				</a>
 				<HeaderSearch />
-				<ThemeToggle />
 			</div>
 		</div>
 	</div>
 </header>
 
 <HeaderBehavior />
+
+<script>
+	import { FAVORITES_EVENT, getFavoriteSlugs } from "@/scripts/favorites";
+
+	const countBadge = document.querySelector<HTMLElement>("[data-favorites-count]");
+
+	function updateFavoritesCount() {
+		if (!countBadge) return;
+		const count = getFavoriteSlugs().length;
+		if (count > 0) {
+			countBadge.textContent = count > 99 ? "99+" : String(count);
+			countBadge.classList.remove("hidden");
+			countBadge.classList.add("inline-flex");
+		} else {
+			countBadge.textContent = "";
+			countBadge.classList.add("hidden");
+			countBadge.classList.remove("inline-flex");
+		}
+	}
+
+	updateFavoritesCount();
+	window.addEventListener(FAVORITES_EVENT, updateFavoritesCount);
+</script>

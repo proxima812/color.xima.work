@@ -1,0 +1,585 @@
+---
+import { Icon } from "astro-icon/components";
+import CopyFormatIcon from "./CopyFormatIcon.astro";
+
+const exportFormats = [
+	["css", "CSS3"],
+	["tailwind", "Tailwind"],
+	["react", "React"],
+] as const;
+---
+
+<section class="space-y-8" data-mesh-generator>
+	<header class="space-y-4">
+		<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Generator</p>
+		<h1 class="max-w-3xl text-5xl font-semibold leading-none tracking-tight text-zinc-950 md:text-6xl dark:text-zinc-50">
+			Build a mesh gradient
+		</h1>
+		<p class="max-w-2xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
+			Place color points on the canvas, drag them into position, then copy Tailwind, CSS3, or React.
+		</p>
+	</header>
+
+	<div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
+		<div class="min-w-0 space-y-5 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+			<div class="flex flex-wrap items-center justify-between gap-3">
+				<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Preview</h2>
+				<p class="hidden text-xs font-medium text-zinc-500 dark:text-zinc-400" data-mesh-hint>Maximum 10 points</p>
+			</div>
+
+			<div
+				class="relative aspect-square w-full touch-none overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
+				data-mesh-preview
+			>
+				<div class="absolute inset-0" data-mesh-handles></div>
+			</div>
+			<p class="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs leading-5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">
+				Click anywhere on the canvas to add a point (up to 10). Drag a point to move it.
+			</p>
+
+			<div class="min-w-0 rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-950" data-mesh-export>
+				<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+					<div
+						class="inline-flex max-w-full flex-wrap gap-1 rounded-xl border border-zinc-200 bg-white p-1 text-xs font-semibold text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400"
+						role="tablist"
+						aria-label="Snippet format"
+					>
+						{
+							exportFormats.map(([format, label], index) => (
+								<button
+									type="button"
+									role="tab"
+									id={`mesh-tab-${format}`}
+									aria-controls={`mesh-panel-${format}`}
+									aria-selected={index === 0 ? "true" : "false"}
+									tabindex={index === 0 ? 0 : -1}
+									data-mesh-tab={format}
+									class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 transition aria-selected:bg-zinc-900 aria-selected:text-zinc-50 dark:aria-selected:bg-zinc-100 dark:aria-selected:text-zinc-950"
+								>
+									<CopyFormatIcon format={format} />
+									<span>{label}</span>
+								</button>
+							))
+						}
+					</div>
+					<button
+						type="button"
+						class="inline-flex items-center gap-1.5 rounded-xl bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white"
+						data-mesh-copy
+						aria-label="Copy snippet"
+					>
+						<span data-copy-icon="copy" aria-hidden="true"><Icon name="mdi:content-copy" /></span>
+						<span class="hidden" data-copy-icon="check" aria-hidden="true"><Icon name="mdi:check-bold" /></span>
+						<span data-mesh-copy-label>Copy</span>
+					</button>
+				</div>
+				{
+					exportFormats.map(([format], index) => (
+						<div
+							role="tabpanel"
+							id={`mesh-panel-${format}`}
+							aria-labelledby={`mesh-tab-${format}`}
+							tabindex="0"
+							hidden={index !== 0}
+							data-mesh-tabpanel={format}
+						>
+							<pre class="max-h-64 max-w-full overflow-auto rounded-xl border border-zinc-200 bg-white p-3 text-xs leading-6 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"><code data-mesh-code={format} /></pre>
+						</div>
+					))
+				}
+			</div>
+		</div>
+
+		<aside class="min-w-0 space-y-5 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
+			<div>
+				<div class="mb-2 flex items-center justify-between gap-2 px-1">
+					<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Points</h2>
+					<span class="text-xs text-zinc-400" data-mesh-count>2 / 10</span>
+				</div>
+				<div class="grid gap-2" data-mesh-points-list></div>
+				<button
+					type="button"
+					class="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:disabled:hover:bg-zinc-950"
+					data-mesh-add
+				>
+					<Icon name="mdi:plus" aria-hidden="true" />
+					Add point
+				</button>
+			</div>
+
+			<label class="block space-y-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+				<span class="flex items-center justify-between text-sm font-medium text-zinc-600 dark:text-zinc-300">
+					<span>Blob size</span>
+					<span data-mesh-blob-value>65%</span>
+				</span>
+				<input
+					type="range"
+					min="40"
+					max="90"
+					step="5"
+					value="65"
+					class="w-full accent-zinc-900 dark:accent-zinc-100"
+					data-mesh-blob
+					aria-label="Blob size"
+				/>
+			</label>
+
+			<label class="flex items-center justify-between gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+				<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Base color</span>
+				<input
+					type="color"
+					value="#18181b"
+					class="h-9 w-14 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-950"
+					data-mesh-base-color
+					aria-label="Base color"
+				/>
+			</label>
+
+			<div class="grid grid-cols-2 gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+				<button
+					type="button"
+					class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900"
+					data-mesh-randomize
+				>
+					<Icon name="mdi:shuffle-variant" aria-hidden="true" />
+					Randomize
+				</button>
+				<button
+					type="button"
+					class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900"
+					data-mesh-reset
+				>
+					<Icon name="mdi:restore" aria-hidden="true" />
+					Reset
+				</button>
+			</div>
+		</aside>
+	</div>
+</section>
+
+<script>
+	interface Point {
+		id: number;
+		x: number;
+		y: number;
+		color: string;
+	}
+
+	type ExportFormat = "css" | "tailwind" | "react";
+
+	const MAX_POINTS = 10;
+	const MIN_POINTS = 1;
+
+	const DEFAULT_BASE_COLOR = "#18181b";
+	const DEFAULT_BLOB_SIZE = 65;
+	const DEFAULT_POINTS: Point[] = [
+		{ id: 1, x: 28, y: 32, color: "#7c3aed" },
+		{ id: 2, x: 72, y: 68, color: "#22d3ee" },
+	];
+
+	const PALETTE = [
+		"#7c3aed",
+		"#22d3ee",
+		"#f472b6",
+		"#fb923c",
+		"#34d399",
+		"#60a5fa",
+		"#f87171",
+		"#a3e635",
+		"#e879f9",
+		"#fbbf24",
+	];
+
+	const root = document.querySelector<HTMLElement>("[data-mesh-generator]");
+	const preview = root?.querySelector<HTMLElement>("[data-mesh-preview]");
+	const handlesLayer = root?.querySelector<HTMLElement>("[data-mesh-handles]");
+	const pointsList = root?.querySelector<HTMLElement>("[data-mesh-points-list]");
+	const countLabel = root?.querySelector<HTMLElement>("[data-mesh-count]");
+	const addButton = root?.querySelector<HTMLButtonElement>("[data-mesh-add]");
+	const blobInput = root?.querySelector<HTMLInputElement>("[data-mesh-blob]");
+	const blobValueLabel = root?.querySelector<HTMLElement>("[data-mesh-blob-value]");
+	const baseColorInput = root?.querySelector<HTMLInputElement>("[data-mesh-base-color]");
+	const randomizeButton = root?.querySelector<HTMLButtonElement>("[data-mesh-randomize]");
+	const resetButton = root?.querySelector<HTMLButtonElement>("[data-mesh-reset]");
+	const hint = root?.querySelector<HTMLElement>("[data-mesh-hint]");
+	const tabButtons = root?.querySelectorAll<HTMLButtonElement>("[data-mesh-tab]");
+	const tabPanels = root?.querySelectorAll<HTMLElement>("[data-mesh-tabpanel]");
+	const copyButton = root?.querySelector<HTMLButtonElement>("[data-mesh-copy]");
+	const copyLabel = root?.querySelector<HTMLElement>("[data-mesh-copy-label]");
+
+	/** Parses `?seed=<comma-separated hex colors>` from the URL, lenient about a missing leading `#`. Returns 2-10 valid hex colors, or null if the param is absent/unusable. */
+	function parseSeedColors(): string[] | null {
+		const seed = new URLSearchParams(window.location.search).get("seed");
+		if (!seed) return null;
+		const colors = seed
+			.split(",")
+			.map((entry) => entry.trim())
+			.map((entry) => (entry.startsWith("#") ? entry : `#${entry}`))
+			.filter((entry) => /^#[0-9a-f]{6}$/i.test(entry));
+		if (colors.length < 2) return null;
+		return colors.slice(0, MAX_POINTS);
+	}
+
+	/** Distributes seeded colors evenly around a circle (center 50,50 / radius 30) so points start non-overlapping. */
+	function buildPointsFromSeed(colors: string[]): Point[] {
+		return colors.map((color, index) => {
+			const angle = (2 * Math.PI * index) / colors.length - Math.PI / 2;
+			return {
+				id: index + 1,
+				x: Math.round(50 + 30 * Math.cos(angle)),
+				y: Math.round(50 + 30 * Math.sin(angle)),
+				color,
+			};
+		});
+	}
+
+	const seedColors = parseSeedColors();
+	const startingPoints = seedColors ? buildPointsFromSeed(seedColors) : DEFAULT_POINTS;
+
+	let points: Point[] = startingPoints.map((point) => ({ ...point }));
+	let baseColor = DEFAULT_BASE_COLOR;
+	let blobSize = DEFAULT_BLOB_SIZE;
+	let nextId = startingPoints.length + 1;
+	let activeFormat: ExportFormat = "css";
+	let hintTimeout: number | undefined;
+
+	function clamp(value: number, min: number, max: number): number {
+		return Math.min(max, Math.max(min, value));
+	}
+
+	function toArbitraryValue(value: string): string {
+		return value
+			.replace(/\s*,\s*/g, ",")
+			.replace(/\s+/g, "_")
+			.replace(/\\_/g, "_");
+	}
+
+	function buildBackgroundImage(): string {
+		return points
+			.map((point) => `radial-gradient(circle at ${point.x}% ${point.y}%, ${point.color}, transparent ${blobSize}%)`)
+			.join(", ");
+	}
+
+	function buildCssSnippet(): string {
+		const layers = points.map(
+			(point) => `radial-gradient(circle at ${point.x}% ${point.y}%, ${point.color}, transparent ${blobSize}%)`,
+		);
+		const formattedLayers = layers.map((layer) => `    ${layer}`).join(",\n");
+		return `.mesh-gradient {\n  background-color: ${baseColor};\n  background-image:\n${formattedLayers};\n}`;
+	}
+
+	function buildTailwindSnippet(): string {
+		const backgroundImage = buildBackgroundImage();
+		return `bg-[${toArbitraryValue(baseColor)}] bg-[${toArbitraryValue(backgroundImage)}]`;
+	}
+
+	function buildReactSnippet(): string {
+		const backgroundImage = buildBackgroundImage();
+		return `<div\n  style={{\n    backgroundColor: "${baseColor}",\n    backgroundImage:\n      "${backgroundImage}",\n  }}\n/>`;
+	}
+
+	function getSnippet(format: ExportFormat): string {
+		if (format === "tailwind") return buildTailwindSnippet();
+		if (format === "react") return buildReactSnippet();
+		return buildCssSnippet();
+	}
+
+	function showHint() {
+		if (!hint) return;
+		hint.classList.remove("hidden");
+		window.clearTimeout(hintTimeout);
+		hintTimeout = window.setTimeout(() => hint.classList.add("hidden"), 2000);
+	}
+
+	/** Updates the live preview background and the currently visible/all code panels. Safe to call at any time, never touches handle/list DOM structure. */
+	function renderOutputs() {
+		if (preview) {
+			preview.style.backgroundColor = baseColor;
+			preview.style.backgroundImage = buildBackgroundImage();
+		}
+		if (baseColorInput) baseColorInput.value = baseColor;
+		if (blobInput) blobInput.value = String(blobSize);
+		if (blobValueLabel) blobValueLabel.textContent = `${blobSize}%`;
+
+		const formats: ExportFormat[] = ["css", "tailwind", "react"];
+		for (const format of formats) {
+			const codeElement = root?.querySelector<HTMLElement>(`[data-mesh-code="${format}"]`);
+			if (codeElement) codeElement.textContent = getSnippet(format);
+		}
+	}
+
+	function nudgeHandlePosition(handle: HTMLElement, point: Point) {
+		handle.style.left = `${point.x}%`;
+		handle.style.top = `${point.y}%`;
+	}
+
+	function startDrag(pointId: number, handle: HTMLElement, downEvent: PointerEvent) {
+		downEvent.stopPropagation();
+		downEvent.preventDefault();
+		handle.setPointerCapture(downEvent.pointerId);
+		handle.classList.add("cursor-grabbing");
+
+		function onMove(moveEvent: PointerEvent) {
+			if (!preview) return;
+			const rect = preview.getBoundingClientRect();
+			if (rect.width === 0 || rect.height === 0) return;
+			const point = points.find((candidate) => candidate.id === pointId);
+			if (!point) return;
+			point.x = Math.round(clamp(((moveEvent.clientX - rect.left) / rect.width) * 100, 0, 100));
+			point.y = Math.round(clamp(((moveEvent.clientY - rect.top) / rect.height) * 100, 0, 100));
+			nudgeHandlePosition(handle, point);
+			renderOutputs();
+		}
+
+		function onUp(upEvent: PointerEvent) {
+			handle.classList.remove("cursor-grabbing");
+			handle.releasePointerCapture(upEvent.pointerId);
+			handle.removeEventListener("pointermove", onMove);
+			handle.removeEventListener("pointerup", onUp);
+			handle.removeEventListener("pointercancel", onUp);
+			renderOutputs();
+		}
+
+		handle.addEventListener("pointermove", onMove);
+		handle.addEventListener("pointerup", onUp);
+		handle.addEventListener("pointercancel", onUp);
+	}
+
+	function nextPaletteColor(): string {
+		return PALETTE[points.length % PALETTE.length];
+	}
+
+	function addPoint(x: number, y: number, color?: string) {
+		if (points.length >= MAX_POINTS) {
+			showHint();
+			return;
+		}
+		points.push({
+			id: nextId++,
+			x: Math.round(clamp(x, 0, 100)),
+			y: Math.round(clamp(y, 0, 100)),
+			color: color ?? nextPaletteColor(),
+		});
+		renderStructure();
+	}
+
+	function removePoint(id: number) {
+		if (points.length <= MIN_POINTS) return;
+		points = points.filter((point) => point.id !== id);
+		renderStructure();
+	}
+
+	function hslToHex(h: number, s: number, l: number): string {
+		const hue = ((h % 360) + 360) % 360;
+		const saturation = s / 100;
+		const lightness = l / 100;
+		const k = (n: number) => (n + hue / 30) % 12;
+		const a = saturation * Math.min(lightness, 1 - lightness);
+		const f = (n: number) => lightness - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+		const toHex = (n: number) =>
+			Math.round(f(n) * 255)
+				.toString(16)
+				.padStart(2, "0");
+		return `#${toHex(0)}${toHex(8)}${toHex(4)}`;
+	}
+
+	function randomizePoints() {
+		points = points.map((point) => ({
+			...point,
+			x: Math.round(clamp(point.x + (Math.random() * 10 - 5), 0, 100)),
+			y: Math.round(clamp(point.y + (Math.random() * 10 - 5), 0, 100)),
+			color: hslToHex(Math.round(Math.random() * 360), 72, 58),
+		}));
+		renderStructure();
+	}
+
+	function resetToDefaults() {
+		points = DEFAULT_POINTS.map((point) => ({ ...point }));
+		baseColor = DEFAULT_BASE_COLOR;
+		blobSize = DEFAULT_BLOB_SIZE;
+		nextId = 3;
+		renderStructure();
+	}
+
+	function renderHandle(point: Point, index: number): HTMLElement {
+		const handle = document.createElement("div");
+		handle.className =
+			"absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border-2 border-white shadow-sm ring-1 ring-black/10 touch-none dark:border-zinc-950 dark:ring-white/20";
+		handle.style.left = `${point.x}%`;
+		handle.style.top = `${point.y}%`;
+		handle.style.backgroundColor = point.color;
+		handle.setAttribute("role", "button");
+		handle.setAttribute("tabindex", "0");
+		handle.setAttribute("aria-label", `Point ${index + 1}, drag to move`);
+		handle.dataset.pointHandle = "true";
+		handle.dataset.pointId = String(point.id);
+
+		handle.addEventListener("pointerdown", (event) => startDrag(point.id, handle, event));
+		handle.addEventListener("keydown", (event) => {
+			const step = event.shiftKey ? 10 : 2;
+			let moved = false;
+			const current = points.find((candidate) => candidate.id === point.id);
+			if (!current) return;
+			if (event.key === "ArrowLeft") {
+				current.x = Math.round(clamp(current.x - step, 0, 100));
+				moved = true;
+			} else if (event.key === "ArrowRight") {
+				current.x = Math.round(clamp(current.x + step, 0, 100));
+				moved = true;
+			} else if (event.key === "ArrowUp") {
+				current.y = Math.round(clamp(current.y - step, 0, 100));
+				moved = true;
+			} else if (event.key === "ArrowDown") {
+				current.y = Math.round(clamp(current.y + step, 0, 100));
+				moved = true;
+			}
+			if (moved) {
+				event.preventDefault();
+				nudgeHandlePosition(handle, current);
+				renderOutputs();
+			}
+		});
+
+		return handle;
+	}
+
+	function renderPointRow(point: Point, index: number): HTMLElement {
+		const row = document.createElement("div");
+		row.className =
+			"flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-2 py-1.5 dark:border-zinc-800 dark:bg-zinc-950";
+
+		const label = document.createElement("span");
+		label.className = "w-6 shrink-0 text-xs font-semibold text-zinc-500 dark:text-zinc-400";
+		label.textContent = `#${index + 1}`;
+		row.appendChild(label);
+
+		const colorInput = document.createElement("input");
+		colorInput.type = "color";
+		colorInput.value = point.color;
+		colorInput.setAttribute("aria-label", `Point ${index + 1} color`);
+		colorInput.className = "h-8 w-10 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900";
+		colorInput.addEventListener("input", () => {
+			point.color = colorInput.value;
+			const handle = handlesLayer?.querySelector<HTMLElement>(`[data-point-id="${point.id}"]`);
+			if (handle) handle.style.backgroundColor = point.color;
+			renderOutputs();
+		});
+		row.appendChild(colorInput);
+
+		const spacer = document.createElement("span");
+		spacer.className = "flex-1";
+		row.appendChild(spacer);
+
+		const removeButton = document.createElement("button");
+		removeButton.type = "button";
+		removeButton.className =
+			"inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100";
+		removeButton.setAttribute("aria-label", `Remove point ${index + 1}`);
+		removeButton.disabled = points.length <= MIN_POINTS;
+		removeButton.innerHTML =
+			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true"><path fill="currentColor" d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+		removeButton.addEventListener("click", () => removePoint(point.id));
+		row.appendChild(removeButton);
+
+		return row;
+	}
+
+	/** Rebuilds handles + points list DOM from `points`, then syncs outputs. Only call when the point set changes shape (add/remove/randomize/reset) — never during an active drag. */
+	function renderStructure() {
+		if (handlesLayer) {
+			handlesLayer.innerHTML = "";
+			points.forEach((point, index) => handlesLayer.appendChild(renderHandle(point, index)));
+		}
+		if (pointsList) {
+			pointsList.innerHTML = "";
+			points.forEach((point, index) => pointsList.appendChild(renderPointRow(point, index)));
+		}
+		if (countLabel) countLabel.textContent = `${points.length} / ${MAX_POINTS}`;
+		if (addButton) addButton.disabled = points.length >= MAX_POINTS;
+		renderOutputs();
+	}
+
+	function selectTab(format: ExportFormat) {
+		activeFormat = format;
+		tabButtons?.forEach((button) => {
+			const isActive = button.dataset.meshTab === format;
+			button.setAttribute("aria-selected", isActive ? "true" : "false");
+			button.tabIndex = isActive ? 0 : -1;
+		});
+		tabPanels?.forEach((panel) => {
+			panel.hidden = panel.dataset.meshTabpanel !== format;
+		});
+	}
+
+	async function copyText(value: string): Promise<boolean> {
+		try {
+			await navigator.clipboard.writeText(value);
+			return true;
+		} catch {
+			const textarea = document.createElement("textarea");
+			textarea.value = value;
+			textarea.style.position = "fixed";
+			textarea.style.left = "-9999px";
+			document.body.appendChild(textarea);
+			textarea.select();
+			const ok = document.execCommand("copy");
+			document.body.removeChild(textarea);
+			return ok;
+		}
+	}
+
+	preview?.addEventListener("click", (event) => {
+		if (event.target !== preview || !preview) return;
+		const rect = preview.getBoundingClientRect();
+		const x = ((event.clientX - rect.left) / rect.width) * 100;
+		const y = ((event.clientY - rect.top) / rect.height) * 100;
+		addPoint(x, y);
+	});
+
+	addButton?.addEventListener("click", () => {
+		const jitterX = 50 + (Math.random() * 20 - 10);
+		const jitterY = 50 + (Math.random() * 20 - 10);
+		addPoint(jitterX, jitterY);
+	});
+
+	blobInput?.addEventListener("input", () => {
+		blobSize = clamp(Number(blobInput.value) || DEFAULT_BLOB_SIZE, 40, 90);
+		renderOutputs();
+	});
+
+	baseColorInput?.addEventListener("input", () => {
+		baseColor = baseColorInput.value;
+		renderOutputs();
+	});
+
+	randomizeButton?.addEventListener("click", randomizePoints);
+	resetButton?.addEventListener("click", resetToDefaults);
+
+	tabButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			const format = button.dataset.meshTab as ExportFormat | undefined;
+			if (format) selectTab(format);
+		});
+	});
+
+	copyButton?.addEventListener("click", async () => {
+		const value = getSnippet(activeFormat);
+		if (!value) return;
+		const copied = await copyText(value);
+		if (!copied) return;
+		copyButton.setAttribute("data-copy-state", "copied");
+		const copyIcon = copyButton.querySelector('[data-copy-icon="copy"]');
+		const checkIcon = copyButton.querySelector('[data-copy-icon="check"]');
+		copyIcon?.classList.add("hidden");
+		checkIcon?.classList.remove("hidden");
+		if (copyLabel) copyLabel.textContent = "Copied";
+		window.setTimeout(() => {
+			copyButton.removeAttribute("data-copy-state");
+			copyIcon?.classList.remove("hidden");
+			checkIcon?.classList.add("hidden");
+			if (copyLabel) copyLabel.textContent = "Copy";
+		}, 1400);
+	});
+
+	renderStructure();
+</script>

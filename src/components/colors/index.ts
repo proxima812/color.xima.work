@@ -9,5 +9,8 @@ export { default as ColorsGallery } from "./ColorsGallery.astro";
 export { default as ColorsGrid } from "./ColorsGrid.astro";
 export { default as ColorsHeader } from "./ColorsHeader.astro";
 export { default as GithubStarsBadge } from "./GithubStarsBadge.astro";
+export { default as GradientMarquee } from "./GradientMarquee.astro";
 export { default as GradientRedirect } from "./GradientRedirect.astro";
 export { default as GradientGenerator } from "./GradientGenerator.astro";
+export { default as MeshGenerator } from "./MeshGenerator.astro";
+export { default as InstagramPostGenerator } from "./InstagramPostGenerator.astro";

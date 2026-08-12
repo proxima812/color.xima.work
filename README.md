@@ -17,7 +17,7 @@ A fast gradient gallery for modern UI work.
 - Smart search powered by Fuse.js.
 - Copy formats for both CSS3 and Tailwind CSS v4.
 - Detail pages, category collections, daily/random redirects, and a gradient generator.
-- Static Astro output with sitemap, robots.txt, canonical URLs, and dynamic SVG OG images.
+- Static Astro output with sitemap, robots.txt, canonical URLs, and a generated static OG image.
 - Minimal runtime, Bun-first local workflow, Vercel deployment.
 
 ## Quick Start
@@ -58,7 +58,7 @@ src/
   config/              site and SEO settings
   data/                gradient source, tags, descriptions, copy snippets
   layouts/             shared page shell
-  pages/               gallery, detail, collection, generator, redirects, robots, OG routes
+  pages/               gallery, detail, collection, generator, redirects, robots
   styles/              global styles and gradient utilities
 ```
 
@@ -72,7 +72,6 @@ src/
 /generator/               gradient generator
 /daily/                   daily gradient redirect
 /random/                  random gradient redirect
-/og/[slug].svg            dynamic SVG social image
 /robots.txt               robots policy with sitemap link
 ```
 
@@ -101,6 +100,7 @@ bg-[radial-gradient(...)] border border-solid border-[rgba(...)] shadow-[...]
 - Output mode: static
 - Deployment target: Vercel
 - Gradient collection loader: `src/content.config.ts` reads `src/data/colors.json`
+- Social preview: one static image at `public/og-default.jpg`, regenerate it with `bun run og`
 
 ## Contributing
 
@@ -108,4 +108,6 @@ Issues and pull requests are welcome. Keep changes focused, preserve the existin
 
 ## License
 
-No license file is currently included in this repository.
+The code in this repository is released under the [MIT License](LICENSE).
+
+The gradient CSS snippets themselves are public domain (CC0). Use them freely in any project, including commercial work, with no attribution required.

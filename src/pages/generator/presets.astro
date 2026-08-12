@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import { GradientGenerator } from "@/components/colors";
-import { getGeneratorPath } from "@/config";
+import { getGeneratorPresetsPath } from "@/config";
 import { buildColorCards, buildCssSnippetMap } from "@/data";
 import { BaseLayout } from "@/layouts";
 
@@ -20,9 +20,9 @@ const generatorItems = cards.map((card) => ({
 ---
 
 <BaseLayout
-	title="Gradient generator - color.xima"
-	description="Generate color blocks and text gradients from the color.xima gradient library."
-	canonicalPath={getGeneratorPath()}
+	title="Preset generator - color.xima"
+	description="Pick any catalog gradient and generate color blocks or text gradients from the color.xima library."
+	canonicalPath={getGeneratorPresetsPath()}
 >
 	<GradientGenerator items={generatorItems} />
 </BaseLayout>

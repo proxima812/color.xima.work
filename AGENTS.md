@@ -13,10 +13,18 @@
 - Main source folders: `src/pages`, `src/components`, `src/components/colors`, `src/config`, `src/data`, `src/layouts`, `src/styles`.
 - Language: English only.
 
+## Product And Design Context
+
+- `PRODUCT.md` is the source of truth for product facts: users, purpose, routes, capabilities, constraints, and product principles.
+- `DESIGN.md` is the source of truth for the visual system: color roles, typography, layout, elevation, shapes, component patterns, and the non-negotiable design principles for this site.
+- Read both before any UI, copy, or structural change, and follow their rules over generic design defaults.
+- Both files describe the current code. If a change makes them wrong, update them in the same task.
+
 ## Working Rules
 
 - Keep changes narrowly scoped to the requested task.
-- Do not touch `.claude`.
+- `.claude/skills/` holds installed third-party skills. Read them, do not edit them by hand; update them only by reinstalling with `bunx skills add`.
+- Do not modify other `.claude` files unless explicitly asked.
 - Do not modify generated artifacts, `.astro`, `.vercel`, `node_modules`, or local browser files unless explicitly asked.
 - Do not redesign layout, spacing, hierarchy, color system, or interactions unless the task asks for UI changes.
 - Prefer existing Astro component patterns, data structures, and Tailwind utilities.

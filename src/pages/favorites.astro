@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import { ColorsGrid } from "@/components/colors";
+import { getCardsPath, getFavoritesPath } from "@/config";
+import { buildColorCards, buildCssSnippetMap } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+export const prerender = true;
+
+const cards = buildColorCards(await getCollection("colors"));
+const cssSnippetMap = buildCssSnippetMap(cards.map((card) => card.className));
+---
+
+<BaseLayout
+	title="Favorites - color.xima"
+	description="Gradients you've saved from color.xima.work, kept locally in this browser."
+	canonicalPath={getFavoritesPath()}
+	noindex
+>
+	<section class="space-y-8">
+		<header class="space-y-3">
+			<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Favorites</p>
+			<h1 class="text-5xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">Your saved gradients</h1>
+			<p class="text-lg text-zinc-500 dark:text-zinc-400">
+				Saved locally in this browser — tap the heart on any gradient to add it here.
+			</p>
+		</header>
+		<div id="colors-gallery-root" data-favorites-root>
+			<ColorsGrid items={cards} cssSnippetMap={cssSnippetMap} />
+			<div
+				class="mt-16 flex flex-col items-center gap-4 rounded-xl border border-dashed border-zinc-200 bg-white/70 px-5 py-14 text-center dark:border-zinc-800 dark:bg-zinc-900/70"
+				data-favorites-empty
+				hidden
+			>
+				<div class="space-y-1">
+					<p class="text-sm font-medium text-zinc-900 dark:text-zinc-100">No favorites yet</p>
+					<p class="text-sm text-zinc-500 dark:text-zinc-400">
+						Browse the catalog and tap the heart on any gradient.
+					</p>
+				</div>
+				<a
+					href={getCardsPath()}
+					class="inline-flex h-9 cursor-pointer items-center rounded-xl border border-zinc-200 bg-white/70 px-3 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+				>
+					Browse the catalog
+				</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<script>
+	import { FAVORITES_EVENT, getFavoriteSlugs } from "@/scripts/favorites";
+
+	const root = document.querySelector("[data-favorites-root]");
+	const items = root?.querySelectorAll<HTMLElement>("[data-color-item]");
+	const emptyState = root?.querySelector<HTMLElement>("[data-favorites-empty]");
+
+	function applyFavoritesFilter() {
+		if (!items) return;
+		const favoriteSlugs = new Set(getFavoriteSlugs());
+		let visibleCount = 0;
+
+		items.forEach((item) => {
+			const slug = item.getAttribute("data-color-slug");
+			const visible = !!slug && favoriteSlugs.has(slug);
+			item.style.display = visible ? "" : "none";
+			if (visible) visibleCount += 1;
+		});
+
+		if (emptyState) emptyState.hidden = visibleCount > 0;
+	}
+
+	applyFavoritesFilter();
+	window.addEventListener(FAVORITES_EVENT, applyFavoritesFilter);
+</script>

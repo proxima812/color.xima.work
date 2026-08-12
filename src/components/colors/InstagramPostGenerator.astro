@@ -1,0 +1,1451 @@
+---
+import type { ColorCardItem } from "@/data";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	items: Pick<ColorCardItem, "slug" | "name" | "className" | "tags">[];
+}
+
+const { items } = Astro.props;
+const firstItem = items[0];
+
+const formatOptions = [
+	["square", "Square", "1080 × 1080"],
+	["portrait", "Portrait", "1080 × 1350"],
+	["story", "Story", "1080 × 1920"],
+] as const;
+
+const solidPresets = [
+	"#09090b",
+	"#27272a",
+	"#71717a",
+	"#f4f4f5",
+	"#ffffff",
+	"#ef4444",
+	"#f97316",
+	"#eab308",
+	"#22c55e",
+	"#14b8a6",
+	"#3b82f6",
+	"#6366f1",
+	"#a855f7",
+	"#ec4899",
+	"#fbcfe8",
+	"#bae6fd",
+] as const;
+
+const positionGrid = [
+	["top-left", "Top left"],
+	["top-center", "Top center"],
+	["top-right", "Top right"],
+	["middle-left", "Middle left"],
+	["center", "Center"],
+	["middle-right", "Middle right"],
+	["bottom-left", "Bottom left"],
+	["bottom-center", "Bottom center"],
+	["bottom-right", "Bottom right"],
+] as const;
+
+const DEFAULT_TEXT_POSITION = "bottom-left";
+---
+
+<section class="space-y-8" data-instagram-generator>
+	<header class="space-y-4">
+		<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Generator</p>
+		<h1 class="max-w-3xl text-5xl font-semibold leading-none tracking-tight text-zinc-950 md:text-6xl dark:text-zinc-50">
+			Build an Instagram post
+		</h1>
+		<p class="max-w-2xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
+			Pick a background, pad it into a framed card, and download it sized for a square, portrait, or Story post.
+		</p>
+	</header>
+
+	<div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
+		<div class="min-w-0 space-y-5 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+			<div class="inline-flex max-w-full overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-sm font-medium text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" role="tablist" aria-label="Post format">
+				{
+					formatOptions.map(([format, label, dims], index) => (
+						<button
+							class="whitespace-nowrap rounded-xl px-3 py-1.5 text-left transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50"
+							type="button"
+							role="tab"
+							data-instagram-format={format}
+							aria-selected={index === 0 ? "true" : "false"}
+						>
+							<span class="block">{label}</span>
+							<span class="block text-xs font-normal text-zinc-400 dark:text-zinc-500">{dims}</span>
+						</button>
+					))
+				}
+			</div>
+
+			<div class="grid place-items-center rounded-xl border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-zinc-950">
+				<div class="mx-auto w-full max-w-sm">
+					<div
+						class="relative w-full overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
+						style="aspect-ratio: 1080 / 1080;"
+						data-instagram-preview-frame
+					>
+						<div class="relative box-border h-full w-full" style="background-color:#f4f4f5; padding: 5.926%;" data-instagram-outer-fill>
+							<div class={`relative box-border h-full w-full ${firstItem?.className ?? ""}`} data-instagram-inner-preview>
+								<div class="pointer-events-none absolute inset-0 flex" style="padding: 5%;" data-instagram-text-preview>
+									<p class="max-w-full whitespace-pre-line" data-instagram-text-content />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<label class="block space-y-2">
+				<span class="flex items-center justify-between text-sm font-medium text-zinc-600 dark:text-zinc-300">
+					<span>Padding</span>
+					<span data-instagram-padding-value>64px</span>
+				</span>
+				<input
+					type="range"
+					min="0"
+					max="200"
+					step="2"
+					value="64"
+					class="w-full accent-zinc-900 dark:accent-zinc-100"
+					data-instagram-padding
+					aria-label="Padding"
+				/>
+			</label>
+
+			<label class="flex items-center justify-between gap-3">
+				<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Outer color</span>
+				<input
+					type="color"
+					value="#f4f4f5"
+					class="h-9 w-14 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-950"
+					data-instagram-outer-color
+					aria-label="Outer color"
+				/>
+			</label>
+
+			<div class="space-y-4 border-t border-zinc-200 pt-5 dark:border-zinc-800">
+				<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Frame</h2>
+
+				<label class="block space-y-2">
+					<span class="flex items-center justify-between text-sm font-medium text-zinc-600 dark:text-zinc-300">
+						<span>Corner radius</span>
+						<span data-instagram-radius-value>24px</span>
+					</span>
+					<input
+						type="range"
+						min="0"
+						max="120"
+						step="2"
+						value="24"
+						class="w-full accent-zinc-900 dark:accent-zinc-100"
+						data-instagram-radius
+						aria-label="Corner radius"
+					/>
+				</label>
+
+				<div class="space-y-2">
+					<label class="flex items-center justify-between gap-3">
+						<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Border</span>
+						<input
+							type="checkbox"
+							class="h-4 w-4 cursor-pointer accent-zinc-900 dark:accent-zinc-100"
+							data-instagram-border-toggle
+							aria-label="Enable border"
+						/>
+					</label>
+					<div class="hidden space-y-3" data-instagram-border-fields>
+						<div class="flex items-center justify-between gap-3">
+							<span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Border color</span>
+							<input
+								type="color"
+								value="#ffffff"
+								class="h-9 w-14 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-950"
+								data-instagram-border-color
+								aria-label="Border color"
+							/>
+						</div>
+						<label class="block space-y-2">
+							<span class="flex items-center justify-between text-xs font-medium text-zinc-500 dark:text-zinc-400">
+								<span>Border width</span>
+								<span data-instagram-border-width-value>2px</span>
+							</span>
+							<input
+								type="range"
+								min="1"
+								max="12"
+								step="1"
+								value="2"
+								class="w-full accent-zinc-900 dark:accent-zinc-100"
+								data-instagram-border-width
+								aria-label="Border width"
+							/>
+						</label>
+					</div>
+				</div>
+
+				<div class="space-y-2">
+					<label class="flex items-center justify-between gap-3">
+						<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Shadow</span>
+						<input
+							type="checkbox"
+							class="h-4 w-4 cursor-pointer accent-zinc-900 dark:accent-zinc-100"
+							data-instagram-shadow-toggle
+							aria-label="Enable shadow"
+						/>
+					</label>
+					<div class="hidden space-y-2" data-instagram-shadow-fields>
+						<span class="flex items-center justify-between text-xs font-medium text-zinc-500 dark:text-zinc-400">
+							<span>Shadow blur</span>
+							<span data-instagram-shadow-blur-value>32</span>
+						</span>
+						<input
+							type="range"
+							min="0"
+							max="80"
+							step="2"
+							value="32"
+							class="w-full accent-zinc-900 dark:accent-zinc-100"
+							data-instagram-shadow-blur
+							aria-label="Shadow blur"
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="space-y-4 border-t border-zinc-200 pt-5 dark:border-zinc-800">
+				<label class="flex items-center justify-between gap-3">
+					<span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Text overlay</span>
+					<input
+						type="checkbox"
+						checked
+						class="h-4 w-4 cursor-pointer accent-zinc-900 dark:accent-zinc-100"
+						data-instagram-text-toggle
+						aria-label="Enable text overlay"
+					/>
+				</label>
+
+				<div class="space-y-4" data-instagram-text-fields>
+					<label class="block space-y-2">
+						<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Content</span>
+						<textarea
+							rows="3"
+							class="w-full resize-y rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600"
+							data-instagram-text-content-input
+						>{"Your headline\ngoes here"}</textarea>
+					</label>
+
+					<div class="space-y-2">
+						<span class="block text-sm font-medium text-zinc-600 dark:text-zinc-300">Position</span>
+						<div class="grid w-24 grid-cols-3 gap-1 rounded-xl border border-zinc-200 bg-zinc-50 p-1.5 dark:border-zinc-800 dark:bg-zinc-950">
+							{
+								positionGrid.map(([position, label]) => (
+									<button
+										type="button"
+										class="flex aspect-square items-center justify-center rounded-lg text-zinc-400 transition hover:bg-white aria-pressed:bg-zinc-900 aria-pressed:text-zinc-50 dark:hover:bg-zinc-900 dark:aria-pressed:bg-zinc-100 dark:aria-pressed:text-zinc-950"
+										data-instagram-text-position={position}
+										aria-pressed={position === DEFAULT_TEXT_POSITION ? "true" : "false"}
+										aria-label={label}
+									>
+										<span class="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true" />
+									</button>
+								))
+							}
+						</div>
+					</div>
+
+					<label class="block space-y-2">
+						<span class="flex items-center justify-between text-sm font-medium text-zinc-600 dark:text-zinc-300">
+							<span>Font size</span>
+							<span data-instagram-text-size-value>64px</span>
+						</span>
+						<input
+							type="range"
+							min="16"
+							max="160"
+							step="2"
+							value="64"
+							class="w-full accent-zinc-900 dark:accent-zinc-100"
+							data-instagram-text-size
+							aria-label="Text font size"
+						/>
+					</label>
+
+					<div class="flex items-center justify-between gap-3">
+						<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Weight</span>
+						<div class="inline-flex rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-xs font-medium text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">
+							<button
+								type="button"
+								class="rounded-xl px-3 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50"
+								data-instagram-text-weight="regular"
+								aria-pressed="false"
+							>
+								Regular
+							</button>
+							<button
+								type="button"
+								class="rounded-xl px-3 py-1.5 transition aria-pressed:bg-white aria-pressed:text-zinc-950 aria-pressed:shadow-sm dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-50"
+								data-instagram-text-weight="bold"
+								aria-pressed="true"
+							>
+								Bold
+							</button>
+						</div>
+					</div>
+
+					<label class="flex items-center justify-between gap-3">
+						<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Text color</span>
+						<input
+							type="color"
+							value="#ffffff"
+							class="h-9 w-14 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-950"
+							data-instagram-text-color
+							aria-label="Text color"
+						/>
+					</label>
+				</div>
+			</div>
+
+			<div class="space-y-2 border-t border-zinc-200 pt-5 dark:border-zinc-800">
+				<div class="grid grid-cols-2 gap-2">
+					<button
+						type="button"
+						class="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-zinc-950 px-3 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 data-[download-state=done]:opacity-70 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white [&[data-download-state=done]_[data-download-icon='check']]:inline-flex [&[data-download-state=done]_[data-download-icon='download']]:hidden"
+						data-instagram-download
+						aria-label="Download PNG"
+					>
+						<span data-download-icon="download" aria-hidden="true"><Icon name="mdi:download" /></span>
+						<span class="hidden" data-download-icon="check" aria-hidden="true"><Icon name="mdi:check-bold" /></span>
+						<span data-instagram-download-label>Download PNG</span>
+					</button>
+					<button
+						type="button"
+						class="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-sm font-medium text-zinc-800 transition hover:bg-zinc-50 data-[download-state=done]:opacity-70 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900 [&[data-download-state=done]_[data-download-icon='check']]:inline-flex [&[data-download-state=done]_[data-download-icon='download']]:hidden"
+						data-instagram-download-svg
+						aria-label="Download SVG"
+					>
+						<span data-download-icon="download" aria-hidden="true"><Icon name="mdi:download" /></span>
+						<span class="hidden" data-download-icon="check" aria-hidden="true"><Icon name="mdi:check-bold" /></span>
+						<span data-instagram-download-svg-label>Download SVG</span>
+					</button>
+				</div>
+				<p class="text-xs leading-5 text-zinc-500 dark:text-zinc-400">
+					PNG for direct posting. SVG imports as editable layers into Figma, Canva, Sketch, and Illustrator.
+				</p>
+			</div>
+		</div>
+
+		<aside class="min-w-0 space-y-4 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
+			<div class="inline-flex w-full rounded-xl border border-zinc-200 bg-zinc-50 p-1 text-sm font-medium text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400" role="tablist" aria-label="Gradient source">
+				<button
+					class="flex-1 rounded-xl px-3 py-1.5 transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50"
+					type="button"
+					role="tab"
+					data-instagram-source="catalog"
+					aria-selected="true"
+				>
+					Catalog
+				</button>
+				<button
+					class="flex-1 rounded-xl px-3 py-1.5 transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50"
+					type="button"
+					role="tab"
+					data-instagram-source="mesh"
+					aria-selected="false"
+				>
+					Mesh
+				</button>
+				<button
+					class="flex-1 rounded-xl px-3 py-1.5 transition aria-selected:bg-white aria-selected:text-zinc-950 aria-selected:shadow-sm dark:aria-selected:bg-zinc-800 dark:aria-selected:text-zinc-50"
+					type="button"
+					role="tab"
+					data-instagram-source="solid"
+					aria-selected="false"
+				>
+					Solid
+				</button>
+			</div>
+
+			<div data-instagram-catalog-panel>
+				<div class="mb-2 flex items-center justify-between gap-2 px-1">
+					<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Gradients</h2>
+					<span class="text-xs text-zinc-400" data-instagram-catalog-count>{items.length}</span>
+				</div>
+				<label class="mb-3 block px-1">
+					<span class="sr-only">Search gradients</span>
+					<input
+						class="h-10 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-zinc-600"
+						type="search"
+						placeholder="Search by name or tag"
+						data-instagram-catalog-search
+						autocomplete="off"
+						spellcheck="false"
+					/>
+				</label>
+				<div class="grid max-h-[28rem] gap-2 overflow-auto pr-1">
+					{
+						items.map((item, index) => (
+							<button
+								type="button"
+								class="grid grid-cols-[3rem_minmax(0,1fr)] items-center gap-3 rounded-xl border border-transparent p-2 text-left transition hover:bg-zinc-50 aria-pressed:border-zinc-300 aria-pressed:bg-zinc-50 dark:hover:bg-zinc-950 dark:aria-pressed:border-zinc-700 dark:aria-pressed:bg-zinc-950"
+								data-instagram-catalog-option
+								data-index={index}
+								aria-pressed={index === 0 ? "true" : "false"}
+							>
+								<span class={`${item.className} h-10 rounded-xl border border-black/5`} aria-hidden="true" />
+								<span class="min-w-0">
+									<span class="block truncate text-sm font-medium text-zinc-800 dark:text-zinc-200">{item.name}</span>
+									<span class="block truncate text-xs text-zinc-500 dark:text-zinc-400">{item.tags.join(", ")}</span>
+								</span>
+							</button>
+						))
+					}
+					<p class="hidden py-10 text-center text-sm text-zinc-500 dark:text-zinc-400" data-instagram-catalog-empty>No gradients found</p>
+				</div>
+			</div>
+
+			<div class="space-y-4" data-instagram-mesh-panel hidden>
+				<div>
+					<div class="mb-2 flex items-center justify-between gap-2 px-1">
+						<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Mesh points</h2>
+						<span class="text-xs text-zinc-400" data-instagram-mesh-count>2 / 10</span>
+					</div>
+					<div
+						class="relative aspect-square w-full touch-none overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
+						data-instagram-mesh-preview
+					>
+						<div class="absolute inset-0" data-instagram-mesh-handles></div>
+					</div>
+					<p class="hidden mt-2 text-xs font-medium text-zinc-500 dark:text-zinc-400" data-instagram-mesh-hint>Maximum 10 points</p>
+				</div>
+
+				<div class="grid gap-2" data-instagram-mesh-points-list></div>
+				<button
+					type="button"
+					class="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:disabled:hover:bg-zinc-950"
+					data-instagram-mesh-add
+				>
+					<Icon name="mdi:plus" aria-hidden="true" />
+					Add point
+				</button>
+
+				<label class="block space-y-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+					<span class="flex items-center justify-between text-sm font-medium text-zinc-600 dark:text-zinc-300">
+						<span>Blob size</span>
+						<span data-instagram-mesh-blob-value>65%</span>
+					</span>
+					<input
+						type="range"
+						min="40"
+						max="90"
+						step="5"
+						value="65"
+						class="w-full accent-zinc-900 dark:accent-zinc-100"
+						data-instagram-mesh-blob
+						aria-label="Blob size"
+					/>
+				</label>
+
+				<label class="flex items-center justify-between gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+					<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Base color</span>
+					<input
+						type="color"
+						value="#18181b"
+						class="h-9 w-14 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-950"
+						data-instagram-mesh-base-color
+						aria-label="Mesh base color"
+					/>
+				</label>
+
+				<div class="grid grid-cols-2 gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+					<button
+						type="button"
+						class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900"
+						data-instagram-mesh-randomize
+					>
+						<Icon name="mdi:shuffle-variant" aria-hidden="true" />
+						Randomize
+					</button>
+					<button
+						type="button"
+						class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900"
+						data-instagram-mesh-reset
+					>
+						<Icon name="mdi:restore" aria-hidden="true" />
+						Reset
+					</button>
+				</div>
+			</div>
+
+			<div class="space-y-4" data-instagram-solid-panel hidden>
+				<div class="flex items-center justify-between gap-2 px-1">
+					<h2 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Solid color</h2>
+				</div>
+				<div class="grid grid-cols-4 gap-2 px-1">
+					{
+						solidPresets.map((color) => (
+							<button
+								type="button"
+								class="aspect-square w-full rounded-xl border border-black/5 ring-1 ring-transparent transition aria-pressed:ring-2 aria-pressed:ring-zinc-900 aria-pressed:ring-offset-2 aria-pressed:ring-offset-white dark:aria-pressed:ring-zinc-100 dark:aria-pressed:ring-offset-zinc-900"
+								style={`background-color:${color};`}
+								data-instagram-solid-preset
+								data-color={color}
+								aria-pressed="false"
+								aria-label={`Use color ${color}`}
+							/>
+						))
+					}
+				</div>
+				<label class="flex items-center justify-between gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+					<span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Custom color</span>
+					<input
+						type="color"
+						value="#3b82f6"
+						class="h-9 w-14 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-950"
+						data-instagram-solid-custom
+						aria-label="Custom solid color"
+					/>
+				</label>
+			</div>
+		</aside>
+	</div>
+</section>
+
+<script is:inline type="application/json" id="instagram-generator-data" set:html={JSON.stringify(items)}></script>
+
+<script>
+	interface CatalogItem {
+		slug: string;
+		name: string;
+		className: string;
+		tags: string[];
+	}
+
+	interface MeshPoint {
+		id: number;
+		x: number;
+		y: number;
+		color: string;
+	}
+
+	type FormatId = "square" | "portrait" | "story";
+	type SourceId = "catalog" | "mesh" | "solid";
+	type TextPosition =
+		| "top-left"
+		| "top-center"
+		| "top-right"
+		| "middle-left"
+		| "center"
+		| "middle-right"
+		| "bottom-left"
+		| "bottom-center"
+		| "bottom-right";
+	type TextWeight = "regular" | "bold";
+	type HorizontalAlign = "left" | "center" | "right";
+	type VerticalAlign = "top" | "middle" | "bottom";
+
+	const FORMATS: Record<FormatId, { width: number; height: number }> = {
+		square: { width: 1080, height: 1080 },
+		portrait: { width: 1080, height: 1350 },
+		story: { width: 1080, height: 1920 },
+	};
+
+	const POSITIONS: Record<TextPosition, { h: HorizontalAlign; v: VerticalAlign }> = {
+		"top-left": { h: "left", v: "top" },
+		"top-center": { h: "center", v: "top" },
+		"top-right": { h: "right", v: "top" },
+		"middle-left": { h: "left", v: "middle" },
+		center: { h: "center", v: "middle" },
+		"middle-right": { h: "right", v: "middle" },
+		"bottom-left": { h: "left", v: "bottom" },
+		"bottom-center": { h: "center", v: "bottom" },
+		"bottom-right": { h: "right", v: "bottom" },
+	};
+
+	const JUSTIFY_CONTENT: Record<HorizontalAlign, string> = { left: "flex-start", center: "center", right: "flex-end" };
+	const ALIGN_ITEMS: Record<VerticalAlign, string> = { top: "flex-start", middle: "center", bottom: "flex-end" };
+
+	const MAX_POINTS = 10;
+	const MIN_POINTS = 1;
+	const DEFAULT_BASE_COLOR = "#18181b";
+	const DEFAULT_BLOB_SIZE = 65;
+	const DEFAULT_OUTER_COLOR = "#f4f4f5";
+	const DEFAULT_PADDING = 64;
+	const DEFAULT_SOLID_COLOR = "#3b82f6";
+	const DEFAULT_RADIUS = 24;
+	const DEFAULT_BORDER_COLOR = "#ffffff";
+	const DEFAULT_BORDER_WIDTH = 2;
+	const DEFAULT_SHADOW_BLUR = 32;
+	const DEFAULT_TEXT_CONTENT = "Your headline\ngoes here";
+	const DEFAULT_TEXT_POSITION: TextPosition = "bottom-left";
+	const DEFAULT_TEXT_SIZE = 64;
+	const DEFAULT_TEXT_COLOR = "#ffffff";
+	const TEXT_MARGIN_FRACTION = 0.05;
+	const TEXT_LINE_HEIGHT_FACTOR = 1.25;
+	const FONT_STACK = "ui-sans-serif, system-ui, sans-serif";
+	const DEFAULT_POINTS: MeshPoint[] = [
+		{ id: 1, x: 28, y: 32, color: "#7c3aed" },
+		{ id: 2, x: 72, y: 68, color: "#22d3ee" },
+	];
+
+	const PALETTE = [
+		"#7c3aed",
+		"#22d3ee",
+		"#f472b6",
+		"#fb923c",
+		"#34d399",
+		"#60a5fa",
+		"#f87171",
+		"#a3e635",
+		"#e879f9",
+		"#fbbf24",
+	];
+
+	const root = document.querySelector<HTMLElement>("[data-instagram-generator]");
+	const dataElement = document.getElementById("instagram-generator-data");
+	const catalogItems = (dataElement?.textContent ? JSON.parse(dataElement.textContent) : []) as CatalogItem[];
+
+	// ── Shared / top-level controls ──────────────────────────────
+	const formatButtons = root?.querySelectorAll<HTMLButtonElement>("[data-instagram-format]");
+	const sourceButtons = root?.querySelectorAll<HTMLButtonElement>("[data-instagram-source]");
+	const previewFrame = root?.querySelector<HTMLElement>("[data-instagram-preview-frame]");
+	const outerFill = root?.querySelector<HTMLElement>("[data-instagram-outer-fill]");
+	const innerPreview = root?.querySelector<HTMLElement>("[data-instagram-inner-preview]");
+	const paddingInput = root?.querySelector<HTMLInputElement>("[data-instagram-padding]");
+	const paddingValueLabel = root?.querySelector<HTMLElement>("[data-instagram-padding-value]");
+	const outerColorInput = root?.querySelector<HTMLInputElement>("[data-instagram-outer-color]");
+	const downloadButton = root?.querySelector<HTMLButtonElement>("[data-instagram-download]");
+	const downloadLabel = root?.querySelector<HTMLElement>("[data-instagram-download-label]");
+	const downloadSvgButton = root?.querySelector<HTMLButtonElement>("[data-instagram-download-svg]");
+	const downloadSvgLabel = root?.querySelector<HTMLElement>("[data-instagram-download-svg-label]");
+
+	// ── Frame controls (radius / border / shadow) ─────────────────
+	const radiusInput = root?.querySelector<HTMLInputElement>("[data-instagram-radius]");
+	const radiusValueLabel = root?.querySelector<HTMLElement>("[data-instagram-radius-value]");
+	const borderToggle = root?.querySelector<HTMLInputElement>("[data-instagram-border-toggle]");
+	const borderFields = root?.querySelector<HTMLElement>("[data-instagram-border-fields]");
+	const borderColorInput = root?.querySelector<HTMLInputElement>("[data-instagram-border-color]");
+	const borderWidthInput = root?.querySelector<HTMLInputElement>("[data-instagram-border-width]");
+	const borderWidthValueLabel = root?.querySelector<HTMLElement>("[data-instagram-border-width-value]");
+	const shadowToggle = root?.querySelector<HTMLInputElement>("[data-instagram-shadow-toggle]");
+	const shadowFields = root?.querySelector<HTMLElement>("[data-instagram-shadow-fields]");
+	const shadowBlurInput = root?.querySelector<HTMLInputElement>("[data-instagram-shadow-blur]");
+	const shadowBlurValueLabel = root?.querySelector<HTMLElement>("[data-instagram-shadow-blur-value]");
+
+	// ── Text overlay controls ──────────────────────────────────────
+	const textToggle = root?.querySelector<HTMLInputElement>("[data-instagram-text-toggle]");
+	const textFields = root?.querySelector<HTMLElement>("[data-instagram-text-fields]");
+	const textContentInput = root?.querySelector<HTMLTextAreaElement>("[data-instagram-text-content-input]");
+	const textPositionButtons = root?.querySelectorAll<HTMLButtonElement>("[data-instagram-text-position]");
+	const textSizeInput = root?.querySelector<HTMLInputElement>("[data-instagram-text-size]");
+	const textSizeValueLabel = root?.querySelector<HTMLElement>("[data-instagram-text-size-value]");
+	const textWeightButtons = root?.querySelectorAll<HTMLButtonElement>("[data-instagram-text-weight]");
+	const textColorInput = root?.querySelector<HTMLInputElement>("[data-instagram-text-color]");
+	const textPreviewLayer = root?.querySelector<HTMLElement>("[data-instagram-text-preview]");
+	const textPreviewContent = root?.querySelector<HTMLElement>("[data-instagram-text-content]");
+
+	// ── Solid panel ─────────────────────────────────────────────────
+	const solidPanel = root?.querySelector<HTMLElement>("[data-instagram-solid-panel]");
+	const solidPresetButtons = root?.querySelectorAll<HTMLButtonElement>("[data-instagram-solid-preset]");
+	const solidCustomInput = root?.querySelector<HTMLInputElement>("[data-instagram-solid-custom]");
+
+	// ── Catalog panel ─────────────────────────────────────────────
+	const catalogPanel = root?.querySelector<HTMLElement>("[data-instagram-catalog-panel]");
+	const catalogSearch = root?.querySelector<HTMLInputElement>("[data-instagram-catalog-search]");
+	const catalogOptions = root?.querySelectorAll<HTMLButtonElement>("[data-instagram-catalog-option]");
+	const catalogCount = root?.querySelector<HTMLElement>("[data-instagram-catalog-count]");
+	const catalogEmpty = root?.querySelector<HTMLElement>("[data-instagram-catalog-empty]");
+
+	// ── Mesh panel ────────────────────────────────────────────────
+	const meshPanel = root?.querySelector<HTMLElement>("[data-instagram-mesh-panel]");
+	const meshPreview = root?.querySelector<HTMLElement>("[data-instagram-mesh-preview]");
+	const meshHandlesLayer = root?.querySelector<HTMLElement>("[data-instagram-mesh-handles]");
+	const meshPointsList = root?.querySelector<HTMLElement>("[data-instagram-mesh-points-list]");
+	const meshCountLabel = root?.querySelector<HTMLElement>("[data-instagram-mesh-count]");
+	const meshAddButton = root?.querySelector<HTMLButtonElement>("[data-instagram-mesh-add]");
+	const meshBlobInput = root?.querySelector<HTMLInputElement>("[data-instagram-mesh-blob]");
+	const meshBlobValueLabel = root?.querySelector<HTMLElement>("[data-instagram-mesh-blob-value]");
+	const meshBaseColorInput = root?.querySelector<HTMLInputElement>("[data-instagram-mesh-base-color]");
+	const meshRandomizeButton = root?.querySelector<HTMLButtonElement>("[data-instagram-mesh-randomize]");
+	const meshResetButton = root?.querySelector<HTMLButtonElement>("[data-instagram-mesh-reset]");
+	const meshHint = root?.querySelector<HTMLElement>("[data-instagram-mesh-hint]");
+
+	let activeFormat: FormatId = "square";
+	let activeSource: SourceId = "catalog";
+	let activeCatalogIndex = 0;
+	let paddingPx = DEFAULT_PADDING;
+	let outerColor = DEFAULT_OUTER_COLOR;
+	let catalogQuery = "";
+	let solidColor = DEFAULT_SOLID_COLOR;
+
+	let cornerRadiusPx = DEFAULT_RADIUS;
+	let borderEnabled = false;
+	let borderColor = DEFAULT_BORDER_COLOR;
+	let borderWidthPx = DEFAULT_BORDER_WIDTH;
+	let shadowEnabled = false;
+	let shadowBlurPx = DEFAULT_SHADOW_BLUR;
+
+	let textEnabled = true;
+	let textContent = DEFAULT_TEXT_CONTENT;
+	let textPosition: TextPosition = DEFAULT_TEXT_POSITION;
+	let textFontSizePx = DEFAULT_TEXT_SIZE;
+	let textWeight: TextWeight = "bold";
+	let textColor = DEFAULT_TEXT_COLOR;
+
+	let meshPoints: MeshPoint[] = DEFAULT_POINTS.map((point) => ({ ...point }));
+	let meshBaseColor = DEFAULT_BASE_COLOR;
+	let meshBlobSize = DEFAULT_BLOB_SIZE;
+	let meshNextId = DEFAULT_POINTS.length + 1;
+	let meshHintTimeout: number | undefined;
+
+	function clamp(value: number, min: number, max: number): number {
+		return Math.min(max, Math.max(min, value));
+	}
+
+	function getActiveCatalogItem(): CatalogItem | undefined {
+		return catalogItems[activeCatalogIndex] ?? catalogItems[0];
+	}
+
+	function buildMeshBackgroundImage(): string {
+		return meshPoints
+			.map((point) => `radial-gradient(circle at ${point.x}% ${point.y}%, ${point.color}, transparent ${meshBlobSize}%)`)
+			.join(", ");
+	}
+
+	/** The card's fill, resolved for the active source mode. Shared by the PNG canvas capture and the SVG export
+	 * so both paths draw from exactly the same computed values. */
+	function getCardFill(): { backgroundImage: string; backgroundColor: string } {
+		if (activeSource === "catalog" && innerPreview) {
+			const computed = getComputedStyle(innerPreview);
+			return { backgroundImage: computed.backgroundImage, backgroundColor: computed.backgroundColor };
+		}
+		if (activeSource === "mesh") {
+			return { backgroundImage: buildMeshBackgroundImage(), backgroundColor: meshBaseColor };
+		}
+		return { backgroundImage: "none", backgroundColor: solidColor };
+	}
+
+	/** Ratio between the live preview's rendered pixel width and the real export width, so px-based
+	 * frame/text settings (radius, border width, shadow, font size) stay visually proportional at any
+	 * preview scale or format — the same idea the padding percentage already relies on. */
+	function getPreviewScale(): number {
+		const format = FORMATS[activeFormat];
+		const rect = previewFrame?.getBoundingClientRect();
+		if (!rect || rect.width === 0) return 1;
+		return rect.width / format.width;
+	}
+
+	// ── Main preview + format/padding/outer-color/frame/text rendering ───────
+	function renderMainPreview() {
+		const format = FORMATS[activeFormat];
+		if (previewFrame) previewFrame.style.aspectRatio = `${format.width} / ${format.height}`;
+
+		const paddingPct = clamp((paddingPx / format.width) * 100, 0, 45);
+		if (outerFill) {
+			outerFill.style.backgroundColor = outerColor;
+			outerFill.style.padding = `${paddingPct}%`;
+		}
+
+		if (innerPreview) {
+			if (activeSource === "catalog") {
+				const item = getActiveCatalogItem();
+				innerPreview.className = `relative box-border h-full w-full ${item?.className ?? ""}`;
+				innerPreview.style.backgroundImage = "";
+				innerPreview.style.backgroundColor = "";
+			} else if (activeSource === "mesh") {
+				innerPreview.className = "relative box-border h-full w-full";
+				innerPreview.style.backgroundImage = buildMeshBackgroundImage();
+				innerPreview.style.backgroundColor = meshBaseColor;
+			} else {
+				innerPreview.className = "relative box-border h-full w-full";
+				innerPreview.style.backgroundImage = "";
+				innerPreview.style.backgroundColor = solidColor;
+			}
+
+			const scale = getPreviewScale();
+			innerPreview.style.borderRadius = `${cornerRadiusPx * scale}px`;
+			innerPreview.style.border = borderEnabled ? `${Math.max(1, borderWidthPx * scale)}px solid ${borderColor}` : "";
+			innerPreview.style.boxShadow = shadowEnabled
+				? `0 ${shadowBlurPx * scale * 0.35}px ${shadowBlurPx * scale}px rgba(0, 0, 0, 0.35)`
+				: "";
+		}
+
+		if (textPreviewLayer && textPreviewContent) {
+			textPreviewLayer.classList.toggle("hidden", !textEnabled);
+			if (textEnabled) {
+				const scale = getPreviewScale();
+				const position = POSITIONS[textPosition];
+				textPreviewLayer.style.justifyContent = JUSTIFY_CONTENT[position.h];
+				textPreviewLayer.style.alignItems = ALIGN_ITEMS[position.v];
+				textPreviewContent.textContent = textContent;
+				textPreviewContent.style.textAlign = position.h;
+				textPreviewContent.style.fontSize = `${textFontSizePx * scale}px`;
+				textPreviewContent.style.fontWeight = textWeight === "bold" ? "700" : "400";
+				textPreviewContent.style.lineHeight = String(TEXT_LINE_HEIGHT_FACTOR);
+				textPreviewContent.style.color = textColor;
+			}
+		}
+
+		formatButtons?.forEach((button) => {
+			button.setAttribute("aria-selected", button.dataset.instagramFormat === activeFormat ? "true" : "false");
+		});
+	}
+
+	if (paddingValueLabel) paddingValueLabel.textContent = `${paddingPx}px`;
+	if (outerColorInput) outerColorInput.value = outerColor;
+
+	// ── Source toggle ───────────────────────────────────────────
+	function renderSource() {
+		sourceButtons?.forEach((button) => {
+			button.setAttribute("aria-selected", button.dataset.instagramSource === activeSource ? "true" : "false");
+		});
+		if (catalogPanel) catalogPanel.hidden = activeSource !== "catalog";
+		if (meshPanel) meshPanel.hidden = activeSource !== "mesh";
+		if (solidPanel) solidPanel.hidden = activeSource !== "solid";
+		renderMainPreview();
+	}
+
+	sourceButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			const nextSource = button.dataset.instagramSource;
+			activeSource = nextSource === "mesh" ? "mesh" : nextSource === "solid" ? "solid" : "catalog";
+			renderSource();
+		});
+	});
+
+	// ── Format tabs ─────────────────────────────────────────────
+	formatButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			const format = button.dataset.instagramFormat as FormatId | undefined;
+			if (!format || !(format in FORMATS)) return;
+			activeFormat = format;
+			renderMainPreview();
+		});
+	});
+
+	// ── Padding + outer color ──────────────────────────────────
+	paddingInput?.addEventListener("input", () => {
+		paddingPx = clamp(Number(paddingInput.value) || 0, 0, 200);
+		if (paddingValueLabel) paddingValueLabel.textContent = `${paddingPx}px`;
+		renderMainPreview();
+	});
+
+	outerColorInput?.addEventListener("input", () => {
+		outerColor = outerColorInput.value;
+		renderMainPreview();
+	});
+
+	// ── Solid panel ─────────────────────────────────────────────
+	function renderSolidSelection() {
+		solidPresetButtons?.forEach((button) => {
+			button.setAttribute("aria-pressed", button.dataset.color === solidColor ? "true" : "false");
+		});
+		if (solidCustomInput) solidCustomInput.value = solidColor;
+	}
+
+	solidPresetButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			solidColor = button.dataset.color ?? DEFAULT_SOLID_COLOR;
+			renderSolidSelection();
+			renderMainPreview();
+		});
+	});
+
+	solidCustomInput?.addEventListener("input", () => {
+		solidColor = solidCustomInput.value;
+		renderSolidSelection();
+		renderMainPreview();
+	});
+
+	renderSolidSelection();
+
+	// ── Frame: corner radius, border, shadow ────────────────────
+	radiusInput?.addEventListener("input", () => {
+		cornerRadiusPx = clamp(Number(radiusInput.value) || 0, 0, 120);
+		if (radiusValueLabel) radiusValueLabel.textContent = `${cornerRadiusPx}px`;
+		renderMainPreview();
+	});
+
+	borderToggle?.addEventListener("change", () => {
+		borderEnabled = borderToggle.checked;
+		if (borderFields) borderFields.classList.toggle("hidden", !borderEnabled);
+		renderMainPreview();
+	});
+
+	borderColorInput?.addEventListener("input", () => {
+		borderColor = borderColorInput.value;
+		renderMainPreview();
+	});
+
+	borderWidthInput?.addEventListener("input", () => {
+		borderWidthPx = clamp(Number(borderWidthInput.value) || DEFAULT_BORDER_WIDTH, 1, 12);
+		if (borderWidthValueLabel) borderWidthValueLabel.textContent = `${borderWidthPx}px`;
+		renderMainPreview();
+	});
+
+	shadowToggle?.addEventListener("change", () => {
+		shadowEnabled = shadowToggle.checked;
+		if (shadowFields) shadowFields.classList.toggle("hidden", !shadowEnabled);
+		renderMainPreview();
+	});
+
+	shadowBlurInput?.addEventListener("input", () => {
+		shadowBlurPx = clamp(Number(shadowBlurInput.value) || 0, 0, 80);
+		if (shadowBlurValueLabel) shadowBlurValueLabel.textContent = String(shadowBlurPx);
+		renderMainPreview();
+	});
+
+	// ── Text overlay ──────────────────────────────────────────────
+	textToggle?.addEventListener("change", () => {
+		textEnabled = textToggle.checked;
+		if (textFields) textFields.classList.toggle("hidden", !textEnabled);
+		renderMainPreview();
+	});
+
+	textContentInput?.addEventListener("input", () => {
+		textContent = textContentInput.value;
+		renderMainPreview();
+	});
+
+	textPositionButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			const position = button.dataset.instagramTextPosition as TextPosition | undefined;
+			if (!position || !(position in POSITIONS)) return;
+			textPosition = position;
+			textPositionButtons.forEach((candidate) => {
+				candidate.setAttribute("aria-pressed", candidate.dataset.instagramTextPosition === textPosition ? "true" : "false");
+			});
+			renderMainPreview();
+		});
+	});
+
+	textSizeInput?.addEventListener("input", () => {
+		textFontSizePx = clamp(Number(textSizeInput.value) || DEFAULT_TEXT_SIZE, 16, 160);
+		if (textSizeValueLabel) textSizeValueLabel.textContent = `${textFontSizePx}px`;
+		renderMainPreview();
+	});
+
+	textWeightButtons?.forEach((button) => {
+		button.addEventListener("click", () => {
+			const weight = button.dataset.instagramTextWeight as TextWeight | undefined;
+			if (!weight) return;
+			textWeight = weight;
+			textWeightButtons.forEach((candidate) => {
+				candidate.setAttribute("aria-pressed", candidate.dataset.instagramTextWeight === textWeight ? "true" : "false");
+			});
+			renderMainPreview();
+		});
+	});
+
+	textColorInput?.addEventListener("input", () => {
+		textColor = textColorInput.value;
+		renderMainPreview();
+	});
+
+	window.addEventListener("resize", () => renderMainPreview());
+
+	// ── Catalog panel ───────────────────────────────────────────
+	function renderCatalogSearch() {
+		let visibleCount = 0;
+		catalogOptions?.forEach((button) => {
+			const item = catalogItems[Number(button.dataset.index ?? 0)];
+			const haystack = `${item?.name ?? ""} ${item?.tags?.join(" ") ?? ""}`.toLowerCase();
+			const visible = !catalogQuery || haystack.includes(catalogQuery);
+			button.hidden = !visible;
+			if (visible) visibleCount += 1;
+		});
+		if (catalogCount) catalogCount.textContent = String(visibleCount);
+		if (catalogEmpty) catalogEmpty.classList.toggle("hidden", visibleCount > 0);
+	}
+
+	catalogOptions?.forEach((button) => {
+		button.addEventListener("click", () => {
+			activeCatalogIndex = Number(button.dataset.index ?? 0);
+			catalogOptions.forEach((option) => {
+				option.setAttribute("aria-pressed", option.dataset.index === String(activeCatalogIndex) ? "true" : "false");
+			});
+			renderMainPreview();
+		});
+	});
+
+	catalogSearch?.addEventListener("input", () => {
+		catalogQuery = catalogSearch.value.trim().toLowerCase();
+		renderCatalogSearch();
+	});
+
+	// ── Mesh point editor (adapted from the standalone mesh generator) ──
+	function nudgeHandlePosition(handle: HTMLElement, point: MeshPoint) {
+		handle.style.left = `${point.x}%`;
+		handle.style.top = `${point.y}%`;
+	}
+
+	function showMeshHint() {
+		if (!meshHint) return;
+		meshHint.classList.remove("hidden");
+		window.clearTimeout(meshHintTimeout);
+		meshHintTimeout = window.setTimeout(() => meshHint.classList.add("hidden"), 2000);
+	}
+
+	function renderMeshOutputs() {
+		if (meshPreview) {
+			meshPreview.style.backgroundColor = meshBaseColor;
+			meshPreview.style.backgroundImage = buildMeshBackgroundImage();
+		}
+		if (meshBaseColorInput) meshBaseColorInput.value = meshBaseColor;
+		if (meshBlobInput) meshBlobInput.value = String(meshBlobSize);
+		if (meshBlobValueLabel) meshBlobValueLabel.textContent = `${meshBlobSize}%`;
+		if (activeSource === "mesh") renderMainPreview();
+	}
+
+	function startMeshDrag(pointId: number, handle: HTMLElement, downEvent: PointerEvent) {
+		downEvent.stopPropagation();
+		downEvent.preventDefault();
+		handle.setPointerCapture(downEvent.pointerId);
+		handle.classList.add("cursor-grabbing");
+
+		function onMove(moveEvent: PointerEvent) {
+			if (!meshPreview) return;
+			const rect = meshPreview.getBoundingClientRect();
+			if (rect.width === 0 || rect.height === 0) return;
+			const point = meshPoints.find((candidate) => candidate.id === pointId);
+			if (!point) return;
+			point.x = Math.round(clamp(((moveEvent.clientX - rect.left) / rect.width) * 100, 0, 100));
+			point.y = Math.round(clamp(((moveEvent.clientY - rect.top) / rect.height) * 100, 0, 100));
+			nudgeHandlePosition(handle, point);
+			renderMeshOutputs();
+		}
+
+		function onUp(upEvent: PointerEvent) {
+			handle.classList.remove("cursor-grabbing");
+			handle.releasePointerCapture(upEvent.pointerId);
+			handle.removeEventListener("pointermove", onMove);
+			handle.removeEventListener("pointerup", onUp);
+			handle.removeEventListener("pointercancel", onUp);
+			renderMeshOutputs();
+		}
+
+		handle.addEventListener("pointermove", onMove);
+		handle.addEventListener("pointerup", onUp);
+		handle.addEventListener("pointercancel", onUp);
+	}
+
+	function nextPaletteColor(): string {
+		return PALETTE[meshPoints.length % PALETTE.length];
+	}
+
+	function addMeshPoint(x: number, y: number, color?: string) {
+		if (meshPoints.length >= MAX_POINTS) {
+			showMeshHint();
+			return;
+		}
+		meshPoints.push({
+			id: meshNextId++,
+			x: Math.round(clamp(x, 0, 100)),
+			y: Math.round(clamp(y, 0, 100)),
+			color: color ?? nextPaletteColor(),
+		});
+		renderMeshStructure();
+	}
+
+	function removeMeshPoint(id: number) {
+		if (meshPoints.length <= MIN_POINTS) return;
+		meshPoints = meshPoints.filter((point) => point.id !== id);
+		renderMeshStructure();
+	}
+
+	function hslToHex(h: number, s: number, l: number): string {
+		const hue = ((h % 360) + 360) % 360;
+		const saturation = s / 100;
+		const lightness = l / 100;
+		const k = (n: number) => (n + hue / 30) % 12;
+		const a = saturation * Math.min(lightness, 1 - lightness);
+		const f = (n: number) => lightness - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+		const toHex = (n: number) =>
+			Math.round(f(n) * 255)
+				.toString(16)
+				.padStart(2, "0");
+		return `#${toHex(0)}${toHex(8)}${toHex(4)}`;
+	}
+
+	function randomizeMeshPoints() {
+		meshPoints = meshPoints.map((point) => ({
+			...point,
+			x: Math.round(clamp(point.x + (Math.random() * 10 - 5), 0, 100)),
+			y: Math.round(clamp(point.y + (Math.random() * 10 - 5), 0, 100)),
+			color: hslToHex(Math.round(Math.random() * 360), 72, 58),
+		}));
+		renderMeshStructure();
+	}
+
+	function resetMeshToDefaults() {
+		meshPoints = DEFAULT_POINTS.map((point) => ({ ...point }));
+		meshBaseColor = DEFAULT_BASE_COLOR;
+		meshBlobSize = DEFAULT_BLOB_SIZE;
+		meshNextId = DEFAULT_POINTS.length + 1;
+		renderMeshStructure();
+	}
+
+	function renderMeshHandle(point: MeshPoint, index: number): HTMLElement {
+		const handle = document.createElement("div");
+		handle.className =
+			"absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border-2 border-white shadow-sm ring-1 ring-black/10 touch-none dark:border-zinc-950 dark:ring-white/20";
+		handle.style.left = `${point.x}%`;
+		handle.style.top = `${point.y}%`;
+		handle.style.backgroundColor = point.color;
+		handle.setAttribute("role", "button");
+		handle.setAttribute("tabindex", "0");
+		handle.setAttribute("aria-label", `Point ${index + 1}, drag to move`);
+		handle.dataset.pointHandle = "true";
+		handle.dataset.pointId = String(point.id);
+
+		handle.addEventListener("pointerdown", (event) => startMeshDrag(point.id, handle, event));
+		handle.addEventListener("keydown", (event) => {
+			const step = event.shiftKey ? 10 : 2;
+			let moved = false;
+			const current = meshPoints.find((candidate) => candidate.id === point.id);
+			if (!current) return;
+			if (event.key === "ArrowLeft") {
+				current.x = Math.round(clamp(current.x - step, 0, 100));
+				moved = true;
+			} else if (event.key === "ArrowRight") {
+				current.x = Math.round(clamp(current.x + step, 0, 100));
+				moved = true;
+			} else if (event.key === "ArrowUp") {
+				current.y = Math.round(clamp(current.y - step, 0, 100));
+				moved = true;
+			} else if (event.key === "ArrowDown") {
+				current.y = Math.round(clamp(current.y + step, 0, 100));
+				moved = true;
+			}
+			if (moved) {
+				event.preventDefault();
+				nudgeHandlePosition(handle, current);
+				renderMeshOutputs();
+			}
+		});
+
+		return handle;
+	}
+
+	function renderMeshPointRow(point: MeshPoint, index: number): HTMLElement {
+		const row = document.createElement("div");
+		row.className =
+			"flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-2 py-1.5 dark:border-zinc-800 dark:bg-zinc-950";
+
+		const label = document.createElement("span");
+		label.className = "w-6 shrink-0 text-xs font-semibold text-zinc-500 dark:text-zinc-400";
+		label.textContent = `#${index + 1}`;
+		row.appendChild(label);
+
+		const colorInput = document.createElement("input");
+		colorInput.type = "color";
+		colorInput.value = point.color;
+		colorInput.setAttribute("aria-label", `Point ${index + 1} color`);
+		colorInput.className = "h-8 w-10 cursor-pointer rounded-xl border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900";
+		colorInput.addEventListener("input", () => {
+			point.color = colorInput.value;
+			const handle = meshHandlesLayer?.querySelector<HTMLElement>(`[data-point-id="${point.id}"]`);
+			if (handle) handle.style.backgroundColor = point.color;
+			renderMeshOutputs();
+		});
+		row.appendChild(colorInput);
+
+		const spacer = document.createElement("span");
+		spacer.className = "flex-1";
+		row.appendChild(spacer);
+
+		const removeButton = document.createElement("button");
+		removeButton.type = "button";
+		removeButton.className =
+			"inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100";
+		removeButton.setAttribute("aria-label", `Remove point ${index + 1}`);
+		removeButton.disabled = meshPoints.length <= MIN_POINTS;
+		removeButton.innerHTML =
+			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true"><path fill="currentColor" d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+		removeButton.addEventListener("click", () => removeMeshPoint(point.id));
+		row.appendChild(removeButton);
+
+		return row;
+	}
+
+	function renderMeshStructure() {
+		if (meshHandlesLayer) {
+			meshHandlesLayer.innerHTML = "";
+			meshPoints.forEach((point, index) => meshHandlesLayer.appendChild(renderMeshHandle(point, index)));
+		}
+		if (meshPointsList) {
+			meshPointsList.innerHTML = "";
+			meshPoints.forEach((point, index) => meshPointsList.appendChild(renderMeshPointRow(point, index)));
+		}
+		if (meshCountLabel) meshCountLabel.textContent = `${meshPoints.length} / ${MAX_POINTS}`;
+		if (meshAddButton) meshAddButton.disabled = meshPoints.length >= MAX_POINTS;
+		renderMeshOutputs();
+	}
+
+	meshPreview?.addEventListener("click", (event) => {
+		if (event.target !== meshPreview || !meshPreview) return;
+		const rect = meshPreview.getBoundingClientRect();
+		const x = ((event.clientX - rect.left) / rect.width) * 100;
+		const y = ((event.clientY - rect.top) / rect.height) * 100;
+		addMeshPoint(x, y);
+	});
+
+	meshAddButton?.addEventListener("click", () => {
+		const jitterX = 50 + (Math.random() * 20 - 10);
+		const jitterY = 50 + (Math.random() * 20 - 10);
+		addMeshPoint(jitterX, jitterY);
+	});
+
+	meshBlobInput?.addEventListener("input", () => {
+		meshBlobSize = clamp(Number(meshBlobInput.value) || DEFAULT_BLOB_SIZE, 40, 90);
+		renderMeshOutputs();
+	});
+
+	meshBaseColorInput?.addEventListener("input", () => {
+		meshBaseColor = meshBaseColorInput.value;
+		renderMeshOutputs();
+	});
+
+	meshRandomizeButton?.addEventListener("click", randomizeMeshPoints);
+	meshResetButton?.addEventListener("click", resetMeshToDefaults);
+
+	// ── Text layout shared by both exports ─────────────────────────
+	/** Canvas word-wrap: breaks on explicit `\n` line breaks first, then greedily wraps each paragraph's
+	 * words to fit `maxWidth`, measuring with the context's currently-set font. Used by both the PNG
+	 * canvas pass and the SVG export (via a scratch canvas) so wrapping is identical between the two. */
+	function wrapCanvasText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+		const paragraphs = text.split("\n");
+		const lines: string[] = [];
+		for (const paragraph of paragraphs) {
+			if (paragraph === "") {
+				lines.push("");
+				continue;
+			}
+			const words = paragraph.split(" ");
+			let current = "";
+			for (const word of words) {
+				const attempt = current ? `${current} ${word}` : word;
+				if (current && ctx.measureText(attempt).width > maxWidth) {
+					lines.push(current);
+					current = word;
+				} else {
+					current = attempt;
+				}
+			}
+			if (current) lines.push(current);
+		}
+		return lines;
+	}
+
+	function escapeXml(text: string): string {
+		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	}
+
+	// ── PNG export ────────────────────────────────────────────────
+	// Composites onto one real-size canvas: a solid outer-color fill, an optional shadow pass, the
+	// gradient/solid fill (read via getComputedStyle in catalog mode, built as a radial-gradient string
+	// in mesh mode, or the flat solid color) captured through an SVG foreignObject and clipped to a
+	// rounded rect, an optional border stroke, then the wrapped text overlay — the same computed-style
+	// capture technique used by the detail page's PNG export, so the export has no dependency on
+	// Tailwind classes resolving inside the isolated SVG document.
+	async function downloadInstagramPng() {
+		const format = FORMATS[activeFormat];
+		const canvas = document.createElement("canvas");
+		canvas.width = format.width;
+		canvas.height = format.height;
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+
+		ctx.fillStyle = outerColor;
+		ctx.fillRect(0, 0, format.width, format.height);
+
+		const cardX = paddingPx;
+		const cardY = paddingPx;
+		const cardWidth = Math.max(1, format.width - paddingPx * 2);
+		const cardHeight = Math.max(1, format.height - paddingPx * 2);
+		const radius = Math.max(0, Math.min(cornerRadiusPx, cardWidth / 2, cardHeight / 2));
+
+		// Shadow pass, drawn first and as its own fill so it never bleeds onto the card's own colors.
+		if (shadowEnabled) {
+			ctx.save();
+			ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
+			ctx.shadowBlur = shadowBlurPx;
+			ctx.shadowOffsetY = shadowBlurPx * 0.35;
+			ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+			ctx.beginPath();
+			ctx.roundRect(cardX, cardY, cardWidth, cardHeight, radius);
+			ctx.fill();
+			ctx.restore();
+		}
+
+		const fill = getCardFill();
+		const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${cardWidth}" height="${cardHeight}">
+			<foreignObject width="100%" height="100%">
+				<div xmlns="http://www.w3.org/1999/xhtml" style="width:${cardWidth}px;height:${cardHeight}px;background-image:${fill.backgroundImage};background-color:${fill.backgroundColor};"></div>
+			</foreignObject>
+		</svg>`;
+		const dataUrl = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+		const img = new Image();
+		img.src = dataUrl;
+		await new Promise((resolve, reject) => {
+			img.onload = resolve;
+			img.onerror = reject;
+		});
+
+		ctx.save();
+		ctx.beginPath();
+		ctx.roundRect(cardX, cardY, cardWidth, cardHeight, radius);
+		ctx.clip();
+		ctx.drawImage(img, cardX, cardY, cardWidth, cardHeight);
+		ctx.restore();
+
+		if (borderEnabled) {
+			ctx.save();
+			ctx.beginPath();
+			ctx.roundRect(
+				cardX + borderWidthPx / 2,
+				cardY + borderWidthPx / 2,
+				Math.max(0, cardWidth - borderWidthPx),
+				Math.max(0, cardHeight - borderWidthPx),
+				Math.max(0, radius - borderWidthPx / 2),
+			);
+			ctx.strokeStyle = borderColor;
+			ctx.lineWidth = borderWidthPx;
+			ctx.stroke();
+			ctx.restore();
+		}
+
+		if (textEnabled && textContent.trim()) {
+			const margin = cardWidth * TEXT_MARGIN_FRACTION;
+			ctx.font = `${textWeight === "bold" ? 700 : 400} ${textFontSizePx}px ${FONT_STACK}`;
+			ctx.fillStyle = textColor;
+			const position = POSITIONS[textPosition];
+			ctx.textAlign = position.h === "left" ? "left" : position.h === "right" ? "right" : "center";
+			ctx.textBaseline = "top";
+
+			const lines = wrapCanvasText(ctx, textContent, cardWidth - margin * 2);
+			const lineHeight = textFontSizePx * TEXT_LINE_HEIGHT_FACTOR;
+			const totalHeight = lines.length * lineHeight;
+			const textX = cardX + (position.h === "left" ? margin : position.h === "right" ? cardWidth - margin : cardWidth / 2);
+			let startY: number;
+			if (position.v === "top") startY = cardY + margin;
+			else if (position.v === "bottom") startY = cardY + cardHeight - margin - totalHeight;
+			else startY = cardY + cardHeight / 2 - totalHeight / 2;
+			startY = Math.max(cardY + margin, startY);
+
+			lines.forEach((line, index) => {
+				ctx.fillText(line, textX, startY + index * lineHeight);
+			});
+		}
+
+		const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+		if (!blob) return;
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = `xima-instagram-${activeFormat}.png`;
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	// ── SVG export ────────────────────────────────────────────────
+	// Builds a single self-contained SVG at the real export dimensions: an outer-color background rect,
+	// an optional blurred rounded rect standing in for the shadow, the card fill embedded via the same
+	// foreignObject technique as the PNG capture (reusing getCardFill() so both exports agree), an
+	// optional border rect, and real <text>/<tspan> elements for the overlay — which stay selectable,
+	// editable text once imported into Figma/Canva/Sketch/Illustrator, unlike the flattened PNG.
+	function buildInstagramSvg(): string {
+		const format = FORMATS[activeFormat];
+		const cardX = paddingPx;
+		const cardY = paddingPx;
+		const cardWidth = Math.max(1, format.width - paddingPx * 2);
+		const cardHeight = Math.max(1, format.height - paddingPx * 2);
+		const radius = Math.max(0, Math.min(cornerRadiusPx, cardWidth / 2, cardHeight / 2));
+		const fill = getCardFill();
+
+		const shadowMarkup = shadowEnabled
+			? `<rect x="${cardX}" y="${cardY + shadowBlurPx * 0.35}" width="${cardWidth}" height="${cardHeight}" rx="${radius}" fill="rgba(0,0,0,0.35)" filter="blur(${shadowBlurPx * 0.5}px)" />`
+			: "";
+
+		const cardMarkup = `<foreignObject x="${cardX}" y="${cardY}" width="${cardWidth}" height="${cardHeight}"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;border-radius:${radius}px;background-image:${fill.backgroundImage};background-color:${fill.backgroundColor};"></div></foreignObject>`;
+
+		const borderMarkup = borderEnabled
+			? `<rect x="${cardX + borderWidthPx / 2}" y="${cardY + borderWidthPx / 2}" width="${Math.max(0, cardWidth - borderWidthPx)}" height="${Math.max(0, cardHeight - borderWidthPx)}" rx="${Math.max(0, radius - borderWidthPx / 2)}" fill="none" stroke="${borderColor}" stroke-width="${borderWidthPx}" />`
+			: "";
+
+		let textMarkup = "";
+		if (textEnabled && textContent.trim()) {
+			const margin = cardWidth * TEXT_MARGIN_FRACTION;
+			const scratchCtx = document.createElement("canvas").getContext("2d");
+			let lines = [textContent];
+			if (scratchCtx) {
+				scratchCtx.font = `${textWeight === "bold" ? 700 : 400} ${textFontSizePx}px ${FONT_STACK}`;
+				lines = wrapCanvasText(scratchCtx, textContent, cardWidth - margin * 2);
+			}
+			const lineHeight = textFontSizePx * TEXT_LINE_HEIGHT_FACTOR;
+			const totalHeight = lines.length * lineHeight;
+			const position = POSITIONS[textPosition];
+			const textAnchor = position.h === "left" ? "start" : position.h === "right" ? "end" : "middle";
+			const textX = cardX + (position.h === "left" ? margin : position.h === "right" ? cardWidth - margin : cardWidth / 2);
+			let startY: number;
+			if (position.v === "top") startY = cardY + margin + textFontSizePx * 0.85;
+			else if (position.v === "bottom") startY = cardY + cardHeight - margin - totalHeight + textFontSizePx * 0.85;
+			else startY = cardY + cardHeight / 2 - totalHeight / 2 + textFontSizePx * 0.85;
+			startY = Math.max(cardY + margin + textFontSizePx * 0.85, startY);
+
+			const tspans = lines
+				.map((line, index) => `<tspan x="${textX}" y="${startY + index * lineHeight}">${escapeXml(line)}</tspan>`)
+				.join("");
+			textMarkup = `<text font-family="${FONT_STACK}" font-size="${textFontSizePx}" font-weight="${textWeight === "bold" ? 700 : 400}" fill="${textColor}" text-anchor="${textAnchor}">${tspans}</text>`;
+		}
+
+		return `<svg xmlns="http://www.w3.org/2000/svg" width="${format.width}" height="${format.height}" viewBox="0 0 ${format.width} ${format.height}">
+<rect x="0" y="0" width="${format.width}" height="${format.height}" fill="${outerColor}" />
+${shadowMarkup}
+${cardMarkup}
+${borderMarkup}
+${textMarkup}
+</svg>`;
+	}
+
+	function downloadInstagramSvg() {
+		const svgMarkup = buildInstagramSvg();
+		const blob = new Blob([svgMarkup], { type: "image/svg+xml" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = `xima-instagram-${activeFormat}.svg`;
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	downloadButton?.addEventListener("click", async () => {
+		try {
+			await downloadInstagramPng();
+			downloadButton.setAttribute("data-download-state", "done");
+			if (downloadLabel) downloadLabel.textContent = "Saved";
+			window.setTimeout(() => {
+				downloadButton.removeAttribute("data-download-state");
+				if (downloadLabel) downloadLabel.textContent = "Download PNG";
+			}, 1400);
+		} catch {}
+	});
+
+	downloadSvgButton?.addEventListener("click", () => {
+		try {
+			downloadInstagramSvg();
+			downloadSvgButton.setAttribute("data-download-state", "done");
+			if (downloadSvgLabel) downloadSvgLabel.textContent = "Saved";
+			window.setTimeout(() => {
+				downloadSvgButton.removeAttribute("data-download-state");
+				if (downloadSvgLabel) downloadSvgLabel.textContent = "Download SVG";
+			}, 1400);
+		} catch {}
+	});
+
+	renderMainPreview();
+	renderSource();
+	renderCatalogSearch();
+	renderMeshStructure();
+</script>

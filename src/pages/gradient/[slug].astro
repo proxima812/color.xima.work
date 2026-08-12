@@ -17,7 +17,7 @@ if (!card) return Astro.redirect("/");
 const snippets = buildCssSnippetMap([card.className])[card.className];
 ---
 
-<BaseLayout title={`${card.name} - color.xima`} description={card.description} canonicalPath={getGradientPath(card.slug)} ogImage={`/og/${card.slug}.svg`}>
+<BaseLayout title={`${card.name} - color.xima`} description={card.description} canonicalPath={getGradientPath(card.slug)}>
 	<div class="mb-10">
 		<CategoryNav activeTag={card.tags[0]} />
 	</div>

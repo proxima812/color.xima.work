@@ -47,9 +47,12 @@ const searchItems = cards.map((card) => ({
 	}
 
 	const overlay = document.querySelector("[data-search-overlay]");
-	const closeButton = document.querySelector("[data-search-close]");
-	const input = document.querySelector<HTMLInputElement>("[data-search-input]");
-	const results = document.querySelector("[data-search-results]");
+	const closeButton = overlay?.querySelector("[data-search-close]");
+	const input = overlay?.querySelector<HTMLInputElement>("[data-search-input]");
+	const results = overlay?.querySelector("[data-search-results]");
+	// Pages that render the in-page search bar own Cmd/Ctrl+K; the overlay stays
+	// click-only there so the two search UIs never fire on the same shortcut.
+	const hasInlineSearch = Boolean(document.querySelector("[data-colors-inline-search]"));
 	const dataElement = document.getElementById("site-search-data");
 	const items = (dataElement?.textContent ? JSON.parse(dataElement.textContent) : []) as SearchItem[];
 	const fuse = new Fuse<SearchItem>(items, {
@@ -134,6 +137,7 @@ const searchItems = cards.map((card) => ({
 		}
 		if (event.key.toLowerCase() !== "k") return;
 		if (!event.metaKey && !event.ctrlKey) return;
+		if (hasInlineSearch) return;
 		const target = event.target;
 		const isEditable =
 			target instanceof HTMLInputElement ||

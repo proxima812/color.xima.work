@@ -1,5 +1,5 @@
 ---
-import { CategoryNav, ColorsGallery } from "@/components/colors";
+import { ColorsGallery } from "@/components/colors";
 import { getCardsPath } from "@/config";
 import { BaseLayout } from "@/layouts";
 
@@ -11,9 +11,5 @@ export const prerender = true;
 	description="Browse all color.xima gradient cards in one copy-ready gallery."
 	canonicalPath={getCardsPath()}
 >
-	<ColorsGallery showControls={false}>
-		<div slot="after-header" class="mt-8">
-			<CategoryNav />
-		</div>
-	</ColorsGallery>
+	<ColorsGallery showControls={true} />
 </BaseLayout>

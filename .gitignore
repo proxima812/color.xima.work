@@ -25,3 +25,6 @@ pnpm-debug.log*
 output/playwright
 .output/playwright/
 .vercel
+
+# installed third-party skills (restore with: bunx skills add, see skills-lock.json)
+.claude/skills/

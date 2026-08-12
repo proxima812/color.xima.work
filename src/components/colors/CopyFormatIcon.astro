@@ -1,6 +1,8 @@
 ---
+import { Icon } from "astro-icon/components";
+
 interface Props {
-	format: "css" | "tailwind" | "react";
+	format: "css" | "tailwind" | "scss" | "react" | "swiftui" | "flutter";
 }
 
 const { format } = Astro.props;
@@ -46,6 +48,23 @@ const className = "h-4 w-4 shrink-0";
 					</clipPath>
 				</defs>
 			</>
+		</svg>
+	)
+}
+{format === "scss" && <Icon name="mdi:sass" class={`${className} text-[#cd6799]`} aria-hidden="true" />}
+{format === "react" && <Icon name="mdi:react" class={`${className} text-[#61dafb]`} aria-hidden="true" />}
+{
+	format === "swiftui" && (
+		<Icon name="mdi:language-swift" class={`${className} text-[#f05138]`} aria-hidden="true" />
+	)
+}
+{
+	format === "flutter" && (
+		<svg viewBox="0 0 24 24" class={className} aria-hidden="true">
+			<path
+				fill="#54c5f8"
+				d="M14.314 0 2.3 12l3.7 3.7L21.684.013h-7.357L14.314 0zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.372z"
+			/>
 		</svg>
 	)
 }

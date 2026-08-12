@@ -1,9 +1,29 @@
 ---
-import { getCardsPath, getCollectionPath } from "@/config";
-import { tagOrder, type TagId } from "@/data";
+import { GradientMarquee } from "@/components/colors";
+import {
+	getCardsPath,
+	getCollectionPath,
+	getDailyPath,
+	getFavoritesPath,
+	getGeneratorInstagramPath,
+	getGeneratorMeshPath,
+	getGeneratorPath,
+	getGeneratorPresetsPath,
+	getPicksPath,
+	getRandomPath,
+} from "@/config";
+import { buildColorCards, picks, tagOrder, type TagId } from "@/data";
 import { BaseLayout } from "@/layouts";
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
 
 export const prerender = true;
+
+const cards = buildColorCards(await getCollection("colors"));
+const showcase = cards.filter(
+	(card) => !card.tags.includes("transparent") && !card.tags.includes("border"),
+);
+const swatch = (index: number) => showcase[index % showcase.length].className;
 
 const tagLabels: Record<TagId, string> = {
 	glow: "Glow",
@@ -21,6 +41,65 @@ const tagLabels: Record<TagId, string> = {
 	flag: "Flags",
 	other: "Other",
 };
+
+const cardClass =
+	"group flex flex-col gap-5 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/[0.03] transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/10 dark:hover:border-zinc-700";
+const previewClass = "h-28 w-full rounded-xl border border-black/5 shadow-sm dark:border-white/10";
+const captionLinkClass =
+	"underline decoration-zinc-300 underline-offset-4 transition hover:text-zinc-900 dark:decoration-zinc-600 dark:hover:text-zinc-100";
+const chipClass =
+	"rounded-xl border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-500 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100";
+
+const sections = [
+	{
+		title: "Gallery",
+		description: `All ${cards.length} gradients in one grid, with in-page search and tag filters. Copy Tailwind or CSS3 without leaving the page.`,
+		href: getCardsPath(),
+		icon: "mdi:palette-swatch-outline",
+		preview: "swatches" as const,
+		swatches: [swatch(3), swatch(96), swatch(214), swatch(372)],
+	},
+	{
+		title: "Presets generator",
+		description: "Open any catalog gradient, preview it as a block or as gradient text, and copy Tailwind, CSS3, or React.",
+		href: getGeneratorPresetsPath(),
+		icon: "mdi:palette-outline",
+		preview: "single" as const,
+		swatches: [swatch(11)],
+	},
+	{
+		title: "Mesh generator",
+		description: "Place your own color points on a canvas and build a custom mesh gradient from scratch.",
+		href: getGeneratorMeshPath(),
+		icon: "mdi:blur",
+		preview: "mesh" as const,
+		swatches: [],
+	},
+	{
+		title: "Instagram post",
+		description: "Frame a gradient at Instagram size, set the padding, and download it as a PNG.",
+		href: getGeneratorInstagramPath(),
+		icon: "mdi:image-frame",
+		preview: "frame" as const,
+		swatches: [swatch(148)],
+	},
+	{
+		title: "Picks",
+		description: `${picks.length} hand-curated sets grouped by the job: hero backgrounds, card accents, buttons, dark UI, pastels.`,
+		href: getPicksPath(),
+		icon: "mdi:star-outline",
+		preview: "swatches" as const,
+		swatches: picks[0].classNames.slice(0, 4),
+	},
+	{
+		title: "Favorites",
+		description: "Tap the heart on any gradient while you browse; the set stays in this browser, ready to copy.",
+		href: getFavoritesPath(),
+		icon: "mdi:heart-outline",
+		preview: "single" as const,
+		swatches: [swatch(268)],
+	},
+];
 ---
 
 <BaseLayout
@@ -28,35 +107,131 @@ const tagLabels: Record<TagId, string> = {
 	description="Explore a curated gallery of gradients for cards, hero sections, and modern user interfaces."
 	canonicalPath="/"
 >
-	<section class="grid min-h-[calc(100vh-16rem)] place-items-center py-12 text-center">
-		<div class="w-full max-w-3xl space-y-8">
-			<div class="space-y-4">
-				<h1 class="text-5xl font-semibold leading-none tracking-tight text-zinc-950 sm:text-7xl dark:text-zinc-50">
-					color.xima
-				</h1>
-				<p class="mx-auto max-w-xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
-					Gradients that vibe for modern UI, cards, hero sections, copy-ready CSS, Tailwind classes, and a gradient generator.
-				</p>
-			</div>
+	<section class="mx-auto max-w-3xl space-y-6 text-center">
+		<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+			{cards.length} gradients · Tailwind, CSS3, React
+		</p>
+		<h1
+			class="text-5xl font-semibold leading-none tracking-tight text-zinc-950 sm:text-8xl dark:text-zinc-50"
+		>
+			color.xima
+		</h1>
+		<p class="text-xl leading-relaxed text-zinc-500 dark:text-zinc-400">
+			Gradients that vibe for modern UI, cards, hero sections, copy-ready CSS, Tailwind
+			classes, and a gradient generator.
+		</p>
+		<div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+			<a
+				class="inline-flex h-11 items-center gap-2 rounded-xl bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-white"
+				href={getCardsPath()}
+			>
+				<Icon name="mdi:palette-swatch-outline" class="h-4 w-4" aria-hidden="true" />
+				Browse {cards.length} gradients
+			</a>
+			<a
+				class="inline-flex h-11 items-center gap-2 rounded-xl border border-zinc-200 bg-white/70 px-5 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+				href={getGeneratorPath()}
+			>
+				<Icon name="mdi:palette-outline" class="h-4 w-4" aria-hidden="true" />
+				Open the generator
+			</a>
+		</div>
+	</section>
 
-			<div class="flex flex-wrap justify-center gap-2">
-				<a
-					class="rounded-xl border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-50"
-					href={getCardsPath()}
-				>
-					All cards
-				</a>
-				{
-					tagOrder.map((tag) => (
-						<a
-							class="rounded-xl border border-zinc-200 px-4 py-2 text-sm text-zinc-500 transition hover:border-zinc-400 hover:text-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100"
-							href={getCollectionPath(tag)}
-						>
-							{tagLabels[tag]}
-						</a>
-					))
-				}
+	<div class="relative left-1/2 my-12 w-screen -translate-x-1/2 sm:my-16">
+		<GradientMarquee />
+	</div>
+
+	<p class="mx-auto max-w-2xl text-center text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+		Three families, one per row:{" "}
+		<a class={captionLinkClass} href={getCollectionPath("linear")}>linear</a>,{" "}
+		<a class={captionLinkClass} href={getCollectionPath("border")}>border</a>, and{" "}
+		<a class={captionLinkClass} href={getCollectionPath("mesh")}>mesh</a> gradients. Every tile is a
+		real class from the catalog — the same code the generator hands you. Open one to copy it as
+		Tailwind, CSS3, or React.
+	</p>
+
+	<section class="mt-16 space-y-8 sm:mt-24">
+		<header class="mx-auto max-w-2xl space-y-4 text-center">
+			<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Sections</p>
+			<h2
+				class="text-4xl font-semibold leading-none tracking-tight text-zinc-950 sm:text-5xl dark:text-zinc-50"
+			>
+				Pick one, or generate your own
+			</h2>
+			<p class="text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
+				One catalog feeds everything on the site: the gallery, three generators, curated picks,
+				and the favorites you keep locally.
+			</p>
+		</header>
+
+		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				sections.map((section) => (
+					<a class={cardClass} href={section.href}>
+						{section.preview === "swatches" && (
+							<div class="grid h-28 grid-cols-4 gap-2" aria-hidden="true">
+								{section.swatches.map((className) => (
+									<div class={`${className} h-full w-full rounded-xl border border-black/5 shadow-sm dark:border-white/10`} />
+								))}
+							</div>
+						)}
+						{section.preview === "single" && (
+							<div class={`${section.swatches[0]} ${previewClass}`} aria-hidden="true" />
+						)}
+						{section.preview === "mesh" && (
+							<div
+								class={previewClass}
+								style="background-color:#18181b; background-image: radial-gradient(circle at 28% 32%, #7c3aed, transparent 65%), radial-gradient(circle at 72% 68%, #22d3ee, transparent 65%), radial-gradient(circle at 50% 90%, #f472b6, transparent 60%);"
+								aria-hidden="true"
+							/>
+						)}
+						{section.preview === "frame" && (
+							<div
+								class="h-28 w-full overflow-hidden rounded-xl border border-black/5 bg-zinc-100 p-3 shadow-sm dark:border-white/10 dark:bg-zinc-800"
+								aria-hidden="true"
+							>
+								<div class={`${section.swatches[0]} h-full w-full rounded-md`} />
+							</div>
+						)}
+						<div class="flex items-start justify-between gap-3">
+							<div class="min-w-0 space-y-2">
+								<div class="flex items-center gap-2">
+									<Icon name={section.icon} class="h-5 w-5 text-zinc-500 dark:text-zinc-400" aria-hidden="true" />
+									<h3 class="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+										{section.title}
+									</h3>
+								</div>
+								<p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">{section.description}</p>
+							</div>
+							<Icon
+								name="mdi:arrow-right"
+								class="mt-1 h-5 w-5 shrink-0 text-zinc-400 transition group-hover:translate-x-0.5 group-hover:text-zinc-950 dark:text-zinc-500 dark:group-hover:text-zinc-50"
+								aria-hidden="true"
+							/>
+						</div>
+					</a>
+				))
+			}
+		</div>
+
+		<div
+			class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white/70 p-5 dark:border-zinc-800 dark:bg-zinc-900/70"
+		>
+			<div class="flex flex-wrap items-center justify-between gap-3">
+				<h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Collections</h3>
+				<div class="flex flex-wrap items-center gap-2">
+					<a class={chipClass} href={getDailyPath()}>Gradient of the day</a>
+					<a class={chipClass} href={getRandomPath()}>Random gradient</a>
+				</div>
 			</div>
+			<nav class="flex flex-wrap items-center gap-2" aria-label="Gradient categories">
+				{tagOrder.map((tag) => (
+					<a class={chipClass} href={getCollectionPath(tag)}>
+						{tagLabels[tag]}
+					</a>
+				))}
+			</nav>
 		</div>
 	</section>
 </BaseLayout>

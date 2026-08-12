@@ -6,20 +6,22 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.0",
-    "@astrojs/vercel": "^9.0.4",
-    "@tailwindcss/vite": "^4.1.18",
-    "astro": "^5.17.1",
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/vercel": "^11.0.5",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.0",
     "astro-icon": "^1.1.5",
     "astro-seo": "^1.1.0",
-    "fuse.js": "^7.3.0",
-    "tailwindcss": "^4.1.18",
-    "wrangler": "^4.92.0"
+    "fuse.js": "^7.5.0",
+    "tailwindcss": "^4.3.3",
+    "wrangler": "^4.120.0"
   },
   "devDependencies": {
-    "@iconify-json/mdi": "^1.2.3"
+    "@iconify-json/mdi": "^1.2.3",
+    "playwright-core": "^1.62.1"
   }
 }

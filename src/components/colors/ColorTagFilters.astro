@@ -4,10 +4,11 @@ import type { TagId } from "@/data";
 interface Props {
 	tagOptions: TagId[];
 	tagCounts: Partial<Record<TagId, number>>;
+	tagExampleClassName?: Partial<Record<TagId, string>>;
 	totalCount: number;
 }
 
-const { tagOptions, tagCounts, totalCount } = Astro.props;
+const { tagOptions, tagCounts, tagExampleClassName, totalCount } = Astro.props;
 
 function getTagLabel(tag: TagId) {
 	const map: Record<TagId, string> = {
@@ -31,7 +32,7 @@ function getTagLabel(tag: TagId) {
 }
 ---
 
-<div class="mb-8 flex flex-wrap items-center gap-2" role="group" aria-label="Filters">
+<div class="mb-4 flex flex-wrap items-center gap-2" role="group" aria-label="Filters">
 	<button
 		type="button"
 		class="tag-filter-btn inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-zinc-300 bg-white/70 px-3 py-1.5 text-xs text-zinc-700 transition-[background-color,border-color,color,box-shadow,transform] duration-200 hover:-translate-y-px focus-visible:-translate-y-px aria-pressed:border-zinc-900 aria-pressed:bg-zinc-900 aria-pressed:text-zinc-50 aria-pressed:shadow-[0_6px_14px_-8px_rgb(0_0_0_/_0.35)] dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-400 dark:aria-pressed:border-zinc-50 dark:aria-pressed:bg-zinc-50 dark:aria-pressed:text-zinc-900"
@@ -53,6 +54,12 @@ function getTagLabel(tag: TagId) {
 				aria-controls="colors-grid"
 				aria-label={`${getTagLabel(tag)} (${tagCounts[tag] ?? 0})`}
 			>
+				{tagExampleClassName?.[tag] && (
+					<div
+						class={`${tagExampleClassName[tag]} h-4 w-4 shrink-0 rounded-full ring-1 ring-black/5 dark:ring-white/10`}
+						aria-hidden="true"
+					/>
+				)}
 				{getTagLabel(tag)}
 				<span class="tag-filter-count inline-flex h-4 min-w-4 items-center justify-center rounded-xl border border-zinc-200 bg-white px-1.5 text-[0.68rem] leading-none font-bold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400" aria-hidden="true">{tagCounts[tag] ?? 0}</span>
 			</button>

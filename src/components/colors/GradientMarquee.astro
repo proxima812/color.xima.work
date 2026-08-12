@@ -1,0 +1,134 @@
+---
+import { getGradientPath } from "@/config";
+import { buildColorCards } from "@/data";
+import { getCollection } from "astro:content";
+
+interface Props {
+	perRow?: number;
+}
+
+const { perRow = 18 } = Astro.props;
+
+const cards = buildColorCards(await getCollection("colors"));
+
+// One gradient family per row, in the order they read on the page.
+const rows = [
+	{ tag: "linear", label: "Linear gradients", direction: "right", duration: 64 },
+	{ tag: "border", label: "Border gradients", direction: "right", duration: 88 },
+	{ tag: "mesh", label: "Mesh gradients", direction: "left", duration: 74 },
+] as const;
+
+const marqueeRows = rows.map((row) => {
+	const family = cards.filter((card) => card.tags.includes(row.tag));
+	const stride = Math.max(1, Math.floor(family.length / perRow));
+	const picked = Array.from({ length: Math.min(perRow, family.length) }, (_, i) => family[i * stride]);
+	// Linear (14) and border (10) are smaller than a screen is wide, so the
+	// sequence repeats until one group can cover the viewport; otherwise the
+	// -50% loop would expose a gap on wide displays.
+	const repeat = Math.ceil(perRow / picked.length);
+	return {
+		...row,
+		items: Array.from({ length: repeat }, () => picked).flat(),
+	};
+});
+---
+
+<div
+	class="relative border-y border-zinc-200 py-5 sm:py-6 dark:border-zinc-800"
+	aria-label="Gradient catalog showcase"
+	role="region"
+>
+	<div class="flex flex-col gap-3 sm:gap-4">
+		{
+			marqueeRows.map((row) => (
+				<div
+					class="marquee"
+					data-direction={row.direction}
+					style={`--marquee-duration:${row.duration}s`}
+					aria-label={row.label}
+					role="group"
+				>
+					<div class="marquee-track">
+						{[0, 1].map((copy) => (
+							<div class="marquee-group">
+								{row.items.map((card) => (
+									<a
+										class="group relative mr-3 block h-24 w-36 shrink-0 overflow-hidden rounded-xl ring-1 ring-black/5 transition duration-300 ease-out hover:-translate-y-1 hover:ring-black/15 sm:mr-4 sm:h-28 sm:w-44 dark:ring-white/10 dark:hover:ring-white/25"
+										href={getGradientPath(card.slug)}
+										aria-hidden={copy === 1 ? "true" : undefined}
+										tabindex={copy === 1 ? -1 : undefined}
+									>
+										<span class={`${card.className} absolute inset-0 block`} aria-hidden="true" />
+										<span class="absolute inset-x-1.5 bottom-1.5 block truncate rounded-lg bg-black/45 px-2 py-1 text-[11px] font-medium text-white opacity-0 backdrop-blur-md transition duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+											{card.name}
+										</span>
+									</a>
+								))}
+							</div>
+						))}
+					</div>
+				</div>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.marquee {
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
+		mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
+	}
+
+	.marquee-track {
+		display: flex;
+		width: max-content;
+		will-change: transform;
+		animation: marquee-left var(--marquee-duration, 74s) linear infinite;
+	}
+
+	.marquee[data-direction="right"] .marquee-track {
+		animation-name: marquee-right;
+	}
+
+	.marquee-group {
+		display: flex;
+		flex-shrink: 0;
+	}
+
+	/* Let a visitor stop a row to read a name, the way a presenter would. */
+	.marquee:hover .marquee-track,
+	.marquee:focus-within .marquee-track {
+		animation-play-state: paused;
+	}
+
+	@keyframes marquee-left {
+		from {
+			transform: translate3d(0, 0, 0);
+		}
+		to {
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+
+	@keyframes marquee-right {
+		from {
+			transform: translate3d(-50%, 0, 0);
+		}
+		to {
+			transform: translate3d(0, 0, 0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.marquee {
+			overflow-x: auto;
+		}
+
+		/* Matches the direction rule's specificity so `animation-name` is really cleared. */
+		.marquee .marquee-track,
+		.marquee[data-direction="right"] .marquee-track {
+			animation: none;
+		}
+	}
+</style>

@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import { ColorsGrid } from "@/components/colors";
+import { getPickPath } from "@/config";
+import { buildColorCards, buildCssSnippetMap, picks, type Pick } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+interface Props {
+	pick: Pick;
+}
+
+export function getStaticPaths() {
+	return picks.map((pick) => ({ params: { slug: pick.slug }, props: { pick } }));
+}
+
+const { pick } = Astro.props;
+const cards = buildColorCards(await getCollection("colors")).filter((card) => pick.classNames.includes(card.className));
+const cssSnippetMap = buildCssSnippetMap(cards.map((card) => card.className));
+---
+
+<BaseLayout title={`${pick.title} - color.xima`} description={pick.description} canonicalPath={getPickPath(pick.slug)}>
+	<section class="space-y-8">
+		<header class="space-y-3">
+			<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Pick</p>
+			<h1 class="text-5xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">{pick.title}</h1>
+			<p class="max-w-2xl text-lg text-zinc-500 dark:text-zinc-400">{pick.description}</p>
+			<p class="text-sm text-zinc-500 dark:text-zinc-400">{cards.length} gradients ready to copy as CSS3 or Tailwind CSS v4.</p>
+		</header>
+		<div id="colors-gallery-root">
+			<ColorsGrid items={cards} cssSnippetMap={cssSnippetMap} />
+		</div>
+	</section>
+</BaseLayout>

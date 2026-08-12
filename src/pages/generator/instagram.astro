@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import { InstagramPostGenerator } from "@/components/colors";
+import { getGeneratorInstagramPath } from "@/config";
+import { buildColorCards } from "@/data";
+import { BaseLayout } from "@/layouts";
+
+const cards = buildColorCards(await getCollection("colors"));
+const generatorItems = cards.map((card) => ({
+	slug: card.slug,
+	name: card.name,
+	className: card.className,
+	tags: card.tags,
+}));
+---
+
+<BaseLayout
+	title="Instagram post generator - color.xima"
+	description="Build a gradient background sized for Instagram, frame it with padding, and download it as a PNG."
+	canonicalPath={getGeneratorInstagramPath()}
+>
+	<InstagramPostGenerator items={generatorItems} />
+</BaseLayout>

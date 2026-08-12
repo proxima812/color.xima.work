@@ -26,10 +26,34 @@ export function getGeneratorPath(): string {
 	return normalizePath("/generator/");
 }
 
+export function getGeneratorPresetsPath(): string {
+	return normalizePath("/generator/presets/");
+}
+
+export function getGeneratorMeshPath(): string {
+	return normalizePath("/generator/mesh/");
+}
+
+export function getGeneratorInstagramPath(): string {
+	return normalizePath("/generator/instagram/");
+}
+
 export function getDailyPath(): string {
 	return normalizePath("/daily/");
 }
 
 export function getRandomPath(): string {
 	return normalizePath("/random/");
+}
+
+export function getFavoritesPath(): string {
+	return normalizePath("/favorites/");
+}
+
+export function getPicksPath(): string {
+	return normalizePath("/picks/");
+}
+
+export function getPickPath(slug: string): string {
+	return normalizePath(`/picks/${slug}/`);
 }
