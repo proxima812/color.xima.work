@@ -24,7 +24,7 @@ Success means: the visitor finds a gradient by scanning or searching, and copies
 
 The copy output is derived from the shipped stylesheet, not authored separately. `src/data/css-snippets.ts` reads `src/styles/gradients.css` at build time, extracts the rule body for a class name, and converts the same declarations into Tailwind v4 arbitrary utilities. Preview and snippet cannot drift apart.
 
-Everything else follows from that: the catalogue is a real stylesheet (`src/styles/gradients.css`, ~3960 lines), the index is a flat data file (`src/data/colors.json`, 465 entries), and the whole site is prerendered static output with no gradient API or editor state to sync.
+Everything else follows from that: the catalogue is a real stylesheet (`src/styles/gradients.css`, ~3400 lines), the index is a flat data file (`src/data/colors.json`, 388 entries), and the whole site is prerendered static output with no gradient API or editor state to sync.
 
 ## Operating Context
 
@@ -50,14 +50,14 @@ Routes (all prerendered, `output: "static"`):
 
 Data and taxonomy:
 
-- 465 gradient entries in `src/data/colors.json`, loaded through an Astro content collection (`src/content.config.ts`) with a `{ name, index, className }` schema; card order follows `index`.
+- 388 gradient entries in `src/data/colors.json`, loaded through an Astro content collection (`src/content.config.ts`) with a `{ name, index, className }` schema; card order follows `index`.
 - 14 tags in fixed order (`src/data/tags.ts`): glow, mesh, linear, radial, conic, repeating, multi-stop, transparent, border, noise, femme, masc, flag, other. Tags are derived from the gradient name prefix, one tag per gradient; anything unmatched becomes `other`.
 - Descriptions are generated from the gradient name (`src/data/descriptions.ts`), not hand-written per gradient.
 
 Search:
 
 - Fuse.js, client-side, over the full prerendered item list. `threshold: 0.36`, `ignoreLocation: true`, weighted keys: name, description, tags, className (plus visible id / id in the in-page variant).
-- Two search implementations exist, with different jobs. The overlay is mounted globally and navigates: a match links straight to a detail page. The in-page search + tag filter bar (`ColorsControls`) is rendered on `/cards/` (`showControls={true}`) and filters in place: it hides non-matching `[data-color-item]` cards, updates a "Showing N of 465 gradients" count, and reveals a "No gradients found" empty state with a "Clear filters" button when nothing matches. Search term and tag chip combine (AND).
+- Two search implementations exist, with different jobs. The overlay is mounted globally and navigates: a match links straight to a detail page. The in-page search + tag filter bar (`ColorsControls`) is rendered on `/cards/` (`showControls={true}`) and filters in place: it hides non-matching `[data-color-item]` cards, updates a "Showing N of 388 gradients" count, and reveals a "No gradients found" empty state with a "Clear filters" button when nothing matches. Search term and tag chip combine (AND).
 
 Constraints:
 
@@ -78,7 +78,7 @@ Constraints:
 
 ## Evidence on Hand
 
-- Real content: `src/styles/gradients.css` (the gradients themselves), `src/data/colors.json` (465 catalogue entries), `src/data/tags.ts`, generated descriptions.
+- Real content: `src/styles/gradients.css` (the gradients themselves), `src/data/colors.json` (388 catalogue entries), `src/data/tags.ts`, generated descriptions.
 - Public artefacts: live site `https://color.xima.work`, GitHub repository `proxima812/color.xima.work`, MIT `LICENSE` (the footer's link to it is currently commented out).
 - Absent, and not to be fabricated: testimonials, user counts, traffic or performance metrics, pricing, roadmap, and any claim about who uses the site.
 

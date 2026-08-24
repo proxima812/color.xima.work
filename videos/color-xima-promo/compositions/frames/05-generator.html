@@ -1,0 +1,237 @@
+<template>
+  <div id="s5-root" data-composition-id="s5" data-start="0"
+       data-width="1080" data-height="1920" data-duration="2.7">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+      #s5-root * { margin:0; padding:0; box-sizing:border-box; }
+      #s5-root {
+        position:relative; width:1080px; height:1920px; overflow:hidden;
+        background:#050505; color:#FFFFFF; font-family:'Inter', system-ui, sans-serif;
+      }
+      #s5-root .clip { position:absolute; inset:0; }
+      #s5-root .fill { position:absolute; inset:0; background:#050505; }
+      /* Type ramp */
+      #s5-root .d1 { font-weight:700; letter-spacing:-0.03em; font-size:118px; line-height:1.04; }
+      #s5-root .d2 { font-weight:700; letter-spacing:-0.03em; font-size:86px;  line-height:1.08; }
+      #s5-root .d3 { font-weight:600; letter-spacing:-0.02em; font-size:52px;  line-height:1.15; }
+      #s5-root .sub { font-weight:500; letter-spacing:-0.01em; font-size:36px; color:#8A8A93; }
+      #s5-root .mono { font-family:'IBM Plex Mono', monospace; font-weight:500;
+        letter-spacing:0.08em; text-transform:uppercase; font-size:22px; color:#8A8A93; }
+      /* Floating white card */
+      #s5-root .card { background:#FFFFFF; border-radius:34px; overflow:hidden;
+        box-shadow: 0 46px 100px -34px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07); }
+      #s5-root .ink { color:#0A0A0B; }
+      #s5-root .inkmut { color:#5B5B66; }
+
+      /* ================= scene ================= */
+
+      /* ambient bloom behind the card
+         copied from assets/gradients.css → .radial-glow-plasma-orbit (border/box-shadow stripped) */
+      #s5-root #s5-orb {
+        position:absolute; left:-160px; top:600px; width:1400px; height:1060px;
+        border-radius:50%; filter:blur(108px); pointer-events:none;
+        background-image:
+          radial-gradient(48% 66% at 12% 10%, rgba(217, 70, 239, 0.56) 0%, rgba(217, 70, 239, 0) 100%),
+          radial-gradient(52% 68% at 86% 12%, rgba(56, 189, 248, 0.44) 0%, rgba(56, 189, 248, 0) 100%),
+          radial-gradient(78% 102% at 50% 90%, rgba(168, 85, 247, 0.32) 0%, rgba(168, 85, 247, 0) 100%),
+          linear-gradient(150deg, #1e1b4b 0%, #312e81 48%, #0f172a 100%);
+      }
+
+      /* ---------- headline ---------- */
+      #s5-root #s5-kicker { position:absolute; left:62px; top:344px; width:900px; display:block; }
+      #s5-root #s5-head   { position:absolute; left:60px; top:398px; width:960px; }
+      #s5-root .s5-hl     { display:block; width:960px; white-space:nowrap; color:#FFFFFF; }
+      #s5-root #s5-hl2    { color:#8A8A93; }
+
+      /* ---------- card ---------- */
+      #s5-root #s5-card { position:absolute; left:60px; top:740px; width:960px; height:812px; }
+
+      /* ---------- gradient preview panel ---------- */
+      #s5-root #s5-prev { position:absolute; left:32px; top:32px; width:896px; height:400px;
+        border-radius:22px; overflow:hidden; }
+      #s5-root .s5-lay  { position:absolute; inset:0; }
+      /* copied from assets/gradients.css → .radial-glow-obsidian-royal (border/box-shadow stripped) */
+      #s5-root #s5-layA {
+        background-image:
+          radial-gradient(48% 62% at 14% 12%, rgba(79, 110, 247, 0.52) 0%, rgba(79, 110, 247, 0) 100%),
+          radial-gradient(46% 60% at 86% 18%, rgba(146, 108, 240, 0.44) 0%, rgba(146, 108, 240, 0) 100%),
+          radial-gradient(80% 98% at 50% 96%, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 100%),
+          linear-gradient(152deg, #07080d 0%, #0d1020 50%, #05060a 100%);
+      }
+      /* copied from assets/gradients.css → .radial-glow-plasma-orbit (border/box-shadow stripped) */
+      #s5-root #s5-layB {
+        background-image:
+          radial-gradient(48% 66% at 12% 10%, rgba(217, 70, 239, 0.56) 0%, rgba(217, 70, 239, 0) 100%),
+          radial-gradient(52% 68% at 86% 12%, rgba(56, 189, 248, 0.44) 0%, rgba(56, 189, 248, 0) 100%),
+          radial-gradient(78% 102% at 50% 90%, rgba(168, 85, 247, 0.32) 0%, rgba(168, 85, 247, 0) 100%),
+          linear-gradient(150deg, #1e1b4b 0%, #312e81 48%, #0f172a 100%);
+      }
+      #s5-root #s5-prevline { position:absolute; inset:0; border-radius:22px; pointer-events:none;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.10); }
+
+      /* ---------- gradient stop track ---------- */
+      #s5-root #s5-track { position:absolute; left:64px; top:494px; width:832px; height:56px; }
+      #s5-root #s5-bar   { position:absolute; left:0; top:19px; width:832px; height:18px;
+        border-radius:9px; overflow:hidden; }
+      #s5-root .s5-barlay { position:absolute; inset:0; }
+      /* stop ramps read horizontally: same stop colours as the two preview layers */
+      #s5-root #s5-barA { background-image:linear-gradient(90deg, #4F6EF7 0%, #926CF0 52%, #38BDF8 100%); }
+      #s5-root #s5-barB { background-image:linear-gradient(90deg, #D946EF 0%, #A855F7 50%, #38BDF8 100%); }
+      #s5-root #s5-barline { position:absolute; inset:0; border-radius:9px; pointer-events:none;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.10); }
+      #s5-root .s5-hand { position:absolute; top:0; width:56px; height:56px; border-radius:50%;
+        background:#FFFFFF;
+        box-shadow: 0 0 0 3px #0A0A0B, 0 14px 26px -10px rgba(0,0,0,0.55); }
+      #s5-root #s5-h1 { left:40px; }
+      #s5-root #s5-h2 { left:384px; }
+      #s5-root #s5-h3 { left:640px; }
+
+      /* ---------- control rows ---------- */
+      #s5-root .s5-row { position:absolute; left:64px; width:832px; height:68px; }
+      #s5-root #s5-row1 { top:590px; }
+      #s5-root #s5-row2 { top:682px; }
+      #s5-root .s5-rowlab { position:absolute; left:0; top:0; width:150px; height:68px;
+        display:flex; align-items:center; font-size:28px; font-weight:600;
+        letter-spacing:-0.01em; color:#5B5B66; }
+      #s5-root .s5-cbg { position:absolute; top:0; height:68px; border-radius:34px;
+        background:rgba(10,10,11,0.06); }
+      #s5-root .s5-sel { position:absolute; top:0; height:68px; border-radius:34px; background:#0A0A0B; }
+      #s5-root .s5-clab { position:absolute; top:0; height:68px; display:flex;
+        align-items:center; justify-content:center; font-size:28px; font-weight:600;
+        letter-spacing:-0.01em; }
+      #s5-root .s5-off { color:#0A0A0B; }
+      #s5-root .s5-on  { color:#FFFFFF; }
+      /* chip slots — angle row */
+      #s5-root .s5-sA { left:170px; width:168px; }
+      #s5-root .s5-sB { left:358px; width:168px; }
+      #s5-root .s5-sC { left:546px; width:168px; }
+      /* chip slots — stop-count row */
+      #s5-root .s5-tA { left:170px; width:110px; }
+      #s5-root .s5-tB { left:300px; width:110px; }
+      #s5-root .s5-tC { left:430px; width:110px; }
+      #s5-root .s5-tD { left:560px; width:110px; }
+    </style>
+    <div id="s5-scene" class="clip" data-start="0" data-duration="2.7" data-track-index="1">
+      <div class="fill"></div>
+
+      <div id="s5-orb" data-layout-allow-overflow></div>
+
+      <div id="s5-kicker" class="mono">Generator</div>
+
+      <div id="s5-head">
+        <span id="s5-hl1" class="d2 s5-hl">Pick one.</span>
+        <span id="s5-hl2" class="d2 s5-hl">Or generate your own.</span>
+      </div>
+
+      <div id="s5-card" class="card" data-layout-allow-overflow>
+
+        <!-- gradient preview -->
+        <div id="s5-prev">
+          <div id="s5-layA" class="s5-lay"></div>
+          <div id="s5-layB" class="s5-lay"></div>
+          <div id="s5-prevline"></div>
+        </div>
+
+        <!-- stop track + draggable handles -->
+        <div id="s5-track" class="s5-ctl">
+          <div id="s5-bar">
+            <div id="s5-barA" class="s5-barlay"></div>
+            <div id="s5-barB" class="s5-barlay"></div>
+            <div id="s5-barline"></div>
+          </div>
+          <span id="s5-h1" class="s5-hand"></span>
+          <span id="s5-h2" class="s5-hand"></span>
+          <span id="s5-h3" class="s5-hand"></span>
+        </div>
+
+        <!-- angle row -->
+        <div id="s5-row1" class="s5-row s5-ctl">
+          <span class="s5-rowlab">Angle</span>
+          <span class="s5-cbg s5-sA"></span>
+          <span class="s5-cbg s5-sB"></span>
+          <span class="s5-cbg s5-sC"></span>
+          <span id="s5-sel" class="s5-sel s5-sB"></span>
+          <span class="s5-clab s5-off s5-sA">90&deg;</span>
+          <span id="s5-a2off" class="s5-clab s5-off s5-sB">145&deg;</span>
+          <span id="s5-a2on"  class="s5-clab s5-on  s5-sB">145&deg;</span>
+          <span id="s5-a3off" class="s5-clab s5-off s5-sC">220&deg;</span>
+          <span id="s5-a3on"  class="s5-clab s5-on  s5-sC">220&deg;</span>
+        </div>
+
+        <!-- stop-count row -->
+        <div id="s5-row2" class="s5-row s5-ctl">
+          <span class="s5-rowlab">Stops</span>
+          <span class="s5-cbg s5-tA"></span>
+          <span class="s5-cbg s5-tB"></span>
+          <span class="s5-cbg s5-tC"></span>
+          <span class="s5-cbg s5-tD"></span>
+          <span class="s5-sel s5-tB"></span>
+          <span class="s5-clab s5-off s5-tA">2</span>
+          <span class="s5-clab s5-on  s5-tB">3</span>
+          <span class="s5-clab s5-off s5-tC">4</span>
+          <span class="s5-clab s5-off s5-tD">5</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      /* ---------- t=0 state: base gradient only, 145° angle chip active ---------- */
+      tl.set(["#s5-layB", "#s5-barB"], { opacity: 0 }, 0)
+        .set(["#s5-a2off", "#s5-a3on"], { opacity: 0 }, 0)
+        .set(["#s5-a2on", "#s5-a3off"], { opacity: 1 }, 0);
+
+      /* ---------- entry ---------- */
+      tl.fromTo("#s5-orb", { opacity: 0 }, { opacity: 0.42, duration: 0.90, ease: "power2.out" }, 0);
+
+      tl.fromTo("#s5-kicker",
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.30, ease: "power3.out" }, 0.02);
+
+      tl.fromTo("#s5-root .s5-hl",
+        { opacity: 0, y: 44 },
+        { opacity: 1, y: 0, duration: 0.32, ease: "power4.out", stagger: 0.08 }, 0.06);
+
+      tl.fromTo("#s5-card",
+        { opacity: 0, y: 80 },
+        { opacity: 1, y: 0, duration: 0.44, ease: "expo.out" }, 0.16);
+
+      tl.fromTo("#s5-prev",
+        { opacity: 0, scale: 1.04 },
+        { opacity: 1, scale: 1, duration: 0.36, ease: "power4.out" }, 0.30);
+
+      /* ---------- controls rise from the bottom of the card ---------- */
+      tl.fromTo("#s5-root .s5-ctl",
+        { opacity: 0, y: 60 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power4.out", stagger: 0.06 }, 0.44);
+
+      tl.fromTo("#s5-root .s5-hand",
+        { opacity: 0, scale: 0.5 },
+        { opacity: 1, scale: 1, duration: 0.26, ease: "power3.out", stagger: 0.05 }, 0.62);
+
+      /* ---------- handles glide → the preview genuinely morphs ---------- */
+      tl.to("#s5-h1", { x: 84,  duration: 0.86, ease: "power2.inOut" }, 1.02)
+        .to("#s5-h2", { x: -98, duration: 0.86, ease: "power2.inOut" }, 1.06)
+        .to("#s5-h3", { x: 136, duration: 0.86, ease: "power2.inOut" }, 1.10);
+
+      tl.to(["#s5-layB", "#s5-barB"],
+        { opacity: 1, duration: 0.66, ease: "power1.inOut" }, 1.12);
+
+      /* ---------- angle selector follows the morph ---------- */
+      tl.to("#s5-sel", { x: 188, duration: 0.36, ease: "power3.out" }, 1.30);
+      tl.to("#s5-a2on",  { opacity: 0, duration: 0.14, ease: "none" }, 1.30)
+        .to("#s5-a2off", { opacity: 1, duration: 0.14, ease: "none" }, 1.34)
+        .to("#s5-a3off", { opacity: 0, duration: 0.14, ease: "none" }, 1.48)
+        .to("#s5-a3on",  { opacity: 1, duration: 0.14, ease: "none" }, 1.52);
+
+      /* ---------- slow push-in on the preview ---------- */
+      tl.to("#s5-prev", { scale: 1.06, duration: 0.84, ease: "power1.inOut" }, 1.86);
+
+      window.__timelines["s5"] = tl;
+    })();
+  </script>
+</template>

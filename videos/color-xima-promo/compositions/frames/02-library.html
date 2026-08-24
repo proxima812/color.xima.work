@@ -1,0 +1,382 @@
+<template>
+  <div id="s2-root" data-composition-id="s2" data-start="0"
+       data-width="1080" data-height="1920" data-duration="3">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+      #s2-root * { margin:0; padding:0; box-sizing:border-box; }
+      #s2-root {
+        position:relative; width:1080px; height:1920px; overflow:hidden;
+        background:#050505; color:#FFFFFF; font-family:'Inter', system-ui, sans-serif;
+      }
+      #s2-root .clip { position:absolute; inset:0; }
+      #s2-root .fill { position:absolute; inset:0; background:#050505; }
+      /* Type ramp */
+      #s2-root .d1 { font-weight:700; letter-spacing:-0.03em; font-size:118px; line-height:1.04; }
+      #s2-root .d2 { font-weight:700; letter-spacing:-0.03em; font-size:86px;  line-height:1.08; }
+      #s2-root .d3 { font-weight:600; letter-spacing:-0.02em; font-size:52px;  line-height:1.15; }
+      #s2-root .sub { font-weight:500; letter-spacing:-0.01em; font-size:36px; color:#8A8A93; }
+      #s2-root .mono { font-family:'IBM Plex Mono', monospace; font-weight:500;
+        letter-spacing:0.08em; text-transform:uppercase; font-size:22px; color:#8A8A93; }
+      /* Floating white card */
+      #s2-root .card { background:#FFFFFF; border-radius:34px; overflow:hidden;
+        box-shadow: 0 46px 100px -34px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07); }
+      #s2-root .ink { color:#0A0A0B; }
+      #s2-root .inkmut { color:#5B5B66; }
+
+      /* ================= scene ================= */
+
+      /* --- headline --- */
+      #s2-root #s2-copy { position:absolute; left:70px; top:382px; width:940px; }
+      #s2-root .line { display:block; width:940px; }
+      #s2-root #s2-num {
+        display:inline-block; min-width:170px; margin-right:10px; text-align:left;
+        font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1;
+        color:#FFFFFF;
+      }
+      #s2-root #s2-word { display:inline-block; color:#FFFFFF; }
+      #s2-root #s2-line2 { color:#8E8E99; }
+
+      /* --- ambient bloom behind the mockup --- */
+      #s2-root #s2-halo {
+        position:absolute; left:150px; top:960px; width:780px; height:540px;
+        border-radius:50%; filter:blur(130px); pointer-events:none;
+        background:
+          radial-gradient(50% 50% at 24% 32%, rgba(129,148,248,0.30) 0%, rgba(129,148,248,0) 100%),
+          radial-gradient(50% 50% at 78% 28%, rgba(244,114,158,0.26) 0%, rgba(244,114,158,0) 100%),
+          radial-gradient(60% 60% at 50% 84%, rgba(110,214,220,0.20) 0%, rgba(110,214,220,0) 100%);
+      }
+
+      /* --- 3D stage: perspective wrapper + static tilt (never tweened) --- */
+      #s2-root #s2-stage { position:absolute; inset:0; perspective:1900px; perspective-origin:50% 40%; }
+      #s2-root #s2-tilt {
+        position:absolute; left:50px; top:760px; width:980px; height:900px;
+        transform: rotateX(6deg) rotateZ(-1.5deg);
+      }
+      /* zoom rig — transform-origin comes from GSAP so no CSS transform is declared here */
+      #s2-root #s2-zoom { position:absolute; inset:0; }
+      #s2-root #s2-card { position:absolute; inset:0; }
+
+      /* --- browser chrome --- */
+      #s2-root #s2-bar {
+        position:absolute; left:0; top:0; width:980px; height:44px;
+        background:#F2F2F5; box-shadow: inset 0 -1px 0 rgba(10,10,11,0.09);
+      }
+      #s2-root #s2-dots {
+        position:absolute; left:22px; top:17px; width:47px; height:11px;
+        display:flex; gap:7px;
+      }
+      #s2-root #s2-dots span { display:block; width:11px; height:11px; border-radius:50%; background:#CBCBD3; }
+      #s2-root #s2-url {
+        position:absolute; left:340px; top:8px; width:300px; height:28px;
+        border-radius:14px; background:#FFFFFF;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.08);
+        display:flex; align-items:center; justify-content:center; gap:9px;
+      }
+      #s2-root #s2-fav {
+        display:block; width:13px; height:13px; border-radius:4px;
+        background-image:
+          radial-gradient(60% 70% at 18% 20%, rgba(244,114,158,0.85) 0%, rgba(244,114,158,0) 100%),
+          radial-gradient(60% 70% at 84% 24%, rgba(129,148,248,0.85) 0%, rgba(129,148,248,0) 100%),
+          linear-gradient(150deg, #FBD9E4 0%, #DCE0FA 100%);
+      }
+      #s2-root #s2-urltext {
+        font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:17px;
+        letter-spacing:0.02em; color:#5B5B66;
+      }
+
+      /* --- viewport + tile grid --- */
+      #s2-root #s2-view {
+        position:absolute; left:0; top:44px; width:980px; height:856px;
+        overflow:hidden; background:#FFFFFF;
+      }
+      #s2-root #s2-grid {
+        position:absolute; left:28px; top:24px; width:924px;
+        display:grid; grid-template-columns:repeat(6, 144px); gap:12px;
+      }
+      #s2-root .tile {
+        display:block; width:144px; height:112px; border-radius:14px;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.07);
+      }
+      #s2-root #s2-topfade {
+        position:absolute; left:0; top:0; width:980px; height:44px; pointer-events:none;
+        background:linear-gradient(180deg, #FFFFFF 0%, rgba(255,255,255,0) 100%);
+      }
+      #s2-root #s2-botfade {
+        position:absolute; left:0; bottom:0; width:980px; height:130px; pointer-events:none;
+        background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.94) 64%, #FFFFFF 100%);
+      }
+
+      /* ---------- gradient tiles (copied from assets/gradients.css, chrome stripped) ---------- */
+
+      /* .radial-glow-siri-halo */
+      #s2-root .g01 { background-image:
+        radial-gradient(46% 58% at 10% 16%, rgba(244, 114, 158, 0.52) 0%, rgba(244, 114, 158, 0) 100%),
+        radial-gradient(44% 56% at 52% 6%, rgba(251, 168, 106, 0.44) 0%, rgba(251, 168, 106, 0) 100%),
+        radial-gradient(50% 62% at 90% 20%, rgba(129, 148, 248, 0.5) 0%, rgba(129, 148, 248, 0) 100%),
+        radial-gradient(70% 88% at 46% 96%, rgba(110, 214, 220, 0.32) 0%, rgba(110, 214, 220, 0) 100%),
+        linear-gradient(150deg, #fefdff 0%, #faf9fd 56%, #f5f6fb 100%); }
+      /* .radial-glow-gemini-spark */
+      #s2-root .g02 { background-image:
+        radial-gradient(48% 62% at 14% 12%, rgba(66, 133, 244, 0.58) 0%, rgba(66, 133, 244, 0) 100%),
+        radial-gradient(46% 58% at 84% 18%, rgba(167, 139, 250, 0.5) 0%, rgba(167, 139, 250, 0) 100%),
+        radial-gradient(78% 98% at 50% 94%, rgba(138, 180, 248, 0.34) 0%, rgba(138, 180, 248, 0) 100%),
+        linear-gradient(152deg, #0b1020 0%, #141a30 50%, #090d1a 100%); }
+      /* .radial-glow-obsidian-royal */
+      #s2-root .g03 { background-image:
+        radial-gradient(48% 62% at 14% 12%, rgba(79, 110, 247, 0.52) 0%, rgba(79, 110, 247, 0) 100%),
+        radial-gradient(46% 60% at 86% 18%, rgba(146, 108, 240, 0.44) 0%, rgba(146, 108, 240, 0) 100%),
+        radial-gradient(80% 98% at 50% 96%, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 100%),
+        linear-gradient(152deg, #07080d 0%, #0d1020 50%, #05060a 100%); }
+      /* .radial-glow-aurora-cyan */
+      #s2-root .g04 { background-image:
+        radial-gradient(45% 60% at 18% 18%, rgba(34, 211, 238, 0.62) 0%, rgba(34, 211, 238, 0) 100%),
+        radial-gradient(48% 62% at 82% 16%, rgba(59, 130, 246, 0.54) 0%, rgba(59, 130, 246, 0) 100%),
+        radial-gradient(70% 95% at 52% 84%, rgba(56, 189, 248, 0.46) 0%, rgba(56, 189, 248, 0) 100%),
+        linear-gradient(145deg, #ecfeff 0%, #e0f2fe 55%, #dbeafe 100%); }
+      /* .radial-glow-fuchsia-nova */
+      #s2-root .g05 { background-image:
+        radial-gradient(44% 60% at 14% 12%, rgba(244, 114, 182, 0.66) 0%, rgba(244, 114, 182, 0) 100%),
+        radial-gradient(50% 66% at 84% 16%, rgba(236, 72, 153, 0.56) 0%, rgba(236, 72, 153, 0) 100%),
+        radial-gradient(74% 96% at 50% 88%, rgba(249, 168, 212, 0.44) 0%, rgba(249, 168, 212, 0) 100%),
+        linear-gradient(150deg, #fdf2f8 0%, #fce7f3 52%, #fbcfe8 100%); }
+      /* .radial-glow-comet-cyan */
+      #s2-root .g06 { background-image:
+        radial-gradient(44% 60% at 12% 10%, rgba(103, 232, 249, 0.66) 0%, rgba(103, 232, 249, 0) 100%),
+        radial-gradient(50% 66% at 84% 12%, rgba(34, 211, 238, 0.56) 0%, rgba(34, 211, 238, 0) 100%),
+        radial-gradient(72% 94% at 50% 88%, rgba(56, 189, 248, 0.42) 0%, rgba(56, 189, 248, 0) 100%),
+        linear-gradient(150deg, #ecfeff 0%, #cffafe 50%, #bae6fd 100%); }
+      /* .radial-glow-zenith-gold */
+      #s2-root .g07 { background-image:
+        radial-gradient(46% 62% at 14% 10%, rgba(253, 224, 71, 0.68) 0%, rgba(253, 224, 71, 0) 100%),
+        radial-gradient(50% 66% at 84% 14%, rgba(251, 146, 60, 0.56) 0%, rgba(251, 146, 60, 0) 100%),
+        radial-gradient(74% 98% at 50% 88%, rgba(254, 240, 138, 0.4) 0%, rgba(254, 240, 138, 0) 100%),
+        linear-gradient(150deg, #fffbeb 0%, #fef3c7 50%, #fef9c3 100%); }
+      /* .radial-glow-ember-rose */
+      #s2-root .g08 { background-image:
+        radial-gradient(44% 60% at 14% 14%, rgba(251, 113, 133, 0.62) 0%, rgba(251, 113, 133, 0) 100%),
+        radial-gradient(50% 66% at 84% 18%, rgba(244, 114, 182, 0.54) 0%, rgba(244, 114, 182, 0) 100%),
+        radial-gradient(74% 98% at 50% 86%, rgba(253, 164, 175, 0.46) 0%, rgba(253, 164, 175, 0) 100%),
+        linear-gradient(150deg, #fff1f2 0%, #ffe4e6 52%, #fdf2f8 100%); }
+      /* .radial-glow-galactic-berry */
+      #s2-root .g09 { background-image:
+        radial-gradient(44% 60% at 14% 12%, rgba(244, 114, 182, 0.66) 0%, rgba(244, 114, 182, 0) 100%),
+        radial-gradient(52% 66% at 84% 14%, rgba(168, 85, 247, 0.58) 0%, rgba(168, 85, 247, 0) 100%),
+        radial-gradient(74% 96% at 50% 88%, rgba(236, 72, 153, 0.42) 0%, rgba(236, 72, 153, 0) 100%),
+        linear-gradient(148deg, #fdf2f8 0%, #fae8ff 52%, #f5d0fe 100%); }
+      /* .radial-glow-cobalt-beam */
+      #s2-root .g10 { background-image:
+        radial-gradient(45% 62% at 16% 18%, rgba(96, 165, 250, 0.66) 0%, rgba(96, 165, 250, 0) 100%),
+        radial-gradient(50% 68% at 82% 14%, rgba(59, 130, 246, 0.58) 0%, rgba(59, 130, 246, 0) 100%),
+        radial-gradient(72% 96% at 52% 86%, rgba(125, 211, 252, 0.44) 0%, rgba(125, 211, 252, 0) 100%),
+        linear-gradient(148deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%); }
+      /* .radial-glow-plasma-orbit */
+      #s2-root .g11 { background-image:
+        radial-gradient(48% 66% at 12% 10%, rgba(217, 70, 239, 0.56) 0%, rgba(217, 70, 239, 0) 100%),
+        radial-gradient(52% 68% at 86% 12%, rgba(56, 189, 248, 0.44) 0%, rgba(56, 189, 248, 0) 100%),
+        radial-gradient(78% 102% at 50% 90%, rgba(168, 85, 247, 0.32) 0%, rgba(168, 85, 247, 0) 100%),
+        linear-gradient(150deg, #1e1b4b 0%, #312e81 48%, #0f172a 100%); }
+      /* .radial-glow-onyx-emerald */
+      #s2-root .g12 { background-image:
+        radial-gradient(50% 64% at 16% 14%, rgba(52, 211, 153, 0.72) 0%, rgba(52, 211, 153, 0) 100%),
+        radial-gradient(52% 66% at 86% 20%, rgba(16, 185, 129, 0.56) 0%, rgba(16, 185, 129, 0) 100%),
+        radial-gradient(78% 98% at 48% 94%, rgba(190, 242, 100, 0.28) 0%, rgba(190, 242, 100, 0) 100%),
+        linear-gradient(150deg, #0e1a15 0%, #143024 52%, #08110d 100%); }
+      /* .radial-glow-espresso-amber */
+      #s2-root .g13 { background-image:
+        radial-gradient(50% 64% at 16% 14%, rgba(244, 176, 66, 0.76) 0%, rgba(244, 176, 66, 0) 100%),
+        radial-gradient(52% 66% at 84% 20%, rgba(214, 118, 58, 0.6) 0%, rgba(214, 118, 58, 0) 100%),
+        radial-gradient(80% 98% at 50% 94%, rgba(252, 211, 141, 0.3) 0%, rgba(252, 211, 141, 0) 100%),
+        linear-gradient(150deg, #1c130c 0%, #331f12 52%, #140d08 100%); }
+      /* .radial-glow-titanium-desert */
+      #s2-root .g14 { background-image:
+        radial-gradient(52% 64% at 16% 14%, rgba(214, 168, 108, 0.42) 0%, rgba(214, 168, 108, 0) 100%),
+        radial-gradient(48% 60% at 84% 18%, rgba(196, 152, 128, 0.34) 0%, rgba(196, 152, 128, 0) 100%),
+        radial-gradient(76% 96% at 50% 92%, rgba(232, 208, 170, 0.46) 0%, rgba(232, 208, 170, 0) 100%),
+        linear-gradient(148deg, #fbf6ee 0%, #f2e6d5 52%, #e0cbae 100%); }
+      /* .radial-mesh-sonoma-dusk */
+      #s2-root .g15 { background-image:
+        radial-gradient(58% 76% at 14% 12%, rgba(139, 92, 246, 0.44) 0%, rgba(139, 92, 246, 0) 100%),
+        radial-gradient(54% 72% at 86% 18%, rgba(217, 70, 239, 0.32) 0%, rgba(217, 70, 239, 0) 100%),
+        radial-gradient(74% 96% at 46% 92%, rgba(59, 130, 246, 0.34) 0%, rgba(59, 130, 246, 0) 100%),
+        linear-gradient(152deg, #0d1030 0%, #1b1246 50%, #100c26 100%); }
+      /* .radial-mesh-sequoia-bloom */
+      #s2-root .g16 { background-image:
+        radial-gradient(58% 76% at 10% 14%, rgba(94, 214, 212, 0.4) 0%, rgba(94, 214, 212, 0) 100%),
+        radial-gradient(54% 72% at 88% 14%, rgba(148, 168, 248, 0.38) 0%, rgba(148, 168, 248, 0) 100%),
+        radial-gradient(72% 96% at 50% 92%, rgba(196, 166, 246, 0.34) 0%, rgba(196, 166, 246, 0) 100%),
+        linear-gradient(146deg, #f5fcfd 0%, #eef3fd 52%, #f4f0fd 100%); }
+      /* .radial-mesh-neo-aurora-borealis */
+      #s2-root .g17 { background-image:
+        radial-gradient(58% 76% at 12% 16%, rgba(45, 212, 191, 0.6) 0%, rgba(45, 212, 191, 0) 100%),
+        radial-gradient(54% 72% at 84% 12%, rgba(74, 222, 128, 0.44) 0%, rgba(74, 222, 128, 0) 100%),
+        radial-gradient(72% 96% at 52% 92%, rgba(167, 139, 250, 0.42) 0%, rgba(167, 139, 250, 0) 100%),
+        linear-gradient(155deg, #050b18 0%, #071426 52%, #030812 100%); }
+      /* .radial-mesh-desert-clay */
+      #s2-root .g18 { background-image:
+        radial-gradient(58% 78% at 14% 12%, rgba(206, 122, 78, 0.4) 0%, rgba(206, 122, 78, 0) 100%),
+        radial-gradient(52% 70% at 86% 18%, rgba(226, 176, 142, 0.44) 0%, rgba(226, 176, 142, 0) 100%),
+        radial-gradient(74% 96% at 48% 92%, rgba(212, 158, 154, 0.36) 0%, rgba(212, 158, 154, 0) 100%),
+        linear-gradient(150deg, #fdf7f0 0%, #f7e7d9 52%, #f0dbcd 100%); }
+      /* .radial-mesh-jade-porcelain */
+      #s2-root .g19 { background-image:
+        radial-gradient(56% 76% at 12% 14%, rgba(140, 200, 174, 0.42) 0%, rgba(140, 200, 174, 0) 100%),
+        radial-gradient(52% 70% at 88% 16%, rgba(176, 212, 208, 0.38) 0%, rgba(176, 212, 208, 0) 100%),
+        radial-gradient(72% 94% at 50% 92%, rgba(232, 222, 198, 0.44) 0%, rgba(232, 222, 198, 0) 100%),
+        linear-gradient(148deg, #f8fcf9 0%, #eff7f1 54%, #e9f2ec 100%); }
+      /* .radial-multi-stop-dawn-atlantic */
+      #s2-root .g20 { background-image: linear-gradient(172deg,
+        #0b1233 0%, #232a63 20%, #4a4e94 40%, #8c7fb0 58%,
+        #cf9a9c 76%, #f5d8bd 92%, #fdf4e6 100%); }
+      /* .radial-multi-stop-dusk-mojave */
+      #s2-root .g21 { background-image: linear-gradient(162deg,
+        #fef5e8 0%, #f8d5aa 18%, #e9a370 38%, #c5643f 58%,
+        #7d3752 78%, #3a2450 92%, #1c1232 100%); }
+      /* .radial-multi-stop-jade-abyss */
+      #s2-root .g22 { background-image: linear-gradient(166deg,
+        #f1f9f4 0%, #c8e6d6 18%, #7fc8ad 38%, #379381 58%,
+        #18625e 76%, #0c353b 90%, #061c22 100%); }
+      /* .radial-multi-stop-ember-noir */
+      #s2-root .g23 { background-image: linear-gradient(156deg,
+        #080506 0%, #2b0e11 18%, #631c1e 38%, #a93c24 58%,
+        #e28536 76%, #f4c37e 90%, #fdf0da 100%); }
+      /* .radial-conic-brushed-titanium */
+      #s2-root .g24 { background-image:
+        radial-gradient(72% 72% at 50% 42%, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 66%),
+        conic-gradient(from 200deg at 50% 50%,
+          #8e949c 0deg, #eceef2 42deg, #a5abb3 84deg, #f6f8fa 138deg,
+          #9aa0a8 190deg, #dfe3e8 240deg, #878d95 296deg, #f2f4f7 340deg, #8e949c 360deg); }
+      /* .radial-conic-chrome-mirror */
+      #s2-root .g25 { background-image:
+        radial-gradient(70% 70% at 50% 44%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 62%),
+        conic-gradient(from 186deg at 50% 50%,
+          #3d434c 0deg, #ffffff 38deg, #6b7280 76deg, #e8ecf1 118deg,
+          #2f343c 168deg, #f4f6f9 214deg, #545b66 262deg, #d8dde4 312deg, #3d434c 360deg); }
+      /* .radial-conic-cobalt-satin */
+      #s2-root .g26 { background-image:
+        radial-gradient(72% 72% at 50% 42%, rgba(226, 238, 255, 0.28) 0%, rgba(226, 238, 255, 0) 64%),
+        conic-gradient(from 226deg at 50% 50%,
+          #16306e 0deg, #7ba3ee 46deg, #24468f 92deg, #a8c4f6 144deg,
+          #1c3a7d 196deg, #6d97e4 248deg, #142a63 300deg, #9dbcf3 344deg, #16306e 360deg); }
+    </style>
+    <div id="s2-scene" class="clip" data-start="0" data-duration="3" data-track-index="1">
+      <div class="fill"></div>
+
+      <div id="s2-halo" data-layout-allow-overflow></div>
+
+      <div id="s2-copy">
+        <span id="s2-line1" class="d2 line"><span id="s2-num">0</span><span id="s2-word">gradients</span></span>
+        <span id="s2-line2" class="d2 line">for modern UI</span>
+      </div>
+
+      <div id="s2-stage">
+        <div id="s2-tilt">
+          <div id="s2-zoom" data-layout-allow-overflow>
+            <div id="s2-card" class="card">
+
+              <div id="s2-bar">
+                <div id="s2-dots"><span></span><span></span><span></span></div>
+                <div id="s2-url">
+                  <span id="s2-fav"></span>
+                  <span id="s2-urltext">color.xima.work</span>
+                </div>
+              </div>
+
+              <div id="s2-view">
+                <div id="s2-grid" data-layout-allow-overflow>
+                  <div class="tile g01"></div><div class="tile g11"></div><div class="tile g04"></div><div class="tile g20"></div><div class="tile g07"></div><div class="tile g15"></div>
+                  <div class="tile g16"></div><div class="tile g05"></div><div class="tile g25"></div><div class="tile g12"></div><div class="tile g18"></div><div class="tile g09"></div>
+                  <div class="tile g02"></div><div class="tile g10"></div><div class="tile g21"></div><div class="tile g06"></div><div class="tile g13"></div><div class="tile g24"></div>
+                  <div class="tile g19"></div><div class="tile g03"></div><div class="tile g08"></div><div class="tile g26"></div><div class="tile g14"></div><div class="tile g22"></div>
+                  <div class="tile g23"></div><div class="tile g17"></div><div class="tile g01"></div><div class="tile g05"></div><div class="tile g10"></div><div class="tile g11"></div>
+                  <div class="tile g07"></div><div class="tile g24"></div><div class="tile g12"></div><div class="tile g18"></div><div class="tile g02"></div><div class="tile g20"></div>
+                  <div class="tile g15"></div><div class="tile g09"></div><div class="tile g06"></div><div class="tile g21"></div><div class="tile g25"></div><div class="tile g04"></div>
+                  <div class="tile g13"></div><div class="tile g22"></div><div class="tile g16"></div><div class="tile g03"></div><div class="tile g08"></div><div class="tile g19"></div>
+                  <div class="tile g26"></div><div class="tile g14"></div><div class="tile g23"></div><div class="tile g10"></div><div class="tile g17"></div><div class="tile g05"></div>
+                  <div class="tile g11"></div><div class="tile g01"></div><div class="tile g20"></div><div class="tile g07"></div><div class="tile g24"></div><div class="tile g12"></div>
+                  <div class="tile g04"></div><div class="tile g18"></div><div class="tile g09"></div><div class="tile g25"></div><div class="tile g21"></div><div class="tile g02"></div>
+                  <div class="tile g06"></div><div class="tile g15"></div><div class="tile g13"></div><div class="tile g22"></div><div class="tile g16"></div><div class="tile g08"></div>
+                </div>
+                <div id="s2-topfade"></div>
+                <div id="s2-botfade"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      /* slow zoom lives on an inner element — the tilt wrapper transform stays static CSS */
+      tl.fromTo("#s2-zoom",
+        { scale: 0.985, transformOrigin: "50% 46%" },
+        { scale: 1.045, transformOrigin: "50% 46%", duration: 3, ease: "none" }, 0);
+
+      /* headline: blur-to-sharp */
+      tl.fromTo("#s2-line1",
+        { opacity: 0, y: 36, filter: "blur(14px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.44, ease: "power3.out" }, 0.04);
+
+      tl.fromTo("#s2-line2",
+        { opacity: 0, y: 28, filter: "blur(14px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.44, ease: "power3.out" }, 0.18);
+
+      /* deterministic count-up 0 -> 465 */
+      const count = { v: 0 };
+      let numEl = null;
+      const writeNum = function () {
+        if (!numEl) { numEl = document.getElementById("s2-num"); }
+        if (numEl) { numEl.textContent = Math.round(count.v); }
+      };
+      /* modifiers run on every render, including seeks that suppress callbacks,
+         so the digits stay correct whether the runtime plays or scrubs. */
+      const applyNum = function (v) {
+        const n = Math.round(v);
+        if (!numEl) { numEl = document.getElementById("s2-num"); }
+        if (numEl) { numEl.textContent = n; }
+        return n;
+      };
+      tl.fromTo(count,
+        { v: 0 },
+        { v: 465, duration: 1.12, ease: "power3.out",
+          modifiers: { v: applyNum }, onUpdate: writeNum, onComplete: writeNum }, 0.10);
+
+      /* browser mockup rises in */
+      tl.fromTo("#s2-zoom",
+        { y: 130, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.66, ease: "power4.out" }, 0.16);
+
+      /* ambient bloom behind it */
+      tl.fromTo("#s2-halo",
+        { opacity: 0, scale: 0.9, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1, transformOrigin: "50% 50%", duration: 1.1, ease: "power2.out" }, 0.24);
+
+      /* chrome details */
+      tl.fromTo("#s2-dots span",
+        { opacity: 0, scale: 0.4, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1, transformOrigin: "50% 50%", duration: 0.3, ease: "power3.out", stagger: 0.05 }, 0.44);
+
+      tl.fromTo("#s2-url",
+        { opacity: 0, y: -10 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power3.out" }, 0.48);
+
+      /* the library fills in, tile by tile */
+      tl.fromTo("#s2-grid .tile",
+        { opacity: 0, scale: 0.82, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1, transformOrigin: "50% 50%", duration: 0.28, ease: "power3.out",
+          stagger: { amount: 0.30, from: "start" } }, 0.26);
+
+      /* endless upward scroll inside the mockup */
+      tl.fromTo("#s2-grid",
+        { y: 0 },
+        { y: -300, duration: 2.72, ease: "none" }, 0.28);
+
+      window.__timelines["s2"] = tl;
+    })();
+  </script>
+</template>

@@ -7,3 +7,5 @@ export { getCardTags, tagOrder } from "./tags";
 export type { TagId } from "./tags";
 export { picks } from "./picks";
 export type { Pick } from "./picks";
+export { bestInk, bestInkMuted, currentPantone, INK_DARK, INK_LIGHT, isLight, pantoneYears, rgbLabel, shade, tint, yearGradient, yearGradientTailwind } from "./pantone";
+export type { PantoneYear } from "./pantone";

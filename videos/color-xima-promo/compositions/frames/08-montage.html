@@ -1,0 +1,434 @@
+<template>
+  <div id="s8-root" data-composition-id="s8" data-start="0"
+       data-width="1080" data-height="1920" data-duration="2.3">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+      #s8-root * { margin:0; padding:0; box-sizing:border-box; }
+      #s8-root {
+        position:relative; width:1080px; height:1920px; overflow:hidden;
+        background:#050505; color:#FFFFFF; font-family:'Inter', system-ui, sans-serif;
+      }
+      #s8-root .clip { position:absolute; inset:0; }
+      #s8-root .fill { position:absolute; inset:0; background:#050505; }
+      /* Type ramp */
+      #s8-root .d1 { font-weight:700; letter-spacing:-0.03em; font-size:118px; line-height:1.04; }
+      #s8-root .d2 { font-weight:700; letter-spacing:-0.03em; font-size:86px;  line-height:1.08; }
+      #s8-root .d3 { font-weight:600; letter-spacing:-0.02em; font-size:52px;  line-height:1.15; }
+      #s8-root .sub { font-weight:500; letter-spacing:-0.01em; font-size:36px; color:#8A8A93; }
+      #s8-root .mono { font-family:'IBM Plex Mono', monospace; font-weight:500;
+        letter-spacing:0.08em; text-transform:uppercase; font-size:22px; color:#8A8A93; }
+      /* Floating white card */
+      #s8-root .card { background:#FFFFFF; border-radius:34px; overflow:hidden;
+        box-shadow: 0 46px 100px -34px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07); }
+      #s8-root .ink { color:#0A0A0B; }
+      #s8-root .inkmut { color:#5B5B66; }
+
+      /* ================================================================== */
+      /* scene 8 — fast product montage                                      */
+      /* ================================================================== */
+
+      /* ---- gradients copied from assets/gradients.css (chrome stripped) -- */
+      #s8-root .g-siri {
+        background-image:
+          radial-gradient(46% 58% at 10% 16%, rgba(244, 114, 158, 0.52) 0%, rgba(244, 114, 158, 0) 100%),
+          radial-gradient(44% 56% at 52% 6%, rgba(251, 168, 106, 0.44) 0%, rgba(251, 168, 106, 0) 100%),
+          radial-gradient(50% 62% at 90% 20%, rgba(129, 148, 248, 0.5) 0%, rgba(129, 148, 248, 0) 100%),
+          radial-gradient(70% 88% at 46% 96%, rgba(110, 214, 220, 0.32) 0%, rgba(110, 214, 220, 0) 100%),
+          linear-gradient(150deg, #fefdff 0%, #faf9fd 56%, #f5f6fb 100%);
+      }
+      #s8-root .g-obsidian {
+        background-image:
+          radial-gradient(48% 62% at 14% 12%, rgba(79, 110, 247, 0.52) 0%, rgba(79, 110, 247, 0) 100%),
+          radial-gradient(46% 60% at 86% 18%, rgba(146, 108, 240, 0.44) 0%, rgba(146, 108, 240, 0) 100%),
+          radial-gradient(80% 98% at 50% 96%, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 100%),
+          linear-gradient(152deg, #07080d 0%, #0d1020 50%, #05060a 100%);
+      }
+      #s8-root .g-aurora {
+        background-image:
+          radial-gradient(45% 60% at 18% 18%, rgba(34, 211, 238, 0.62) 0%, rgba(34, 211, 238, 0) 100%),
+          radial-gradient(48% 62% at 82% 16%, rgba(59, 130, 246, 0.54) 0%, rgba(59, 130, 246, 0) 100%),
+          radial-gradient(70% 95% at 52% 84%, rgba(56, 189, 248, 0.46) 0%, rgba(56, 189, 248, 0) 100%),
+          linear-gradient(145deg, #ecfeff 0%, #e0f2fe 55%, #dbeafe 100%);
+      }
+      #s8-root .g-zenith {
+        background-image:
+          radial-gradient(46% 62% at 14% 10%, rgba(253, 224, 71, 0.68) 0%, rgba(253, 224, 71, 0) 100%),
+          radial-gradient(50% 66% at 84% 14%, rgba(251, 146, 60, 0.56) 0%, rgba(251, 146, 60, 0) 100%),
+          radial-gradient(74% 98% at 50% 88%, rgba(254, 240, 138, 0.4) 0%, rgba(254, 240, 138, 0) 100%),
+          linear-gradient(150deg, #fffbeb 0%, #fef3c7 50%, #fef9c3 100%);
+      }
+      #s8-root .g-berry {
+        background-image:
+          radial-gradient(44% 60% at 14% 12%, rgba(244, 114, 182, 0.66) 0%, rgba(244, 114, 182, 0) 100%),
+          radial-gradient(52% 66% at 84% 14%, rgba(168, 85, 247, 0.58) 0%, rgba(168, 85, 247, 0) 100%),
+          radial-gradient(74% 96% at 50% 88%, rgba(236, 72, 153, 0.42) 0%, rgba(236, 72, 153, 0) 100%),
+          linear-gradient(148deg, #fdf2f8 0%, #fae8ff 52%, #f5d0fe 100%);
+      }
+      #s8-root .g-jade {
+        background-image: linear-gradient(166deg,
+          #f1f9f4 0%, #c8e6d6 18%, #7fc8ad 38%, #379381 58%,
+          #18625e 76%, #0c353b 90%, #061c22 100%);
+      }
+      #s8-root .g-ember {
+        background-image:
+          radial-gradient(44% 60% at 14% 14%, rgba(251, 113, 133, 0.62) 0%, rgba(251, 113, 133, 0) 100%),
+          radial-gradient(50% 66% at 84% 18%, rgba(244, 114, 182, 0.54) 0%, rgba(244, 114, 182, 0) 100%),
+          radial-gradient(74% 98% at 50% 86%, rgba(253, 164, 175, 0.46) 0%, rgba(253, 164, 175, 0) 100%),
+          linear-gradient(150deg, #fff1f2 0%, #ffe4e6 52%, #fdf2f8 100%);
+      }
+      #s8-root .g-gemini {
+        background-image:
+          radial-gradient(48% 62% at 14% 12%, rgba(66, 133, 244, 0.58) 0%, rgba(66, 133, 244, 0) 100%),
+          radial-gradient(46% 58% at 84% 18%, rgba(167, 139, 250, 0.5) 0%, rgba(167, 139, 250, 0) 100%),
+          radial-gradient(78% 98% at 50% 94%, rgba(138, 180, 248, 0.34) 0%, rgba(138, 180, 248, 0) 100%),
+          linear-gradient(152deg, #0b1020 0%, #141a30 50%, #090d1a 100%);
+      }
+      #s8-root .g-titanium {
+        background-image:
+          radial-gradient(52% 64% at 16% 14%, rgba(214, 168, 108, 0.42) 0%, rgba(214, 168, 108, 0) 100%),
+          radial-gradient(48% 60% at 84% 18%, rgba(196, 152, 128, 0.34) 0%, rgba(196, 152, 128, 0) 100%),
+          radial-gradient(76% 96% at 50% 92%, rgba(232, 208, 170, 0.46) 0%, rgba(232, 208, 170, 0) 100%),
+          linear-gradient(148deg, #fbf6ee 0%, #f2e6d5 52%, #e0cbae 100%);
+      }
+      #s8-root .g-dawn {
+        background-image: linear-gradient(172deg,
+          #0b1233 0%, #232a63 20%, #4a4e94 40%, #8c7fb0 58%,
+          #cf9a9c 76%, #f5d8bd 92%, #fdf4e6 100%);
+      }
+      #s8-root .g-onyx {
+        background-image:
+          radial-gradient(50% 64% at 16% 14%, rgba(52, 211, 153, 0.72) 0%, rgba(52, 211, 153, 0) 100%),
+          radial-gradient(52% 66% at 86% 20%, rgba(16, 185, 129, 0.56) 0%, rgba(16, 185, 129, 0) 100%),
+          radial-gradient(78% 98% at 48% 94%, rgba(190, 242, 100, 0.28) 0%, rgba(190, 242, 100, 0) 100%),
+          linear-gradient(150deg, #0e1a15 0%, #143024 52%, #08110d 100%);
+      }
+      #s8-root .g-comet {
+        background-image:
+          radial-gradient(44% 60% at 12% 10%, rgba(103, 232, 249, 0.66) 0%, rgba(103, 232, 249, 0) 100%),
+          radial-gradient(50% 66% at 84% 12%, rgba(34, 211, 238, 0.56) 0%, rgba(34, 211, 238, 0) 100%),
+          radial-gradient(72% 94% at 50% 88%, rgba(56, 189, 248, 0.42) 0%, rgba(56, 189, 248, 0) 100%),
+          linear-gradient(150deg, #ecfeff 0%, #cffafe 50%, #bae6fd 100%);
+      }
+      #s8-root .g-mojave {
+        background-image: linear-gradient(162deg,
+          #fef5e8 0%, #f8d5aa 18%, #e9a370 38%, #c5643f 58%,
+          #7d3752 78%, #3a2450 92%, #1c1232 100%);
+      }
+      #s8-root .g-sonoma {
+        background-image:
+          radial-gradient(58% 76% at 14% 12%, rgba(139, 92, 246, 0.44) 0%, rgba(139, 92, 246, 0) 100%),
+          radial-gradient(54% 72% at 86% 18%, rgba(217, 70, 239, 0.32) 0%, rgba(217, 70, 239, 0) 100%),
+          radial-gradient(74% 96% at 46% 92%, rgba(59, 130, 246, 0.34) 0%, rgba(59, 130, 246, 0) 100%),
+          linear-gradient(152deg, #0d1030 0%, #1b1246 50%, #100c26 100%);
+      }
+      #s8-root .g-fuchsia {
+        background-image:
+          radial-gradient(44% 60% at 14% 12%, rgba(244, 114, 182, 0.66) 0%, rgba(244, 114, 182, 0) 100%),
+          radial-gradient(50% 66% at 84% 16%, rgba(236, 72, 153, 0.56) 0%, rgba(236, 72, 153, 0) 100%),
+          radial-gradient(74% 96% at 50% 88%, rgba(249, 168, 212, 0.44) 0%, rgba(249, 168, 212, 0) 100%),
+          linear-gradient(150deg, #fdf2f8 0%, #fce7f3 52%, #fbcfe8 100%);
+      }
+      #s8-root .g-cobalt {
+        background-image:
+          radial-gradient(45% 62% at 16% 18%, rgba(96, 165, 250, 0.66) 0%, rgba(96, 165, 250, 0) 100%),
+          radial-gradient(50% 68% at 82% 14%, rgba(59, 130, 246, 0.58) 0%, rgba(59, 130, 246, 0) 100%),
+          radial-gradient(72% 96% at 52% 86%, rgba(125, 211, 252, 0.44) 0%, rgba(125, 211, 252, 0) 100%),
+          linear-gradient(148deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%);
+      }
+      #s8-root .g-espresso {
+        background-image:
+          radial-gradient(50% 64% at 16% 14%, rgba(244, 176, 66, 0.76) 0%, rgba(244, 176, 66, 0) 100%),
+          radial-gradient(52% 66% at 84% 20%, rgba(214, 118, 58, 0.6) 0%, rgba(214, 118, 58, 0) 100%),
+          radial-gradient(80% 98% at 50% 94%, rgba(252, 211, 141, 0.3) 0%, rgba(252, 211, 141, 0) 100%),
+          linear-gradient(150deg, #1c130c 0%, #331f12 52%, #140d08 100%);
+      }
+
+
+      /* ---- top rail ------------------------------------------------------ */
+      #s8-root #s8-rail {
+        position:absolute; left:90px; top:394px; width:900px; height:26px;
+        display:flex; align-items:center; justify-content:space-between;
+      }
+      #s8-root #s8-ticks { display:flex; align-items:center; gap:12px; }
+      #s8-root .tick { display:block; width:48px; height:5px; border-radius:3px;
+        background:rgba(255,255,255,0.16); }
+      #s8-root #s8-tk1 { background:#FFFFFF; }
+
+      /* ---- the five cards ------------------------------------------------ */
+      #s8-root #s8-stage { position:absolute; inset:0; }
+      #s8-root .pcard {
+        position:absolute; left:90px; top:640px; width:900px; height:900px; opacity:0;
+      }
+      #s8-root #s8-c1 { opacity:1; }
+      #s8-root .moment { position:absolute; left:48px; top:56px; width:804px; height:600px; }
+      #s8-root .lab { position:absolute; left:48px; top:750px; width:804px; }
+      #s8-root .lab span { display:block; width:804px; }
+
+      /* 1 — gallery -------------------------------------------------------- */
+      #s8-root #s8-grid {
+        display:grid; grid-template-columns:repeat(4, 1fr); grid-template-rows:repeat(3, 1fr);
+        gap:20px;
+      }
+      #s8-root .gt { display:block; width:100%; height:100%; border-radius:18px;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.07); }
+
+      /* 2 — generator ------------------------------------------------------ */
+      #s8-root #s8-preview {
+        position:absolute; left:0; top:0; width:804px; height:404px; border-radius:24px;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.08);
+      }
+      #s8-root #s8-track {
+        position:absolute; left:0; top:468px; width:804px; height:8px; border-radius:4px;
+        background:#E7E7EC;
+      }
+      #s8-root .hnd {
+        position:absolute; top:442px; width:60px; height:60px; border-radius:30px;
+        background:#FFFFFF; display:flex; align-items:center; justify-content:center;
+        box-shadow: 0 10px 24px -10px rgba(10,10,11,0.45), 0 0 0 1px rgba(10,10,11,0.10);
+      }
+      #s8-root #s8-h1 { left:60px; }
+      #s8-root #s8-h2 { left:372px; }
+      #s8-root #s8-h3 { left:684px; }
+      #s8-root .hsw { display:block; width:32px; height:32px; border-radius:16px;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.14); }
+      #s8-root .hex {
+        position:absolute; top:530px; width:160px; text-align:center;
+        font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:20px;
+        letter-spacing:0.06em; color:#5B5B66;
+      }
+      #s8-root #s8-hex1 { left:10px; }
+      #s8-root #s8-hex2 { left:322px; }
+      #s8-root #s8-hex3 { left:634px; }
+
+      /* 3 — mesh ----------------------------------------------------------- */
+      #s8-root #s8-mesh {
+        position:absolute; inset:0; border-radius:24px; overflow:hidden;
+      }
+      #s8-root .blob { position:absolute; border-radius:50%; filter:blur(70px); }
+      #s8-root #s8-b1 { left:66px; top:56px; width:380px; height:330px;
+        background:rgba(139,92,246,0.62); }
+      #s8-root #s8-b2 { left:410px; top:250px; width:400px; height:320px;
+        background:rgba(94,214,212,0.42); }
+      #s8-root .cp {
+        position:absolute; width:40px; height:40px; border-radius:20px;
+        border:3px solid rgba(255,255,255,0.94); background:rgba(255,255,255,0.20);
+      }
+      #s8-root #s8-cp1 { left:178px; top:148px; }
+      #s8-root #s8-cp2 { left:546px; top:372px; }
+      #s8-root #s8-pulse {
+        position:absolute; left:546px; top:372px; width:40px; height:40px;
+        border-radius:20px; border:2px solid rgba(255,255,255,0.75);
+      }
+
+      /* 4 — favorites ------------------------------------------------------ */
+      #s8-root #s8-favs { display:flex; gap:20px; }
+      #s8-root .fav { position:relative; flex:1; height:600px; border-radius:24px;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.07); }
+      #s8-root #s8-hchip {
+        position:absolute; right:22px; top:22px; width:68px; height:68px; border-radius:34px;
+        background:#FFFFFF; display:flex; align-items:center; justify-content:center;
+        box-shadow: 0 12px 26px -12px rgba(0,0,0,0.6);
+      }
+      #s8-root .heart { position:relative; display:block; width:36px; height:32px; }
+      #s8-root .heart::before, #s8-root .heart::after {
+        content:''; position:absolute; top:0; width:18px; height:29px;
+        background:#F0345A; border-radius:18px 18px 0 0;
+      }
+      #s8-root .heart::before { left:18px; transform:rotate(-45deg); transform-origin:0 100%; }
+      #s8-root .heart::after  { left:0;    transform:rotate(45deg);  transform-origin:100% 100%; }
+
+      /* 5 — picks ---------------------------------------------------------- */
+      #s8-root .setrow {
+        position:absolute; left:0; width:804px; height:290px; border-radius:24px;
+        overflow:hidden; display:flex;
+        box-shadow: inset 0 0 0 1px rgba(10,10,11,0.07);
+      }
+      #s8-root #s8-set1 { top:0; }
+      #s8-root #s8-set2 { top:310px; }
+      #s8-root .sw { display:block; flex:1; height:290px; }
+      #s8-root #s8-chip {
+        position:absolute; right:22px; top:22px; padding:12px 22px; border-radius:999px;
+        background:#FFFFFF; color:#0A0A0B;
+        font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:20px;
+        letter-spacing:0.10em; text-transform:uppercase;
+        box-shadow: 0 12px 26px -14px rgba(0,0,0,0.55);
+      }
+    </style>
+    <div id="s8-scene" class="clip" data-start="0" data-duration="2.3" data-track-index="1">
+      <div class="fill"></div>
+
+      <div id="s8-rail">
+        <span class="mono">All in one place</span>
+        <span id="s8-ticks">
+          <span class="tick" id="s8-tk1"></span>
+          <span class="tick" id="s8-tk2"></span>
+          <span class="tick" id="s8-tk3"></span>
+          <span class="tick" id="s8-tk4"></span>
+          <span class="tick" id="s8-tk5"></span>
+        </span>
+      </div>
+
+      <div id="s8-stage" data-layout-allow-overflow>
+
+        <!-- 1 — gallery -->
+        <div class="card pcard" id="s8-c1" data-layout-allow-overflow>
+          <div class="moment" id="s8-grid">
+            <span class="gt g-siri"></span>
+            <span class="gt g-obsidian"></span>
+            <span class="gt g-aurora"></span>
+            <span class="gt g-zenith"></span>
+            <span class="gt g-berry"></span>
+            <span class="gt g-jade"></span>
+            <span class="gt g-ember"></span>
+            <span class="gt g-gemini"></span>
+            <span class="gt g-titanium"></span>
+            <span class="gt g-dawn"></span>
+            <span class="gt g-onyx"></span>
+            <span class="gt g-comet"></span>
+          </div>
+          <div class="lab" id="s8-lab1"><span class="d2 ink">Gallery.</span></div>
+        </div>
+
+        <!-- 2 — generator -->
+        <div class="card pcard" id="s8-c2" data-layout-allow-overflow>
+          <div class="moment">
+            <div id="s8-preview" class="g-mojave"></div>
+            <div id="s8-track"></div>
+            <div class="hnd" id="s8-h1"><span class="hsw" style="background:#FEF5E8"></span></div>
+            <div class="hnd" id="s8-h2"><span class="hsw" style="background:#C5643F"></span></div>
+            <div class="hnd" id="s8-h3"><span class="hsw" style="background:#1C1232"></span></div>
+            <div class="hex" id="s8-hex1">#FEF5E8</div>
+            <div class="hex" id="s8-hex2">#C5643F</div>
+            <div class="hex" id="s8-hex3">#1C1232</div>
+          </div>
+          <div class="lab" id="s8-lab2"><span class="d2 ink">Generator.</span></div>
+        </div>
+
+        <!-- 3 — mesh -->
+        <div class="card pcard" id="s8-c3" data-layout-allow-overflow>
+          <div class="moment">
+            <div id="s8-mesh" class="g-sonoma">
+              <div class="blob" id="s8-b1"></div>
+              <div class="blob" id="s8-b2"></div>
+              <div class="cp" id="s8-cp1"></div>
+              <div class="cp" id="s8-cp2"></div>
+              <div id="s8-pulse"></div>
+            </div>
+          </div>
+          <div class="lab" id="s8-lab3"><span class="d2 ink">Mesh.</span></div>
+        </div>
+
+        <!-- 4 — favorites -->
+        <div class="card pcard" id="s8-c4" data-layout-allow-overflow>
+          <div class="moment" id="s8-favs">
+            <div class="fav g-fuchsia"></div>
+            <div class="fav g-obsidian">
+              <div id="s8-hchip"><span class="heart"></span></div>
+            </div>
+            <div class="fav g-cobalt"></div>
+          </div>
+          <div class="lab" id="s8-lab4"><span class="d2 ink">Favorites.</span></div>
+        </div>
+
+        <!-- 5 — picks -->
+        <div class="card pcard" id="s8-c5" data-layout-allow-overflow>
+          <div class="moment">
+            <div class="setrow" id="s8-set1">
+              <span class="sw g-aurora"></span>
+              <span class="sw g-comet"></span>
+              <span class="sw g-cobalt"></span>
+              <span class="sw g-gemini"></span>
+              <span class="sw g-obsidian"></span>
+              <div id="s8-chip">8 sets</div>
+            </div>
+            <div class="setrow" id="s8-set2">
+              <span class="sw g-zenith"></span>
+              <span class="sw g-ember"></span>
+              <span class="sw g-fuchsia"></span>
+              <span class="sw g-berry"></span>
+              <span class="sw g-espresso"></span>
+            </div>
+          </div>
+          <div class="lab" id="s8-lab5"><span class="d2 ink">Picks.</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      const CUT   = [0, 0.46, 0.92, 1.38, 1.84];
+      const cards = ['#s8-c1', '#s8-c2', '#s8-c3', '#s8-c4', '#s8-c5'];
+      const ticks = ['#s8-tk1', '#s8-tk2', '#s8-tk3', '#s8-tk4', '#s8-tk5'];
+      const ENTER = [
+        { x: 300, y: 0 },
+        { x: 0,   y: 280 },
+        { x: 300, y: 0 },
+        { x: 0,   y: 280 },
+        { x: 300, y: 0 }
+      ];
+
+      /* chrome ---------------------------------------------------------- */
+      tl.fromTo('#s8-rail', { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power2.out' }, 0);
+
+      /* hard cuts + card entries ---------------------------------------- */
+      CUT.forEach(function (t, i) {
+        cards.forEach(function (c, j) {
+          tl.set(c, { opacity: i === j ? 1 : 0 }, t);
+        });
+        ticks.forEach(function (k, j) {
+          tl.set(k, { backgroundColor: i === j ? '#FFFFFF' : 'rgba(255,255,255,0.16)' }, t);
+        });
+        tl.fromTo(cards[i],
+          { x: ENTER[i].x, y: ENTER[i].y, rotation: -1.5 },
+          { x: 0, y: 0, rotation: 0, duration: 0.2, ease: 'power4.out' }, t);
+        tl.fromTo('#s8-lab' + (i + 1),
+          { y: 26, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.26, ease: 'power3.out' }, t + 0.05);
+      });
+
+      /* 1 — gallery: tiles rack in -------------------------------------- */
+      tl.fromTo('#s8-grid .gt',
+        { y: 16, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.20, ease: 'power3.out', stagger: 0.012 }, 0.05);
+
+      /* 2 — generator: stops spread out along the track ------------------ */
+      tl.fromTo('#s8-h1', { x: 140 },  { x: 0, duration: 0.34, ease: 'power3.out' }, 0.51);
+      tl.fromTo('#s8-h2', { x: 34 },   { x: 0, duration: 0.34, ease: 'power3.out' }, 0.53);
+      tl.fromTo('#s8-h3', { x: -128 }, { x: 0, duration: 0.34, ease: 'power3.out' }, 0.55);
+      tl.fromTo('#s8-c2 .hex',
+        { y: 10, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.22, ease: 'power2.out', stagger: 0.03 }, 0.62);
+
+      /* 3 — mesh: field breathes, control points land -------------------- */
+      tl.fromTo('#s8-b1', { x: -14, y: 10 }, { x: 12, y: -8, duration: 0.46, ease: 'sine.out' }, 0.92);
+      tl.fromTo('#s8-b2', { x: 16, y: -10 }, { x: -12, y: 8, duration: 0.46, ease: 'sine.out' }, 0.92);
+      tl.fromTo('#s8-cp1', { scale: 0.3, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.30, ease: 'power4.out' }, 0.98);
+      tl.fromTo('#s8-cp2', { scale: 0.3, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.30, ease: 'power4.out' }, 1.04);
+      tl.fromTo('#s8-pulse', { scale: 0.9, opacity: 0.75 },
+        { scale: 2.6, opacity: 0, duration: 0.46, ease: 'power2.out' }, 1.08);
+
+      /* 4 — favorites: tiles land, heart pops ---------------------------- */
+      tl.fromTo('#s8-favs .fav',
+        { y: 22, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.24, ease: 'power3.out', stagger: 0.05 }, 1.43);
+      tl.fromTo('#s8-hchip', { scale: 0.4, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.28, ease: 'power4.out' }, 1.58);
+
+      /* 5 — picks: two sets slide, chip snaps ---------------------------- */
+      tl.fromTo('#s8-set1', { x: -46, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.30, ease: 'power4.out' }, 1.89);
+      tl.fromTo('#s8-set2', { x: -46, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.30, ease: 'power4.out' }, 1.96);
+      tl.fromTo('#s8-chip', { scale: 0.6, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.26, ease: 'power4.out' }, 2.04);
+
+      window.__timelines["s8"] = tl;
+    })();
+  </script>
+</template>

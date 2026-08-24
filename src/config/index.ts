@@ -12,6 +12,7 @@ export {
 	getGeneratorPresetsPath,
 	getGradientPath,
 	normalizePath,
+	getPantonePath,
 	getPickPath,
 	getPicksPath,
 	getRandomPath,

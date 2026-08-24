@@ -57,3 +57,7 @@ export function getPicksPath(): string {
 export function getPickPath(slug: string): string {
 	return normalizePath(`/picks/${slug}/`);
 }
+
+export function getPantonePath(): string {
+	return normalizePath("/pantone/");
+}

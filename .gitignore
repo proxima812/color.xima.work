@@ -28,3 +28,8 @@ output/playwright
 
 # installed third-party skills (restore with: bunx skills add, see skills-lock.json)
 .claude/skills/
+
+# Артефакты видеопроекта: рендеры и захваты пересобираются, в историю не едут
+videos/*/renders/
+videos/*/capture/
+.impeccable/hook.cache.json

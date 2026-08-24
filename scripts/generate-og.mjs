@@ -27,7 +27,7 @@ const TILE_CLASSES = [
 	"radial-glow-fuchsia-nova",
 	"radial-mesh-solar-pop",
 	"radial-conic-aurora-wheel",
-	"radial-multi-stop-ocean-pop",
+	"radial-multi-stop-orange-pop",
 	"radial-glow-aurora-cyan",
 	"radial-mesh-amethyst-cloud",
 	"radial-multi-stop-rainbow-soft",
@@ -36,7 +36,7 @@ const TILE_CLASSES = [
 ];
 
 const WORDMARK = "color.xima";
-const TAGLINE = "465 curated CSS gradients · CSS3 · Tailwind v4";
+const TAGLINE = "388 curated CSS gradients · CSS3 · Tailwind v4";
 
 function playwrightCacheDir() {
 	if (process.env.PLAYWRIGHT_BROWSERS_PATH) return process.env.PLAYWRIGHT_BROWSERS_PATH;

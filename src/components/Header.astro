@@ -1,7 +1,7 @@
 ---
 import { GithubStarsBadge } from "@/components/colors";
 import { HeaderBehavior, HeaderSearch } from "@/components/header";
-import { getCardsPath, getFavoritesPath, getGeneratorPath, getRandomPath } from "@/config";
+import { getCardsPath, getFavoritesPath, getGeneratorPath, getPantonePath, getRandomPath } from "@/config";
 import { Icon } from "astro-icon/components";
 import Logotype from "./logotype.astro";
 ---
@@ -36,6 +36,14 @@ import Logotype from "./logotype.astro";
 				>
 					<Icon name="mdi:palette-outline" class="h-4 w-4" aria-hidden="true" />
 					<span class="hidden sm:inline">Generator</span>
+				</a>
+				<a
+					href={getPantonePath()}
+					class="inline-flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200 bg-white/70 px-3 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+					aria-label="Pantone Color of the Year"
+				>
+					<Icon name="mdi:calendar-star-outline" class="h-4 w-4" aria-hidden="true" />
+					<span class="hidden md:inline">Pantone</span>
 				</a>
 				<a
 					href={getRandomPath()}

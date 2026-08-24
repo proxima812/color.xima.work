@@ -1,0 +1,140 @@
+<template>
+  <div id="s1-root" data-composition-id="s1" data-start="0"
+       data-width="1080" data-height="1920" data-duration="2.4">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+      #s1-root * { margin:0; padding:0; box-sizing:border-box; }
+      #s1-root {
+        position:relative; width:1080px; height:1920px; overflow:hidden;
+        background:#050505; color:#FFFFFF; font-family:'Inter', system-ui, sans-serif;
+      }
+      #s1-root .clip { position:absolute; inset:0; }
+      #s1-root .fill { position:absolute; inset:0; background:#050505; }
+      /* Type ramp */
+      #s1-root .d1 { font-weight:700; letter-spacing:-0.03em; font-size:118px; line-height:1.04; }
+      #s1-root .d2 { font-weight:700; letter-spacing:-0.03em; font-size:86px;  line-height:1.08; }
+      #s1-root .d3 { font-weight:600; letter-spacing:-0.02em; font-size:52px;  line-height:1.15; }
+      #s1-root .sub { font-weight:500; letter-spacing:-0.01em; font-size:36px; color:#8A8A93; }
+      #s1-root .mono { font-family:'IBM Plex Mono', monospace; font-weight:500;
+        letter-spacing:0.08em; text-transform:uppercase; font-size:22px; color:#8A8A93; }
+      /* Floating white card */
+      #s1-root .card { background:#FFFFFF; border-radius:34px; overflow:hidden;
+        box-shadow: 0 46px 100px -34px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07); }
+      #s1-root .ink { color:#0A0A0B; }
+      #s1-root .inkmut { color:#5B5B66; }
+
+      /* ---------- scene ---------- */
+      /* camera rig — transform-origin is set from GSAP so no CSS transform is ever declared here */
+      #s1-root #s1-push { position:absolute; inset:0; }
+
+      /* type block, upper-middle of the safe zone (y 434 -> 645) */
+      #s1-root #s1-copy { position:absolute; left:70px; top:434px; width:940px; }
+      #s1-root .line { display:block; width:940px; }
+      #s1-root #s1-wordmark { color:#FFFFFF; }
+      #s1-root #s1-wordmark .dim { color:#9A9AA6; }
+      #s1-root #s1-tagline { margin-top:44px; }
+
+      /* ambient bloom that leaks out from behind the card */
+      #s1-root #s1-halo {
+        position:absolute; left:130px; top:986px; width:820px; height:560px;
+        border-radius:50%; filter:blur(130px); pointer-events:none;
+        background:
+          radial-gradient(50% 50% at 24% 32%, rgba(244,114,158,0.34) 0%, rgba(244,114,158,0) 100%),
+          radial-gradient(50% 50% at 78% 28%, rgba(129,148,248,0.32) 0%, rgba(129,148,248,0) 100%),
+          radial-gradient(62% 62% at 50% 84%, rgba(110,214,220,0.24) 0%, rgba(110,214,220,0) 100%);
+      }
+
+      /* hero card — edge-to-edge gradient, no padding by design */
+      #s1-root #s1-card { position:absolute; left:70px; top:874px; width:940px; height:744px; }
+      #s1-root .glayer { position:absolute; inset:-12%; }
+
+      /* .radial-mesh-neo-aurora-borealis / .radial-multi-stop-dawn-atlantic — copied from
+         assets/gradients.css, borders stripped. The originally chosen pale UI-surface
+         gradients read as an empty white card at full-bleed; the opening hook needs colour. */
+      #s1-root #s1-grad-a {
+          background-image:
+    radial-gradient(58% 76% at 12% 16%, rgba(45, 212, 191, 0.6) 0%, rgba(45, 212, 191, 0) 100%),
+    radial-gradient(54% 72% at 84% 12%, rgba(74, 222, 128, 0.44) 0%, rgba(74, 222, 128, 0) 100%),
+    radial-gradient(72% 96% at 52% 92%, rgba(167, 139, 250, 0.42) 0%, rgba(167, 139, 250, 0) 100%),
+    linear-gradient(155deg, #050b18 0%, #071426 52%, #030812 100%);
+      }
+      /* .radial-glow-siri-halo — copied from assets/gradients.css, border + box-shadow stripped */
+      #s1-root #s1-grad-b {
+          background-image: linear-gradient(172deg,
+    #0b1233 0%, #232a63 20%, #4a4e94 40%, #8c7fb0 58%,
+    #cf9a9c 76%, #f5d8bd 92%, #fdf4e6 100%);
+      }
+
+      /* static glass chrome — never tweened */
+      #s1-root #s1-sheen {
+        position:absolute; inset:0; border-radius:34px; pointer-events:none;
+        background:linear-gradient(158deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 34%, rgba(255,255,255,0) 62%);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55);
+      }
+    </style>
+    <div id="s1-scene" class="clip" data-start="0" data-duration="2.4" data-track-index="1">
+      <div class="fill"></div>
+
+      <div id="s1-push" data-layout-allow-overflow>
+        <div id="s1-halo" data-layout-allow-overflow></div>
+
+        <div id="s1-copy">
+          <span id="s1-wordmark" class="d1 line">color<span class="dim">.xima</span></span>
+          <span id="s1-tagline" class="sub line">Gradients that vibe.</span>
+        </div>
+
+        <div id="s1-card" class="card" data-layout-allow-overflow>
+          <div id="s1-grad-a" class="glayer"></div>
+          <div id="s1-grad-b" class="glayer"></div>
+          <div id="s1-sheen"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      /* ---- camera: one slow, continuous push-in across the whole beat ---- */
+      tl.fromTo("#s1-push",
+        { scale: 1, transformOrigin: "50% 46%" },
+        { scale: 1.045, transformOrigin: "50% 46%", duration: 2.4, ease: "none" }, 0);
+
+      /* ---- the gradient morphs: base layer drifts in scale, second layer cross-fades over it ---- */
+      tl.fromTo("#s1-grad-a",
+        { scale: 1.02, rotation: 0, transformOrigin: "50% 50%" },
+        { scale: 1.17, rotation: 2.4, transformOrigin: "50% 50%", duration: 2.4, ease: "none" }, 0);
+
+      tl.fromTo("#s1-grad-b",
+        { opacity: 0, scale: 1.28, rotation: -2.2, transformOrigin: "50% 50%" },
+        { opacity: 0.9, scale: 1.04, rotation: 0, transformOrigin: "50% 50%", duration: 1.85, ease: "power1.inOut" }, 0.40);
+
+      /* ---- type arrives blur-to-sharp ---- */
+      tl.fromTo("#s1-wordmark",
+        { opacity: 0, y: 32, filter: "blur(14px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.34, ease: "power4.out" }, 0.02);
+
+      tl.fromTo("#s1-tagline",
+        { opacity: 0, y: 22, filter: "blur(14px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.32, ease: "power3.out" }, 0.14);
+
+      /* ---- hero card rises from the bottom edge and lands ---- */
+      tl.fromTo("#s1-card",
+        { y: 560 },
+        { y: 0, duration: 0.66, ease: "power4.out" }, 0.20);
+
+      tl.fromTo("#s1-card",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.22, ease: "power2.out" }, 0.20);
+
+      /* ---- ambient bloom opens up behind the card ---- */
+      tl.fromTo("#s1-halo",
+        { opacity: 0, scale: 0.9, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1, transformOrigin: "50% 50%", duration: 1.0, ease: "power2.out" }, 0.26);
+
+      window.__timelines["s1"] = tl;
+    })();
+  </script>
+</template>

@@ -793,7 +793,7 @@ export function buildCssSnippetMap(classNames: readonly string[]): Record<string
 /**
  * One Shiki highlighter for the whole build. `codeToHtml()` re-resolves themes and
  * languages on every call, which is measurable once six formats are rendered on each
- * of the 465 detail pages.
+ * of the 388 detail pages.
  */
 let highlighterPromise: Promise<Highlighter> | null = null;
 

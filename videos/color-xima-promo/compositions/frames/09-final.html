@@ -1,0 +1,147 @@
+<template>
+  <div id="s9-root" data-composition-id="s9" data-start="0"
+       data-width="1080" data-height="1920" data-duration="2.6">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+      #s9-root * { margin:0; padding:0; box-sizing:border-box; }
+      #s9-root {
+        position:relative; width:1080px; height:1920px; overflow:hidden;
+        background:#050505; color:#FFFFFF; font-family:'Inter', system-ui, sans-serif;
+      }
+      #s9-root .clip { position:absolute; inset:0; }
+      #s9-root .fill { position:absolute; inset:0; background:#050505; }
+      /* Type ramp */
+      #s9-root .d1 { font-weight:700; letter-spacing:-0.03em; font-size:118px; line-height:1.04; }
+      #s9-root .d2 { font-weight:700; letter-spacing:-0.03em; font-size:86px;  line-height:1.08; }
+      #s9-root .d3 { font-weight:600; letter-spacing:-0.02em; font-size:52px;  line-height:1.15; }
+      #s9-root .sub { font-weight:500; letter-spacing:-0.01em; font-size:36px; color:#8A8A93; }
+      #s9-root .mono { font-family:'IBM Plex Mono', monospace; font-weight:500;
+        letter-spacing:0.08em; text-transform:uppercase; font-size:22px; color:#8A8A93; }
+      /* Floating white card */
+      #s9-root .card { background:#FFFFFF; border-radius:34px; overflow:hidden;
+        box-shadow: 0 46px 100px -34px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07); }
+      #s9-root .ink { color:#0A0A0B; }
+      #s9-root .inkmut { color:#5B5B66; }
+
+      /* ================= scene ================= */
+
+      /* camera rig: everything except the vignette + fade plate rides this */
+      #s9-root #s9-zoom { position:absolute; inset:0; transform-origin:50% 48%; }
+
+      /* hero light source — 900x900 circle centred on (540, 1080) */
+      /* .radial-glow-obsidian-royal — copied from assets/gradients.css, border + box-shadow stripped */
+      #s9-root #s9-orb {
+        position:absolute; left:90px; top:630px; width:900px; height:900px;
+        border-radius:50%; filter:blur(70px); opacity:0.75; pointer-events:none;
+        background-image:
+          radial-gradient(48% 62% at 14% 12%, rgba(79, 110, 247, 0.52) 0%, rgba(79, 110, 247, 0) 100%),
+          radial-gradient(46% 60% at 86% 18%, rgba(146, 108, 240, 0.44) 0%, rgba(146, 108, 240, 0) 100%),
+          radial-gradient(80% 98% at 50% 96%, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 100%),
+          linear-gradient(152deg, #07080d 0%, #0d1020 50%, #05060a 100%);
+      }
+
+      /* low warm bloom under the CTA — stops the frame reading monochrome-blue */
+      /* .radial-glow-espresso-amber — copied from assets/gradients.css, border + box-shadow stripped */
+      #s9-root #s9-orb-warm {
+        position:absolute; left:400px; top:1160px; width:620px; height:620px;
+        border-radius:50%; filter:blur(80px); opacity:0.38; pointer-events:none;
+        background-image:
+          radial-gradient(50% 64% at 16% 14%, rgba(244, 176, 66, 0.76) 0%, rgba(244, 176, 66, 0) 100%),
+          radial-gradient(52% 66% at 84% 20%, rgba(214, 118, 58, 0.6) 0%, rgba(214, 118, 58, 0) 100%),
+          radial-gradient(80% 98% at 50% 94%, rgba(252, 211, 141, 0.3) 0%, rgba(252, 211, 141, 0) 100%),
+          linear-gradient(150deg, #1c130c 0%, #331f12 52%, #140d08 100%);
+      }
+
+      /* ---- type lockup, centred, all inside y=340..1520 ---- */
+      #s9-root #s9-title { display:block; position:absolute; left:0; right:0; top:698px;
+        text-align:center; color:#FFFFFF; }
+
+      #s9-root #s9-tag { position:absolute; left:130px; top:868px; width:820px; text-align:center; }
+      #s9-root #s9-tag .tline { display:block; width:100%; line-height:1.42; }
+
+      #s9-root #s9-cta { position:absolute; left:0; right:0; top:1288px; text-align:center; }
+      #s9-root #s9-cta .url { display:block; width:100%; color:#FFFFFF;
+        font-size:26px; letter-spacing:0.16em; line-height:1; }
+
+      /* frame-locked vignette — deepens the edges so the orb reads as centre light */
+      #s9-root #s9-vignette { position:absolute; inset:0; pointer-events:none;
+        background: radial-gradient(122% 82% at 50% 52%,
+          rgba(5,5,5,0) 42%, rgba(5,5,5,0.5) 76%, rgba(5,5,5,0.92) 100%); }
+
+      /* final fade-to-black plate */
+      #s9-root #s9-fade { position:absolute; inset:0; background:#000000; opacity:0; }
+    </style>
+    <div id="s9-scene" class="clip" data-start="0" data-duration="2.6" data-track-index="1">
+      <div class="fill"></div>
+
+      <div id="s9-zoom" data-layout-allow-overflow>
+        <div id="s9-orb" data-layout-allow-overflow></div>
+        <div id="s9-orb-warm" data-layout-allow-overflow></div>
+
+        <span id="s9-title" class="d1">color.xima</span>
+
+        <div id="s9-tag">
+          <span class="sub tline">Gradients that vibe</span>
+          <span class="sub tline">for modern interfaces.</span>
+        </div>
+
+        <div id="s9-cta">
+          <span class="mono url">color.xima.work</span>
+        </div>
+      </div>
+
+      <div id="s9-vignette"></div>
+      <div id="s9-fade"></div>
+
+    </div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      /* camera — one slow, unbroken push for the whole beat */
+      tl.fromTo("#s9-zoom",
+        { scale: 1 },
+        { scale: 1.06, duration: 2.6, ease: "none" }, 0);
+
+      /* hero orb — gentle drift (~34px x, ~32px y) + slow breathing pulse */
+      tl.fromTo("#s9-orb",
+        { x: -18, y: 16, scale: 1 },
+        { x: 16, y: -16, scale: 1.08, duration: 2.6, ease: "sine.inOut" }, 0);
+
+      tl.fromTo("#s9-orb",
+        { opacity: 0 },
+        { opacity: 0.75, duration: 0.9, ease: "power2.out" }, 0);
+
+      /* warm bloom drifts against the hero orb so the light feels alive */
+      tl.fromTo("#s9-orb-warm",
+        { x: 14, y: 12, scale: 1.05 },
+        { x: -14, y: -10, scale: 0.97, duration: 2.6, ease: "sine.inOut" }, 0);
+
+      tl.fromTo("#s9-orb-warm",
+        { opacity: 0 },
+        { opacity: 0.38, duration: 1.1, ease: "power2.out" }, 0.08);
+
+      /* type — line by line, 0.18s apart, opacity + y:24 -> 0 */
+      tl.fromTo("#s9-title",
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.26, ease: "power3.out" }, 0.02);
+
+      tl.fromTo("#s9-tag",
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.26, ease: "power3.out" }, 0.20);
+
+      tl.fromTo("#s9-cta",
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.26, ease: "power3.out" }, 0.38);
+
+      /* composed frame is fully legible 0.64s -> 2.15s (1.51s hold), then fade out */
+      tl.fromTo("#s9-fade",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.45, ease: "power2.in" }, 2.15);
+
+      window.__timelines["s9"] = tl;
+    })();
+  </script>
+</template>

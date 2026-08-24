@@ -1,0 +1,259 @@
+---
+import { getPantonePath } from "@/config";
+import {
+	bestInk,
+	bestInkMuted,
+	currentPantone,
+	INK_DARK,
+	pantoneYears,
+	rgbLabel,
+	yearGradient,
+	yearGradientTailwind,
+} from "@/data";
+import { BaseLayout } from "@/layouts";
+import { Icon } from "astro-icon/components";
+
+const hero = currentPantone;
+const heroInk = bestInk(hero.hex);
+const heroMuted = bestInkMuted(hero.hex);
+const heroLine = heroInk === INK_DARK ? "rgba(24,24,27,0.16)" : "rgba(250,250,250,0.22)";
+
+const first = pantoneYears[pantoneYears.length - 1];
+const pairYears = pantoneYears.filter((entry) => entry.second);
+const span = `${first.year}–${hero.year}`;
+---
+
+<BaseLayout
+	title="Pantone Color of the Year - color.xima"
+	description={`Every Pantone Color of the Year from ${first.year} to ${hero.year}, with hex, RGB and Pantone codes — plus a ready-to-copy CSS gradient derived from each chip.`}
+	canonicalPath={getPantonePath()}
+>
+	<section class="space-y-14">
+		<!-- Hero: this year's chip, rendered at full width -->
+		<header class="space-y-6">
+			<p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Pantone Color of the Year</p>
+
+			<div
+				class="relative overflow-hidden rounded-2xl border border-zinc-200 shadow-sm shadow-zinc-950/[0.04] dark:border-zinc-800 dark:shadow-black/20"
+				style={`background-image:${yearGradient(hero)}`}
+			>
+				<div class="flex flex-col gap-10 p-7 sm:p-10 md:min-h-[19rem] md:justify-between">
+					<div class="flex items-start justify-between gap-6">
+						<span
+							class="rounded-full border px-3 py-1 text-xs font-semibold tracking-wide uppercase"
+							style={`color:${heroInk};border-color:${heroLine}`}
+						>
+							{hero.year}
+						</span>
+						<span class="font-mono text-xs tracking-wide" style={`color:${heroMuted}`}>
+							PANTONE {hero.code}
+						</span>
+					</div>
+
+					<div class="space-y-3">
+						<h1
+							class="text-5xl font-semibold leading-none tracking-tight md:text-7xl"
+							style={`color:${heroInk}`}
+						>
+							{hero.name}
+						</h1>
+						<p class="max-w-xl text-base leading-relaxed" style={`color:${heroMuted}`}>
+							{hero.note}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<p class="max-w-2xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
+				Every pick from {span}, with the Pantone code, hex and RGB. Each chip also comes as a
+				three-stop CSS gradient built the same way — a tint, the chip, then a shade — so you can drop a year
+				straight into a layout.
+			</p>
+		</header>
+
+		<!-- Spectrum ribbon: all years as one continuous band, newest at the left -->
+		<section class="space-y-3" aria-label={`All colours of the year, ${span}`}>
+			<div class="flex items-baseline justify-between gap-4">
+				<h2 class="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+					{pantoneYears.length} years at a glance
+				</h2>
+				<p class="text-xs text-zinc-400 dark:text-zinc-500">{hero.year} &larr; {first.year}</p>
+			</div>
+			<div
+				class="flex h-20 overflow-hidden rounded-xl border border-zinc-200 shadow-sm shadow-zinc-950/[0.03] dark:border-zinc-800 dark:shadow-black/10"
+			>
+				{
+					pantoneYears.map((entry) => (
+						<a
+							href={`#y${entry.year}`}
+							class="group relative flex-1 transition-[flex-grow] duration-300 ease-out hover:grow-[2.4]"
+							style={`background-color:${entry.hex}`}
+							title={`${entry.year} — ${entry.name} (${entry.hex.toUpperCase()})`}
+						>
+							<span class="sr-only">{`${entry.year} ${entry.name}`}</span>
+							{entry.second && (
+								<span
+									class="absolute inset-x-0 bottom-0 h-1/2"
+									style={`background-color:${entry.second.hex}`}
+									aria-hidden="true"
+								/>
+							)}
+							<span
+								class="absolute inset-x-0 bottom-1 hidden justify-center text-[0.6875rem] font-semibold group-hover:flex"
+								style={`color:${bestInk(entry.second?.hex ?? entry.hex)}`}
+								aria-hidden="true"
+							>
+								{entry.year}
+							</span>
+						</a>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- Timeline -->
+		<section class="space-y-6">
+			<h2 class="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">The full run</h2>
+
+			<ol class="grid gap-5 sm:grid-cols-2" role="list">
+				{
+					pantoneYears.map((entry) => {
+						const ink = bestInk(entry.hex);
+						const css = `background-image: ${yearGradient(entry)};`;
+						return (
+							<li
+								id={`y${entry.year}`}
+								class="scroll-mt-32 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm shadow-zinc-950/[0.03] transition-colors hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/10 dark:hover:border-zinc-700"
+								data-pantone-card
+							>
+								{/* Swatch: the chip itself, not the derived gradient, so the colour reads true */}
+								<div class="relative flex h-36 items-end" style={`background-color:${entry.hex}`}>
+									{entry.second && (
+										<div
+											class="absolute inset-y-0 right-0 w-1/2"
+											style={`background-color:${entry.second.hex}`}
+											aria-hidden="true"
+										/>
+									)}
+									<div class="relative flex w-full items-end justify-between gap-3 p-4">
+										<span class="text-3xl font-semibold leading-none tracking-tight" style={`color:${ink}`}>
+											{entry.year}
+										</span>
+										<span
+											class="font-mono text-[0.6875rem] tracking-wide"
+											style={`color:${bestInkMuted(entry.second?.hex ?? entry.hex)}`}
+										>
+											{entry.hex.toUpperCase()}
+										</span>
+									</div>
+								</div>
+
+								<div class="space-y-4 p-5">
+									<div class="space-y-2">
+										<h3 class="text-lg font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+											{entry.name}
+											{entry.second && <span class="text-zinc-400 dark:text-zinc-500"> + {entry.second.name}</span>}
+										</h3>
+										<p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">{entry.note}</p>
+									</div>
+
+									<dl class="grid grid-cols-3 gap-3 border-t border-zinc-100 pt-4 text-xs dark:border-zinc-800">
+										<div class="space-y-1">
+											<dt class="font-medium text-zinc-400 dark:text-zinc-500">Pantone</dt>
+											<dd class="font-mono text-zinc-700 dark:text-zinc-300">{entry.code}</dd>
+										</div>
+										<div class="space-y-1">
+											<dt class="font-medium text-zinc-400 dark:text-zinc-500">Hex</dt>
+											<dd class="font-mono text-zinc-700 dark:text-zinc-300">{entry.hex.toUpperCase()}</dd>
+										</div>
+										<div class="space-y-1">
+											<dt class="font-medium text-zinc-400 dark:text-zinc-500">RGB</dt>
+											<dd class="font-mono text-zinc-700 dark:text-zinc-300">{rgbLabel(entry.hex)}</dd>
+										</div>
+									</dl>
+
+									{/* Derived gradient + copy actions */}
+									<div class="space-y-3 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+										<div
+											class="h-10 rounded-lg border border-black/5 dark:border-white/10"
+											style={`background-image:${yearGradient(entry)}`}
+											aria-hidden="true"
+										/>
+										<div class="flex flex-wrap gap-2">
+											<button
+												type="button"
+												class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+												data-copy={entry.hex.toUpperCase()}
+											>
+												<Icon name="mdi:content-copy" class="h-3.5 w-3.5" aria-hidden="true" />
+												Hex
+											</button>
+											<button
+												type="button"
+												class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+												data-copy={css}
+											>
+												<Icon name="mdi:language-css3" class="h-3.5 w-3.5" aria-hidden="true" />
+												CSS
+											</button>
+											<button
+												type="button"
+												class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-zinc-50"
+												data-copy={yearGradientTailwind(entry)}
+											>
+												<Icon name="mdi:tailwind" class="h-3.5 w-3.5" aria-hidden="true" />
+												Tailwind
+											</button>
+										</div>
+									</div>
+								</div>
+							</li>
+						);
+					})
+				}
+			</ol>
+		</section>
+
+		<!-- Notes -->
+		<section
+			class="space-y-3 rounded-xl border border-zinc-200 bg-white p-5 text-sm leading-relaxed text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400"
+		>
+			<h2 class="text-base font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">About these values</h2>
+			<p>
+				Pantone selects for physical ink and textile, so a hex is always an approximation of the TCX chip — published
+				sRGB values differ by a point or two between sources. Use the Pantone code when the output is printed or dyed,
+				and the hex only for screen.
+			</p>
+			<p>
+				{pairYears.length} years shipped a pair instead of a single colour ({
+					pairYears.map((entry) => entry.year).join(" and ")
+				}); those swatches are split, and their derived gradient runs from the first colour into the second.
+			</p>
+		</section>
+	</section>
+</BaseLayout>
+
+<script>
+	const RESET_MS = 1400;
+
+	document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((button) => {
+		button.addEventListener("click", async () => {
+			const value = button.dataset.copy;
+			if (!value) return;
+
+			const label = button.querySelector("svg")?.nextSibling;
+			const original = label?.textContent ?? "";
+
+			try {
+				await navigator.clipboard.writeText(value);
+				if (label) label.textContent = " Copied";
+			} catch {
+				if (label) label.textContent = " Failed";
+			}
+
+			window.setTimeout(() => {
+				if (label) label.textContent = original;
+			}, RESET_MS);
+		});
+	});
+</script>
